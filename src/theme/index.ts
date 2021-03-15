@@ -1,24 +1,24 @@
-import { createMuiTheme, colors } from '@material-ui/core';
+import { colors, createMuiTheme } from '@material-ui/core';
 import typography from './typography';
 
 const theme = createMuiTheme({
   palette: {
     background: {
       default: colors.common.white,
-      paper: colors.common.white
+      paper: colors.common.white,
     },
     primary: {
-      main: '#fec4d2'
+      main: '#fec4d2',
     },
     secondary: {
-      main: colors.indigo[500]
+      main: '#546e7a',
     },
     text: {
-      primary: colors.blueGrey[900],
-      secondary: colors.blueGrey[600]
-    }
+      primary: '#232f3e',
+      secondary: colors.blueGrey[600],
+    },
   },
-  typography
+  typography,
 });
 
 export default theme;

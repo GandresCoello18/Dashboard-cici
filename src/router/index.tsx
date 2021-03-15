@@ -1,22 +1,57 @@
-import { Suspense } from "react";
-import { BrowserRouter, Switch, Route } from "react-router-dom";
-import { NotFound } from "../view/NotFound";
-import { PubliceRoute } from "./public";
-import { Home } from '../view/home';
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable react/react-in-jsx-scope */
+import { Navigate, useRoutes } from 'react-router-dom';
+import { NotFound } from '../view/NotFound';
+import { Panel } from '../view/home';
 import DashboardLayout from '../layouts/DashboardLayout';
+import Cookies from 'js-cookie';
+import { ThemeProvider } from '@material-ui/styles';
+import GlobalStyles from '../components/GlobalStyles';
+import theme from '../theme';
+import { Customenrs } from '../view/customers';
+import { Account } from '../view/account';
 
-export default function Routes() {
+const token = Cookies.get('access-token-cici');
+
+const PathSesion = (Componente: any) => {
+  if (token === undefined) {
+    return <Componente />;
+  }
+
+  return <Navigate to='/login' />;
+};
+
+const routes = [
+  {
+    path: 'app',
+    element: <DashboardLayout />,
+    children: [
+      { path: 'dashboard', element: PathSesion(Panel) },
+      { path: 'customers', element: PathSesion(Customenrs) },
+      { path: 'account', element: PathSesion(Account) },
+      { path: '*', element: <Navigate to='/404' /> },
+    ],
+  },
+  {
+    path: '/',
+    element: <DashboardLayout />,
+    children: [
+      { path: '404', element: <NotFound /> },
+      { path: '*', element: <Navigate to='/404' /> },
+    ],
+  },
+];
+
+const App = () => {
+  const routing = useRoutes(routes);
+
   return (
-    <Suspense fallback={<div />}>
-      <BrowserRouter>
-      <DashboardLayout>
-        <Switch>
-            <PubliceRoute path="/" component={Home} />
-            <Route exact path="/404" component={NotFound} />
-            <Route component={NotFound} />
-        </Switch>
-      </DashboardLayout>
-      </BrowserRouter>
-    </Suspense>
+    <ThemeProvider theme={theme}>
+      <GlobalStyles />
+      {routing}
+    </ThemeProvider>
   );
-}
+};
+
+export default App;

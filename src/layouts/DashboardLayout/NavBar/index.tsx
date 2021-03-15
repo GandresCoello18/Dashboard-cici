@@ -1,7 +1,8 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable react/react-in-jsx-scope */
 /* eslint-disable no-undef */
 import { useEffect } from 'react';
-import { Link as RouterLink, useLocation } from 'react-router-dom';
-import PropTypes from 'prop-types';
+import { Link as RouterLink } from 'react-router-dom';
 import {
   Avatar,
   Box,
@@ -10,68 +11,77 @@ import {
   Hidden,
   List,
   Typography,
-  makeStyles
+  makeStyles,
 } from '@material-ui/core';
 import AcUnitIcon from '@material-ui/icons/AcUnit';
+import EqualizerIcon from '@material-ui/icons/Equalizer';
+import PeopleIcon from '@material-ui/icons/People';
+import CardMembershipIcon from '@material-ui/icons/CardMembership';
+import LocalShippingIcon from '@material-ui/icons/LocalShipping';
+import PersonIcon from '@material-ui/icons/Person';
+import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import NavItem from './NavItem';
 
 interface Props {
-  onMobileClose: () => any
-  openMobile: boolean
+  onMobileClose: () => any;
+  openMobile: boolean;
 }
 
 const useStyles = makeStyles(() => ({
   mobileDrawer: {
-    width: 256
+    width: 256,
   },
   desktopDrawer: {
     width: 256,
     top: 64,
-    height: 'calc(100% - 64px)'
+    height: 'calc(100% - 64px)',
   },
   avatar: {
     cursor: 'pointer',
     width: 64,
-    height: 64
+    height: 64,
   },
-  navItem: {}
+  navItem: {},
 }));
 
 const NavBar = ({ onMobileClose, openMobile }: Props) => {
   const classes = useStyles();
-  const location = useLocation();
 
-  let items = [
+  const items = [
     {
       href: '/app/dashboard',
-      icon: AcUnitIcon,
-      title: 'Panel'
+      icon: EqualizerIcon,
+      title: 'Panel',
     },
     {
       href: '/app/customers',
-      icon: AcUnitIcon,
-      title: 'Clientes'
+      icon: PeopleIcon,
+      title: 'Clientes',
     },
     {
       href: '/app/products',
       icon: AcUnitIcon,
-      title: 'Productos'
-    },
-
-    {
-      href: '/app/pacient',
-      icon: AcUnitIcon,
-      title: 'Mascotas'
+      title: 'Productos',
     },
     {
-      href: '/app/calendario',
-      icon: AcUnitIcon,
-      title: 'Calendarios'
+      href: '/app/coupons',
+      icon: CardMembershipIcon,
+      title: 'Cupones',
+    },
+    {
+      href: '/app/shopping',
+      icon: ShoppingCartIcon,
+      title: 'Compras',
+    },
+    {
+      href: '/app/envios',
+      icon: LocalShippingIcon,
+      title: 'Envios',
     },
     {
       href: '/app/account',
-      icon: AcUnitIcon,
-      title: 'Mi cuenta'
+      icon: PersonIcon,
+      title: 'Mi cuenta',
     },
   ];
 
@@ -80,50 +90,24 @@ const NavBar = ({ onMobileClose, openMobile }: Props) => {
       onMobileClose();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [location.pathname]);
+  }, []);
 
   const content = (
-    <Box
-      height="100%"
-      display="flex"
-      flexDirection="column"
-    >
-      <Box
-        alignItems="center"
-        display="flex"
-        flexDirection="column"
-        p={2}
-      >
-        <Avatar
-          className={classes.avatar}
-          component={RouterLink}
-          src=""
-          to="/app/account"
-        />
-        <Typography
-          color="textPrimary"
-          variant="h5"
-        >
+    <Box height='100%' display='flex' flexDirection='column'>
+      <Box alignItems='center' display='flex' flexDirection='column' p={2}>
+        <Avatar className={classes.avatar} component={RouterLink} src='' to='/app/account' />
+        <Typography color='textPrimary' variant='h5'>
           Anonimo
         </Typography>
-        <Typography
-          color="textSecondary"
-          variant="body2"
-        >
+        <Typography color='textSecondary' variant='body2'>
           anonimo@gmail.com
         </Typography>
       </Box>
       <Divider />
       <Box p={2}>
         <List>
-          {items.map((item) => (
-            <NavItem
-              href={item.href}
-              key={item.title}
-              title={item.title}
-              icon={item.icon}
-              className={classes.navItem}
-            />
+          {items.map((item: any) => (
+            <NavItem href={item.href} key={item.title} title={item.title} icon={item.icon} />
           ))}
         </List>
       </Box>
@@ -135,37 +119,22 @@ const NavBar = ({ onMobileClose, openMobile }: Props) => {
     <>
       <Hidden lgUp>
         <Drawer
-          anchor="left"
+          anchor='left'
           classes={{ paper: classes.mobileDrawer }}
           onClose={onMobileClose}
           open={openMobile}
-          variant="temporary"
+          variant='temporary'
         >
           {content}
         </Drawer>
       </Hidden>
       <Hidden mdDown>
-        <Drawer
-          anchor="left"
-          classes={{ paper: classes.desktopDrawer }}
-          open
-          variant="persistent"
-        >
+        <Drawer anchor='left' classes={{ paper: classes.desktopDrawer }} open variant='persistent'>
           {content}
         </Drawer>
       </Hidden>
     </>
   );
-};
-
-NavBar.propTypes = {
-  onMobileClose: PropTypes.func,
-  openMobile: PropTypes.bool
-};
-
-NavBar.defaultProps = {
-  onMobileClose: () => {},
-  openMobile: false
 };
 
 export default NavBar;

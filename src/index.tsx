@@ -1,19 +1,22 @@
+/* eslint-disable @typescript-eslint/no-use-before-define */
+/* eslint-disable no-undef */
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Routers from './router';
-import { ThemeProvider } from '@material-ui/core';
+import App from './router';
+import 'react-perfect-scrollbar/dist/css/styles.css';
 import reportWebVitals from './reportWebVitals';
-import theme from './theme';
-import GlobalStyles from './components/GlobalStyles';
+import { BrowserRouter } from 'react-router-dom';
+import { MeContextProvider } from './context/contextMe';
 
 ReactDOM.render(
   <React.StrictMode>
-    <ThemeProvider theme={theme}>
-      <GlobalStyles />
-      <Routers />
-    </ThemeProvider>
+    <BrowserRouter>
+      <MeContextProvider>
+        <App />
+      </MeContextProvider>
+    </BrowserRouter>
   </React.StrictMode>,
-  document.getElementById('root')
+  document.querySelector('#root'),
 );
 
 // If you want to start measuring performance in your app, pass a function

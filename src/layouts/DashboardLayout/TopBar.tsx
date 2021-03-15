@@ -1,64 +1,42 @@
-import { Link as RouterLink, useHistory } from 'react-router-dom';
-import clsx from 'clsx';
-import {
-  AppBar,
-  Box,
-  Hidden,
-  IconButton,
-  Toolbar,
-  makeStyles
-} from '@material-ui/core';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable react/react-in-jsx-scope */
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
+import { AppBar, Box, Hidden, IconButton, Toolbar } from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
 import InputIcon from '@material-ui/icons/Input';
 import Cookies from 'js-cookie';
 
 interface Props {
-  onMobileNavOpen: any
-  className?: any
+  onMobileNavOpen: () => any;
 }
 
-const useStyles = makeStyles(() => ({
-  root: {},
-  avatar: {
-    width: 60,
-    height: 60
-  }
-}));
-
-const TopBar = ({
-  className,
-  onMobileNavOpen,
-  ...rest
-}: Props) => {
-  const history = useHistory();
-  const classes = useStyles();
+const TopBar = ({ onMobileNavOpen, ...rest }: Props) => {
+  const navigate = useNavigate();
 
   const closeSesion = () => {
     Cookies.remove('access-token-cici');
-    history.push('/login');
+    navigate('/login');
   };
 
   return (
-    <AppBar
-      className={clsx(classes.root, className)}
-      elevation={0}
-      {...rest}
-    >
+    <AppBar elevation={0} {...rest}>
       <Toolbar>
-        <RouterLink to="/">
-          Logo
+        <RouterLink to='/'>
+          <img
+            src='../logo-cici.jpg'
+            alt='logo de cici'
+            width={60}
+            style={{ borderRadius: 15, border: '1px solid #fff' }}
+          />
         </RouterLink>
         <Box flexGrow={1} />
         <Hidden mdDown>
-          <IconButton color="inherit" onClick={closeSesion}>
+          <IconButton color='inherit' onClick={closeSesion}>
             <InputIcon />
           </IconButton>
         </Hidden>
         <Hidden lgUp>
-          <IconButton
-            color="inherit"
-            onClick={onMobileNavOpen}
-          >
+          <IconButton color='inherit' onClick={onMobileNavOpen}>
             <MenuIcon />
           </IconButton>
         </Hidden>
