@@ -11,6 +11,7 @@ import GlobalStyles from '../components/GlobalStyles';
 import theme from '../theme';
 import { Customenrs } from '../view/customers';
 import { Account } from '../view/account';
+import { Products } from '../view/product';
 
 const token = Cookies.get('access-token-cici');
 
@@ -29,6 +30,7 @@ const routes = [
     children: [
       { path: 'dashboard', element: PathSesion(Panel) },
       { path: 'customers', element: PathSesion(Customenrs) },
+      { path: 'products', element: PathSesion(Products) },
       { path: 'account', element: PathSesion(Account) },
       { path: '*', element: <Navigate to='/404' /> },
     ],

@@ -5,19 +5,17 @@ import {
   Container,
   makeStyles,
   Box,
-  Button,
   CardContent,
   Card,
   SvgIcon,
   TextField,
   InputAdornment,
 } from '@material-ui/core';
-import { TableCustomer } from '../components/customers/table-customers';
 import Page from '../components/page';
 import SearchIcon from '@material-ui/icons/Search';
-import { Customers } from '../interfaces/Customers';
 import { toast } from 'react-toast';
-import { ModalElement } from '../components/ModalElment';
+import { TableProduct } from '../components/Products/table-productos';
+import { Product } from '../interfaces/Product';
 
 const useStyles = makeStyles((theme: any) => ({
   root: {
@@ -28,19 +26,18 @@ const useStyles = makeStyles((theme: any) => ({
   },
 }));
 
-export const Customenrs = () => {
+export const Products = () => {
   const classes = useStyles();
-  const [Modal, setModal] = useState<boolean>(false);
   const [Loading, setLoading] = useState<boolean>(false);
-  const [SearchClient, setSearchClient] = useState<string>('');
-  const [FetchCustomenrs, setFetchCustomenrs] = useState<Customers[]>([]);
+  const [SearchProduct, setSearchProduct] = useState<string>('');
+  const [FetchProducts, setFetchProducts] = useState<Product[]>([]);
 
   useEffect(() => {
     setLoading(true);
 
     try {
       const Fetch = async () => {
-        setFetchCustomenrs([]);
+        setFetchProducts([]);
       };
 
       Fetch();
@@ -52,20 +49,15 @@ export const Customenrs = () => {
   }, []);
 
   return (
-    <Page className={classes.root} title='Clientes'>
+    <Page className={classes.root} title='Productos'>
       <Container maxWidth={undefined}>
-        <Box display='flex' justifyContent='flex-end'>
-          <Button color='secondary' variant='contained' onClick={() => setModal(true)}>
-            Nuevo cliente
-          </Button>
-        </Box>
         <Box mt={3}>
           <Card>
             <CardContent>
               <Box maxWidth={500}>
                 <TextField
                   fullWidth
-                  onChange={event => setSearchClient(event.target.value)}
+                  onChange={event => setSearchProduct(event.target.value)}
                   InputProps={{
                     startAdornment: (
                       <InputAdornment position='start'>
@@ -75,7 +67,7 @@ export const Customenrs = () => {
                       </InputAdornment>
                     ),
                   }}
-                  placeholder='Buscar cliente'
+                  placeholder='Buscar producto'
                   variant='outlined'
                 />
               </Box>
@@ -83,17 +75,9 @@ export const Customenrs = () => {
           </Card>
         </Box>
         <Box mt={3}>
-          <TableCustomer
-            SearchClient={SearchClient}
-            customers={FetchCustomenrs}
-            Loading={Loading}
-          />
+          <TableProduct SearchProduct={SearchProduct} products={FetchProducts} Loading={Loading} />
         </Box>
       </Container>
-
-      <ModalElement visible={Modal} setVisible={setModal}>
-        dfef
-      </ModalElement>
     </Page>
   );
 };
