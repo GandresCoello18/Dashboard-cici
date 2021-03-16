@@ -12,6 +12,7 @@ import theme from '../theme';
 import { Customenrs } from '../view/customers';
 import { Account } from '../view/account';
 import { Products } from '../view/product';
+import { Coupons } from '../view/coupons';
 
 const token = Cookies.get('access-token-cici');
 
@@ -31,6 +32,7 @@ const routes = [
       { path: 'dashboard', element: PathSesion(Panel) },
       { path: 'customers', element: PathSesion(Customenrs) },
       { path: 'products', element: PathSesion(Products) },
+      { path: 'coupons', element: PathSesion(Coupons) },
       { path: 'account', element: PathSesion(Account) },
       { path: '*', element: <Navigate to='/404' /> },
     ],

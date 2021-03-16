@@ -17,6 +17,7 @@ import {
 } from '@material-ui/core';
 import getInitials from '../../util/getInitials';
 import Alert from '@material-ui/lab/Alert';
+import Skeleton from '@material-ui/lab/Skeleton';
 import { Product } from '../../interfaces/Product';
 
 const useStyles = makeStyles(theme => ({
@@ -43,6 +44,12 @@ export const TableProduct = ({ products, SearchProduct, Loading }: Props) => {
 
   const handlePageChange = (event: any, newPage: number) => setPage(newPage);
 
+  const SkeletonProduct = () => {
+    return [0, 1, 2, 3, 4, 5, 6, 7].map(item => (
+      <Skeleton key={item} style={{ marginBottom: 10 }} variant='rect' width='100%' height={40} />
+    ));
+  };
+
   return (
     <Card>
       <Box minWidth={1050}>
@@ -63,59 +70,64 @@ export const TableProduct = ({ products, SearchProduct, Loading }: Props) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {products
-              .filter(item => {
-                return (
-                  item.title.toLowerCase().includes(SearchProduct.toLowerCase()) ||
-                  item.description.toLowerCase().includes(SearchProduct.toLowerCase())
-                );
-              })
-              .map(product => (
-                <TableRow hover key={product.idProducts}>
-                  <TableCell>
-                    <Box alignItems='center' display='flex'>
-                      <Avatar className={classes.avatar} src={product.source}>
-                        {getInitials(product.title)}
-                      </Avatar>
-                      <Typography color='textPrimary' variant='body1'>
-                        {product.title}
-                      </Typography>
-                    </Box>
-                  </TableCell>
-                  <TableCell>${product.price}</TableCell>
-                  <TableCell>{product.available}</TableCell>
-                  <TableCell>{product.sold}</TableCell>
-                  <TableCell>{product.stars}</TableCell>
-                  <TableCell>{product.brand}</TableCell>
-                  <TableCell>{product.size}</TableCell>
-                  <TableCell>{product.model}</TableCell>
-                  <TableCell>{product.discount}%</TableCell>
-                  <TableCell>{product.created_at}</TableCell>
-                  <TableCell>
-                    <Button size='small' variant='contained' color='primary'>
-                      Editar
-                    </Button>
-                    &nbsp; &nbsp;
-                    <Button
-                      size='small'
-                      variant='contained'
-                      onClick={() => {
-                        /* setDialogo(true);
+            {!Loading &&
+              products
+                .filter(item => {
+                  return (
+                    item.title.toLowerCase().includes(SearchProduct.toLowerCase()) ||
+                    item.description.toLowerCase().includes(SearchProduct.toLowerCase())
+                  );
+                })
+                .map(product => (
+                  <TableRow hover key={product.idProducts}>
+                    <TableCell>
+                      <Box alignItems='center' display='flex'>
+                        <Avatar className={classes.avatar} src={product.source}>
+                          {getInitials(product.title)}
+                        </Avatar>
+                        <Typography color='textPrimary' variant='body1'>
+                          {product.title}
+                        </Typography>
+                      </Box>
+                    </TableCell>
+                    <TableCell>${product.price}</TableCell>
+                    <TableCell>{product.available}</TableCell>
+                    <TableCell>{product.sold}</TableCell>
+                    <TableCell>{product.stars}</TableCell>
+                    <TableCell>{product.brand}</TableCell>
+                    <TableCell>{product.size}</TableCell>
+                    <TableCell>{product.model}</TableCell>
+                    <TableCell>{product.discount}%</TableCell>
+                    <TableCell>{product.created_at}</TableCell>
+                    <TableCell>
+                      <Button size='small' variant='contained' color='primary'>
+                        Editar
+                      </Button>
+                      &nbsp; &nbsp;
+                      <Button
+                        size='small'
+                        variant='contained'
+                        onClick={() => {
+                          /* setDialogo(true);
                         setIdUser(customer.idUser); */
-                      }}
-                    >
-                      ELiminar
-                    </Button>
-                  </TableCell>
-                </TableRow>
-              ))}
+                        }}
+                      >
+                        ELiminar
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                ))}
           </TableBody>
         </Table>
+
+        {Loading && SkeletonProduct()}
+
         {!Loading && products.length === 0 && (
           <Alert severity='info'>
             Por el momento no hay <strong>Productos</strong> para mostrar.
           </Alert>
         )}
+
         <TablePagination
           component='div'
           count={products.length}
