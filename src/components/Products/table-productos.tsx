@@ -8,6 +8,7 @@ import {
   Button,
   TableBody,
   TableCell,
+  Chip,
   Card,
   TableHead,
   TableRow,
@@ -18,7 +19,10 @@ import {
 import getInitials from '../../util/getInitials';
 import Alert from '@material-ui/lab/Alert';
 import Skeleton from '@material-ui/lab/Skeleton';
+import PerfectScrollbar from 'react-perfect-scrollbar';
 import { Product } from '../../interfaces/Product';
+import { Link } from 'react-router-dom';
+import { BASE_API } from '../../api';
 
 const useStyles = makeStyles(theme => ({
   root: {},
@@ -52,92 +56,104 @@ export const TableProduct = ({ products, SearchProduct, Loading }: Props) => {
 
   return (
     <Card>
-      <Box minWidth={1050}>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>Producto</TableCell>
-              <TableCell>Pecio</TableCell>
-              <TableCell>Disponible</TableCell>
-              <TableCell>Vendidos</TableCell>
-              <TableCell>Calificacion</TableCell>
-              <TableCell>Marca</TableCell>
-              <TableCell>Tamaño</TableCell>
-              <TableCell>Modelo</TableCell>
-              <TableCell>Descuento</TableCell>
-              <TableCell>Creado el</TableCell>
-              <TableCell>Opciones</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {!Loading &&
-              products
-                .filter(item => {
-                  return (
-                    item.title.toLowerCase().includes(SearchProduct.toLowerCase()) ||
-                    item.description.toLowerCase().includes(SearchProduct.toLowerCase())
-                  );
-                })
-                .map(product => (
-                  <TableRow hover key={product.idProducts}>
-                    <TableCell>
-                      <Box alignItems='center' display='flex'>
-                        <Avatar className={classes.avatar} src={product.source}>
-                          {getInitials(product.title)}
-                        </Avatar>
-                        <Typography color='textPrimary' variant='body1'>
-                          {product.title}
-                        </Typography>
-                      </Box>
-                    </TableCell>
-                    <TableCell>${product.price}</TableCell>
-                    <TableCell>{product.available}</TableCell>
-                    <TableCell>{product.sold}</TableCell>
-                    <TableCell>{product.stars}</TableCell>
-                    <TableCell>{product.brand}</TableCell>
-                    <TableCell>{product.size}</TableCell>
-                    <TableCell>{product.model}</TableCell>
-                    <TableCell>{product.discount}%</TableCell>
-                    <TableCell>{product.created_at}</TableCell>
-                    <TableCell>
-                      <Button size='small' variant='contained' color='primary'>
-                        Editar
-                      </Button>
-                      &nbsp; &nbsp;
-                      <Button
-                        size='small'
-                        variant='contained'
-                        onClick={() => {
-                          /* setDialogo(true);
-                        setIdUser(customer.idUser); */
-                        }}
-                      >
-                        ELiminar
-                      </Button>
-                    </TableCell>
-                  </TableRow>
-                ))}
-          </TableBody>
-        </Table>
+      <PerfectScrollbar>
+        <Box width='100%'>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>Producto</TableCell>
+                <TableCell>Pecio</TableCell>
+                <TableCell>Disponible</TableCell>
+                <TableCell>Vendidos</TableCell>
+                <TableCell>Calificacion</TableCell>
+                <TableCell>Marca</TableCell>
+                <TableCell>Tamaño</TableCell>
+                <TableCell>Modelo</TableCell>
+                <TableCell>Descuento</TableCell>
+                <TableCell>Estado</TableCell>
+                <TableCell>Creado</TableCell>
+                <TableCell>Opciones</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {!Loading &&
+                products
+                  .filter(item => {
+                    return (
+                      item.title.toLowerCase().includes(SearchProduct.toLowerCase()) ||
+                      item.description.toLowerCase().includes(SearchProduct.toLowerCase())
+                    );
+                  })
+                  .map(product => (
+                    <TableRow hover key={product.idProducts}>
+                      <TableCell>
+                        <Box alignItems='center' display='flex'>
+                          <Avatar
+                            className={classes.avatar}
+                            src={`${BASE_API}/static/${product.source}`}
+                          >
+                            {getInitials(product.title)}
+                          </Avatar>
+                          <Typography color='textPrimary' variant='body1'>
+                            {product.title}
+                          </Typography>
+                        </Box>
+                      </TableCell>
+                      <TableCell>${product.price}</TableCell>
+                      <TableCell>{product.available}</TableCell>
+                      <TableCell>{product.sold}</TableCell>
+                      <TableCell>{product.stars}</TableCell>
+                      <TableCell>{product.brand}</TableCell>
+                      <TableCell>{product.size}</TableCell>
+                      <TableCell>{product.model}</TableCell>
+                      <TableCell>{product.discount}%</TableCell>
+                      <TableCell>
+                        <Chip label={product.status} color='secondary' />
+                      </TableCell>
+                      <TableCell>{product.created_at}</TableCell>
+                      <TableCell>
+                        <Link to={`/app/products/${product.idProducts}`}>
+                          <Button size='small' variant='contained' color='primary'>
+                            Detalles
+                          </Button>
+                        </Link>
+                        <br />
+                        &nbsp; &nbsp;
+                        <Button
+                          size='small'
+                          variant='contained'
+                          onClick={() => {
+                            /* setDialogo(true);
+                          setIdUser(customer.idUser); */
+                          }}
+                        >
+                          ELiminar
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+            </TableBody>
+          </Table>
 
-        {Loading && SkeletonProduct()}
+          {Loading && SkeletonProduct()}
 
-        {!Loading && products.length === 0 && (
-          <Alert severity='info'>
-            Por el momento no hay <strong>Productos</strong> para mostrar.
-          </Alert>
-        )}
+          {!Loading && products.length === 0 && (
+            <Alert severity='info'>
+              Por el momento no hay <strong>Productos</strong> para mostrar.
+            </Alert>
+          )}
 
-        <TablePagination
-          component='div'
-          count={products.length}
-          onChangePage={handlePageChange}
-          onChangeRowsPerPage={handleLimitChange}
-          page={page}
-          rowsPerPage={limit}
-          rowsPerPageOptions={[5, 10, 25]}
-        />
-      </Box>
+          <TablePagination
+            component='div'
+            count={products.length}
+            onChangePage={handlePageChange}
+            onChangeRowsPerPage={handleLimitChange}
+            page={page}
+            rowsPerPage={limit}
+            rowsPerPageOptions={[5, 10, 25]}
+          />
+        </Box>
+      </PerfectScrollbar>
     </Card>
   );
 };

@@ -1,6 +1,7 @@
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable react/react-in-jsx-scope */
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import {
   Container,
   makeStyles,
@@ -11,7 +12,9 @@ import {
   CardActions,
   Grid,
   Typography,
+  Select,
   CardActionArea,
+  MenuItem,
   Button,
   CardMedia,
   TextField,
@@ -23,6 +26,9 @@ import { toast } from 'react-toast';
 import { Coupon } from '../interfaces/Coupon';
 import Skeleton from '@material-ui/lab/Skeleton';
 import Alert from '@material-ui/lab/Alert';
+import { MeContext } from '../context/contextMe';
+import { GetCoupons } from '../api/coupons';
+import { renderSource } from '../helpers/coupons';
 
 const useStyles = makeStyles((theme: any) => ({
   root: {
@@ -41,7 +47,9 @@ const useStyles = makeStyles((theme: any) => ({
 
 export const Coupons = () => {
   const classes = useStyles();
+  const { token } = useContext(MeContext);
   const [Loading, setLoading] = useState<boolean>(false);
+  const [IdCoupon, setIdCoupon] = useState<string>('');
   const [SearchCoupon, setSearchCoupon] = useState<string>('');
   const [FetchCoupons, setFetchCoupons] = useState<Coupon[]>([]);
 
@@ -50,7 +58,8 @@ export const Coupons = () => {
 
     try {
       const Fetch = async () => {
-        setFetchCoupons([]);
+        const { coupons } = await (await GetCoupons({ token })).data;
+        setFetchCoupons(coupons);
       };
 
       Fetch();
@@ -59,7 +68,7 @@ export const Coupons = () => {
     }
 
     setLoading(false);
-  }, []);
+  }, [token]);
 
   const SkeletonCuopon = () => {
     return (
@@ -111,12 +120,12 @@ export const Coupons = () => {
                     item.descripcion.toLowerCase().includes(SearchCoupon.toLowerCase())
                   );
                 }).map(coupon => (
-                  <Grid item xs={12} md={4} lg={3} key={coupon.idCoupom}>
-                    <Card className={classes.card} key={coupon.idCoupom}>
+                  <Grid item xs={12} md={4} lg={3} key={coupon.idCoupon}>
+                    <Card className={classes.card}>
                       <CardActionArea>
                         <CardMedia
                           className={classes.media}
-                          image='/static/images/cards/contemplative-reptile.jpg'
+                          image={`../${renderSource(coupon.type)}`}
                           title={coupon.type}
                         />
                         <CardContent>
@@ -129,12 +138,31 @@ export const Coupons = () => {
                         </CardContent>
                       </CardActionArea>
                       <CardActions>
-                        <Button size='small' color='primary'>
-                          Share
+                        <Button size='small' style={{ color: 'red' }}>
+                          Eliminar
                         </Button>
-                        <Button size='small' color='primary'>
-                          Learn More
+                        <Button
+                          size='small'
+                          color='secondary'
+                          onClick={() => setIdCoupon(coupon.idCoupon)}
+                        >
+                          {coupon.status}
                         </Button>
+                        {IdCoupon === coupon.idCoupon && (
+                          <Select
+                            labelId='demo-controlled-open-select-label'
+                            id='demo-controlled-open-select'
+                            open={IdCoupon === coupon.idCoupon}
+                            value=''
+                            onClose={() => setIdCoupon('')}
+                            onOpen={() => setIdCoupon(coupon.idCoupon)}
+                            onChange={event => console.log(event.target.value)}
+                            style={{ width: '80%' }}
+                          >
+                            <MenuItem value='Block'>Bloquear</MenuItem>
+                            <MenuItem value='Active'>Activar</MenuItem>
+                          </Select>
+                        )}
                       </CardActions>
                     </Card>
                   </Grid>

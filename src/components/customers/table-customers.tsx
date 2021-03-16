@@ -16,6 +16,7 @@ import {
   makeStyles,
 } from '@material-ui/core';
 import { Customers } from '../../interfaces/Customers';
+import { Link } from 'react-router-dom';
 import getInitials from '../../util/getInitials';
 import { MeContext } from '../../context/contextMe';
 import Alert from '@material-ui/lab/Alert';
@@ -94,9 +95,11 @@ export const TableCustomer = ({ customers, SearchClient, Loading }: Props) => {
                     <TableCell>
                       {me.idUser !== customer.idUser ? (
                         <>
-                          <Button size='small' variant='contained' color='primary'>
-                            Editar
-                          </Button>
+                          <Link to={`/app/customers/${customer.idUser}`}>
+                            <Button size='small' variant='contained' color='primary'>
+                              Detalles
+                            </Button>
+                          </Link>
                           &nbsp; &nbsp;
                           <Button
                             size='small'

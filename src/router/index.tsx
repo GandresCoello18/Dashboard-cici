@@ -13,6 +13,8 @@ import { Customenrs } from '../view/customers';
 import { Account } from '../view/account';
 import { Products } from '../view/product';
 import { Coupons } from '../view/coupons';
+import { DetailsCustomenr } from '../view/detailsCustomenr';
+import { DetailsProduct } from '../view/detailsProduct';
 
 const token = Cookies.get('access-token-cici');
 
@@ -31,7 +33,9 @@ const routes = [
     children: [
       { path: 'dashboard', element: PathSesion(Panel) },
       { path: 'customers', element: PathSesion(Customenrs) },
+      { path: 'customers/:idUser', element: PathSesion(DetailsCustomenr) },
       { path: 'products', element: PathSesion(Products) },
+      { path: 'products/:idProduct', element: PathSesion(DetailsProduct) },
       { path: 'coupons', element: PathSesion(Coupons) },
       { path: 'account', element: PathSesion(Account) },
       { path: '*', element: <Navigate to='/404' /> },

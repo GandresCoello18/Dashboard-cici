@@ -1,5 +1,5 @@
 export interface Coupon {
-  idCoupom: string;
+  idCoupon: string;
   type: string;
   descripcion: string;
   status: string;
