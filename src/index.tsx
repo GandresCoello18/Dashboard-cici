@@ -4,6 +4,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './router';
 import 'react-perfect-scrollbar/dist/css/styles.css';
+import 'react-multi-carousel/lib/styles.css';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter } from 'react-router-dom';
 import { MeContextProvider } from './context/contextMe';
