@@ -15,6 +15,7 @@ import { Products } from '../view/product';
 import { Coupons } from '../view/coupons';
 import { DetailsCustomenr } from '../view/detailsCustomenr';
 import { DetailsProduct } from '../view/detailsProduct';
+import { Ordens } from '../view/orders';
 
 const token = Cookies.get('access-token-cici');
 
@@ -37,6 +38,7 @@ const routes = [
       { path: 'products', element: PathSesion(Products) },
       { path: 'products/:idProduct', element: PathSesion(DetailsProduct) },
       { path: 'coupons', element: PathSesion(Coupons) },
+      { path: 'shopping', element: PathSesion(Ordens) },
       { path: 'account', element: PathSesion(Account) },
       { path: '*', element: <Navigate to='/404' /> },
     ],

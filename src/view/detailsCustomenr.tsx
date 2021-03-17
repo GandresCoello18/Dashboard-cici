@@ -63,7 +63,7 @@ export const DetailsCustomenr = () => {
   }, [params, token]);
 
   return (
-    <Page className={classes.root} title='Detalles'>
+    <Page className={classes.root} title={`Detalles de ${User?.userName}`}>
       <Container maxWidth='xl'>
         <Grid container spacing={3} direction='row' justify='center' alignItems='center'>
           <Grid item xs={12} md={8}>
