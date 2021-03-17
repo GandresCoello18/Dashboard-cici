@@ -118,7 +118,7 @@ export const TableProduct = ({ products, SearchProduct, Loading }: Props) => {
                           </Button>
                         </Link>
                         <br />
-                        &nbsp; &nbsp;
+                        <br />
                         <Button
                           size='small'
                           variant='contained'

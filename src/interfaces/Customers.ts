@@ -6,4 +6,6 @@ export interface Customers {
   isAdmin: boolean;
   avatar: string;
   provider: 'cici' | 'google';
+  phone: number | null;
+  isBanner: boolean;
 }

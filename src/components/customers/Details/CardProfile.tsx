@@ -2,6 +2,8 @@
 /* eslint-disable react/react-in-jsx-scope */
 /* eslint-disable no-undef */
 import { makeStyles, CardContent, Card, Avatar, Grid, Box, Typography } from '@material-ui/core';
+import { Customers } from '../../../interfaces/Customers';
+import Skeleton from '@material-ui/lab/Skeleton';
 
 const useStyles = makeStyles((theme: any) => ({
   large: {
@@ -19,7 +21,12 @@ const useStyles = makeStyles((theme: any) => ({
   },
 }));
 
-export const CardProfile = () => {
+interface Props {
+  User: Customers | undefined;
+  Loading: boolean;
+}
+
+export const CardProfile = ({ User, Loading }: Props) => {
   const classes = useStyles();
 
   return (
@@ -27,21 +34,29 @@ export const CardProfile = () => {
       <CardContent className={classes.content}>
         <Grid container spacing={4} direction='row' justify='center' alignItems='center'>
           <Grid item xs={12} sm={4} className={classes.divide}>
-            <Avatar
-              alt='Remy Sharp'
-              src='https://material-ui.com/static/images/avatar/1.jpg'
-              className={classes.large}
-            />
-            <h3>Carlos Jose</h3>
+            {Loading ? (
+              <Skeleton variant='circle' width={40} height={40} />
+            ) : (
+              <Avatar alt='Remy Sharp' src={User?.avatar} className={classes.large} />
+            )}
+            {Loading ? <Skeleton variant='text' width={40} /> : <h3>{User?.userName}</h3>}
             <br />
             <Box justifyContent='center' display='flex'>
               <Box mr={1}>
-                <strong>Admin</strong>
+                {Loading ? (
+                  <Skeleton variant='text' width={60} />
+                ) : (
+                  <strong>{User?.isAdmin ? 'Admin' : 'Client'}</strong>
+                )}
                 <Typography>User</Typography>
               </Box>
 
               <Box ml={1}>
-                <strong>Cici</strong>
+                {Loading ? (
+                  <Skeleton variant='text' width={60} />
+                ) : (
+                  <strong>{User?.provider}</strong>
+                )}
                 <Typography>Provider</Typography>
               </Box>
             </Box>
@@ -50,16 +65,32 @@ export const CardProfile = () => {
           <Grid item xs={12} sm={8}>
             <Grid container spacing={4} direction='row' justify='center' alignItems='center'>
               <Grid item xs={12} md={6}>
-                Email: <strong>goyeselcoca@gmail.com</strong>
+                Email:{' '}
+                {Loading ? <Skeleton variant='text' width={160} /> : <strong>{User?.email}</strong>}
               </Grid>
               <Grid item xs={12} md={6}>
-                Usuario: <strong>Carlos jose</strong>
+                Baneado:{' '}
+                {Loading ? (
+                  <Skeleton variant='text' width={60} />
+                ) : (
+                  <strong>{User?.isBanner ? 'Si' : 'No'}</strong>
+                )}
               </Grid>
               <Grid item xs={12} md={6}>
-                Telefono: <strong>0992239138</strong>
+                Telefono:{' '}
+                {Loading ? (
+                  <Skeleton variant='text' width={60} />
+                ) : (
+                  <strong>{User?.phone || 'Ninguno'}</strong>
+                )}
               </Grid>
               <Grid item xs={12} md={6}>
-                Creado: <strong>2020/08/05</strong>
+                Creado:{' '}
+                {Loading ? (
+                  <Skeleton variant='text' width={160} />
+                ) : (
+                  <strong>{User?.created_at}</strong>
+                )}
               </Grid>
             </Grid>
           </Grid>

@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 /* eslint-disable react/react-in-jsx-scope */
 import {
   Card,
@@ -8,6 +9,7 @@ import {
   Button,
   makeStyles,
 } from '@material-ui/core';
+import { Addresses } from '../../../interfaces/Address';
 
 const useStyles = makeStyles({
   root: {
@@ -18,7 +20,11 @@ const useStyles = makeStyles({
   },
 });
 
-export const CardAddress = () => {
+interface Props {
+  Address: Addresses;
+}
+
+export const CardAddress = ({ Address }: Props) => {
   const classes = useStyles();
 
   return (
@@ -26,11 +32,20 @@ export const CardAddress = () => {
       <CardActionArea>
         <CardContent>
           <Typography gutterBottom variant='h5' component='h2'>
-            Lizard
+            {Address.title}
           </Typography>
           <Typography variant='body2' color='textSecondary' component='p'>
-            Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging
-            across all continents except Antarctica
+            {Address.address}
+          </Typography>
+          <Typography variant='body2' color='textSecondary' component='p'>
+            <br />
+            Cuidad: <strong>{Address.city}</strong>
+            <br />
+            Telefono: <strong>{Address.phone}</strong>
+            <br />
+            Codigo Postal: <strong>{Address.postalCode}</strong>
+            <br />
+            Creado el: <strong>{Address.created_at}</strong>
           </Typography>
         </CardContent>
       </CardActionArea>
@@ -39,7 +54,7 @@ export const CardAddress = () => {
           Eliminar
         </Button>
         <Button size='small' color='secondary'>
-          En uso
+          {Address.selected ? 'En uso' : 'Elegir como predeterminado'}
         </Button>
       </CardActions>
     </Card>

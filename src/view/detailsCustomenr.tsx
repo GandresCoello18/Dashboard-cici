@@ -9,6 +9,17 @@ import { CardCoupons } from '../components/customers/Details/CardCoupon';
 import { CardProfile } from '../components/customers/Details/CardProfile';
 import Page from '../components/page';
 import { TableProduct } from '../components/Products/table-productos';
+import { useContext, useEffect, useState } from 'react';
+import { Customers } from '../interfaces/Customers';
+import { toast } from 'react-toast';
+import { useParams } from 'react-router';
+import { GetUser } from '../api/users';
+import { MeContext } from '../context/contextMe';
+import { Addresses } from '../interfaces/Address';
+import { GetAddressByUser } from '../api/address';
+import Alert from '@material-ui/lab/Alert';
+import { GetFavoriteByUser } from '../api/favorite';
+import { Product } from '../interfaces/Product';
 
 const useStyles = makeStyles((theme: any) => ({
   root: {
@@ -21,13 +32,42 @@ const useStyles = makeStyles((theme: any) => ({
 
 export const DetailsCustomenr = () => {
   const classes = useStyles();
+  const params = useParams();
+  const { token } = useContext(MeContext);
+  const [Loading, setLoading] = useState<boolean>(false);
+  const [User, setUser] = useState<Customers>();
+  const [Address, setAddress] = useState<Addresses[]>([]);
+  const [Favorites, setFavorites] = useState<Product[]>([]);
+
+  useEffect(() => {
+    setLoading(true);
+
+    try {
+      const FetchUser = async () => {
+        const { user } = await (await GetUser({ token, idUser: params.idUser })).data;
+        setUser(user);
+
+        const { address } = await (await GetAddressByUser({ token, idUser: params.idUser })).data;
+        setAddress(address);
+
+        const { products } = await (await GetFavoriteByUser({ token, idUser: params.idUser })).data;
+        setFavorites(products);
+      };
+
+      params.idUser && FetchUser();
+    } catch (error) {
+      toast.error(error.message);
+    }
+
+    setLoading(false);
+  }, [params, token]);
 
   return (
     <Page className={classes.root} title='Detalles'>
       <Container maxWidth='xl'>
         <Grid container spacing={3} direction='row' justify='center' alignItems='center'>
           <Grid item xs={12} md={8}>
-            <CardProfile />
+            <CardProfile User={User} Loading={Loading} />
           </Grid>
           <Grid item xs={12} md={4}>
             <CardCoupons />
@@ -40,12 +80,18 @@ export const DetailsCustomenr = () => {
           <CardHeader title='Direcciones' />
           <Divider />
 
-          <Grid container spacing={3} direction='row' justify='center' alignItems='center'>
-            {[0, 1, 2, 3].map(item => (
-              <Grid item xs={12} style={{ padding: 20 }} key={item} md={4} lg={3}>
-                <CardAddress />
+          <Grid container spacing={3} direction='row' alignItems='center'>
+            {Address.map(item => (
+              <Grid item xs={12} style={{ padding: 20 }} key={item.idAddresses} md={4} lg={3}>
+                <CardAddress Address={item} />
               </Grid>
             ))}
+
+            {!Loading && Address.length === 0 && (
+              <Alert severity='info'>
+                Por el momento no hay <strong>Direcciones</strong> para mostrar.
+              </Alert>
+            )}
           </Grid>
         </Card>
 
@@ -57,7 +103,7 @@ export const DetailsCustomenr = () => {
 
           <Grid container spacing={3} direction='row' justify='center' alignItems='center'>
             <Box padding={5}>
-              <TableProduct products={[]} SearchProduct='' Loading={false} />
+              <TableProduct products={Favorites} SearchProduct='' Loading={Loading} />
             </Box>
           </Grid>
         </Card>
