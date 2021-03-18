@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable react/react-in-jsx-scope */
 /* eslint-disable no-undef */
-import { useEffect } from 'react';
+import { useContext, useEffect } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import {
   Avatar,
@@ -21,6 +21,7 @@ import LocalShippingIcon from '@material-ui/icons/LocalShipping';
 import PersonIcon from '@material-ui/icons/Person';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import NavItem from './NavItem';
+import { MeContext } from '../../../context/contextMe';
 
 interface Props {
   onMobileClose: () => any;
@@ -46,6 +47,7 @@ const useStyles = makeStyles(() => ({
 
 const NavBar = ({ onMobileClose, openMobile }: Props) => {
   const classes = useStyles();
+  const { me } = useContext(MeContext);
 
   const items = [
     {
@@ -95,12 +97,17 @@ const NavBar = ({ onMobileClose, openMobile }: Props) => {
   const content = (
     <Box height='100%' display='flex' flexDirection='column'>
       <Box alignItems='center' display='flex' flexDirection='column' p={2}>
-        <Avatar className={classes.avatar} component={RouterLink} src='' to='/app/account' />
+        <Avatar
+          className={classes.avatar}
+          component={RouterLink}
+          src={me.avatar}
+          to='/app/account'
+        />
         <Typography color='textPrimary' variant='h5'>
-          Anonimo
+          {me.userName}
         </Typography>
         <Typography color='textSecondary' variant='body2'>
-          anonimo@gmail.com
+          {me.email}
         </Typography>
       </Box>
       <Divider />

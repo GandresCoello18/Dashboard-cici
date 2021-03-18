@@ -21,7 +21,7 @@ const TopBar = ({ onMobileNavOpen, ...rest }: Props) => {
   return (
     <AppBar elevation={0} {...rest}>
       <Toolbar>
-        <RouterLink to='/'>
+        <RouterLink to='/app/dashboard'>
           <img
             src='../logo-cici.jpg'
             alt='logo de cici'

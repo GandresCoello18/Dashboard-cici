@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
 /* eslint-disable react/react-in-jsx-scope */
 import Cookies from 'js-cookie';
-import { createContext, useState } from 'react';
+import { createContext, Dispatch, SetStateAction, useState } from 'react';
 
 interface Me {
   idUser: string;
@@ -21,6 +21,7 @@ interface Props {
 interface Values {
   token: string;
   me: Me;
+  setMe: Dispatch<SetStateAction<Me>>;
 }
 
 export const MeContext = createContext<Values>({
@@ -34,11 +35,12 @@ export const MeContext = createContext<Values>({
     avatar: '',
     provider: '',
   },
+  setMe: () => false,
 });
 
 export const MeContextProvider = ({ children }: Props) => {
   const [token] = useState<string>(Cookies.get('access-token-cici') || '');
-  const [me] = useState<Me>({
+  const [me, setMe] = useState<Me>({
     idUser: '',
     isAdmin: false,
     userName: '',
@@ -51,6 +53,7 @@ export const MeContextProvider = ({ children }: Props) => {
   const Values: Values = {
     token,
     me,
+    setMe,
   };
 
   return <MeContext.Provider value={Values}>{children}</MeContext.Provider>;

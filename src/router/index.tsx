@@ -5,6 +5,7 @@ import { Navigate, useRoutes } from 'react-router-dom';
 import { NotFound } from '../view/NotFound';
 import { Panel } from '../view/home';
 import DashboardLayout from '../layouts/DashboardLayout';
+import MainLayout from '../layouts/MainLayout';
 import Cookies from 'js-cookie';
 import { ThemeProvider } from '@material-ui/styles';
 import GlobalStyles from '../components/GlobalStyles';
@@ -16,15 +17,20 @@ import { Coupons } from '../view/coupons';
 import { DetailsCustomenr } from '../view/detailsCustomenr';
 import { DetailsProduct } from '../view/detailsProduct';
 import { Ordens } from '../view/orders';
+import { Auth } from '../view/auth';
+import { useContext, useEffect } from 'react';
+import { GetMeUser } from '../api/users';
+import { MeContext } from '../context/contextMe';
+import { toast } from 'react-toast';
 
 const token = Cookies.get('access-token-cici');
 
 const PathSesion = (Componente: any) => {
-  if (token === undefined) {
-    return <Componente />;
-  }
+  return token ? <Componente /> : <Navigate to='/login' />;
+};
 
-  return <Navigate to='/login' />;
+const NotPathSesion = (Componente: any) => {
+  return token ? <Navigate to='/app/dashboard' /> : <Componente />;
 };
 
 const routes = [
@@ -45,9 +51,10 @@ const routes = [
   },
   {
     path: '/',
-    element: <DashboardLayout />,
+    element: <MainLayout />,
     children: [
       { path: '404', element: <NotFound /> },
+      { path: '/login', element: NotPathSesion(Auth) },
       { path: '*', element: <Navigate to='/404' /> },
     ],
   },
@@ -55,6 +62,20 @@ const routes = [
 
 const App = () => {
   const routing = useRoutes(routes);
+  const { token, setMe } = useContext(MeContext);
+
+  useEffect(() => {
+    try {
+      const FetchMe = async () => {
+        const { me } = await (await GetMeUser({ token })).data;
+        setMe(me);
+      };
+
+      token && FetchMe();
+    } catch (error) {
+      toast.error(error.message);
+    }
+  }, [token, setMe]);
 
   return (
     <ThemeProvider theme={theme}>

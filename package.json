@@ -22,6 +22,7 @@
     "react-helmet": "^6.1.0",
     "react-multi-carousel": "^2.6.2",
     "react-perfect-scrollbar": "^1.5.8",
+    "react-pin-field": "^1.1.0",
     "react-router": "^6.0.0-beta.0",
     "react-router-dom": "^6.0.0-beta.0",
     "react-scripts": "4.0.3",
