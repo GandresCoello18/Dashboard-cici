@@ -38,18 +38,19 @@ export const Products = () => {
   useEffect(() => {
     setLoading(true);
 
-    try {
-      const Fetch = async () => {
+    const Fetch = async () => {
+      try {
         const { products } = await (await GetProducts({ token })).data;
         setFetchProducts(products);
-      };
 
-      Fetch();
-    } catch (error) {
-      toast.error(error.message);
-    }
+        setLoading(false);
+      } catch (error) {
+        toast.error(error.message);
+        setLoading(false);
+      }
+    };
 
-    setLoading(false);
+    Fetch();
   }, [token]);
 
   return (

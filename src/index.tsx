@@ -3,6 +3,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './router';
+import './app.css';
 import 'react-perfect-scrollbar/dist/css/styles.css';
 import 'react-multi-carousel/lib/styles.css';
 import reportWebVitals from './reportWebVitals';

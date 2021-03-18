@@ -51,20 +51,21 @@ export const DetailsProduct = () => {
   useEffect(() => {
     setLoading(true);
 
-    try {
-      const FetchProduct = async () => {
+    const FetchProduct = async () => {
+      try {
         const { product } = await (
           await GetProduct({ token: undefined, idProduct: params.idProduct })
         ).data;
         setProduct(product);
-      };
 
-      params.idProduct && FetchProduct();
-    } catch (error) {
-      toast.error(error.message);
-    }
+        setLoading(false);
+      } catch (error) {
+        toast.error(error.message);
+        setLoading(false);
+      }
+    };
 
-    setLoading(false);
+    params.idProduct && FetchProduct();
   }, [params]);
 
   return (

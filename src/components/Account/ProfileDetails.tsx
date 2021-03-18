@@ -12,32 +12,51 @@ import {
   Grid,
   TextField,
 } from '@material-ui/core';
+import { useContext } from 'react';
+import { MeContext } from '../../context/contextMe';
+import { UpdateMeUser, UpdateUser } from '../../api/users';
+import { toast } from 'react-toast';
 
 export const ProfileDetails = () => {
+  const { me, token } = useContext(MeContext);
+
   return (
     <>
       <Formik
         initialValues={{
           email: '',
           userName: '',
-          Phone: 0,
-          Cedula: '',
+          phone: 0,
         }}
         validationSchema={Yup.object().shape({
-          email: Yup.string()
-            .email('Must be a valid email')
-            .max(100)
-            .required('El email es requerido'),
-          userName: Yup.string().max(100).required('El nombre de usuario es requerido'),
-          Phone: Yup.string().max(10).required('El telefono del usuario es requerido'),
-          Cedula: Yup.string().max(10).required('La cedula del usuario es requerido'),
+          email: Yup.string().email('Esta direccion es invalida').max(100),
+          userName: Yup.string().max(100),
+          Phone: Yup.string().max(10),
         })}
-        onSubmit={(values, actions) => {
-          console.log(values);
+        onSubmit={async (values, actions) => {
+          const data: UpdateMeUser = {
+            userName: me.userName,
+            email: me.email,
+            phone: me.phone || 0,
+          };
+
+          if (values.userName) {
+            data.userName = values.userName;
+          }
+
+          if (values.email) {
+            data.email = values.email;
+          }
+
+          if (values.phone) {
+            data.phone = values.phone;
+          }
+
           try {
-            // await UpdateMeUser(token, values);
+            await UpdateUser({ token, data });
+            toast.success('Se actualizaron los datos');
           } catch (error) {
-            console.log(error.message);
+            toast.error(error.message);
           }
 
           actions.setSubmitting(false);
@@ -57,14 +76,13 @@ export const ProfileDetails = () => {
                       fullWidth
                       name='userName'
                       onChange={handleChange}
-                      required
                       onBlur={handleBlur}
                       variant='outlined'
-                      placeholder={'User Name'}
+                      placeholder={me.userName}
                     />
                   </Grid>
                   <Grid item md={6} xs={12}>
-                    <TextField fullWidth disabled value='' variant='outlined' />
+                    <TextField fullWidth disabled value={me.created_at} variant='outlined' />
                   </Grid>
                   <Grid item md={6} xs={12}>
                     <TextField
@@ -72,37 +90,23 @@ export const ProfileDetails = () => {
                       helperText={touched.email && errors.email}
                       fullWidth
                       name='email'
-                      required
                       onBlur={handleBlur}
                       variant='outlined'
                       onChange={handleChange}
-                      placeholder={'Email'}
+                      placeholder={me.email}
                     />
                   </Grid>
                   <Grid item md={6} xs={12}>
                     <TextField
-                      error={Boolean(touched.Phone && errors.Phone)}
-                      helperText={touched.Phone && errors.Phone}
+                      error={Boolean(touched.phone && errors.phone)}
+                      helperText={touched.phone && errors.phone}
                       fullWidth
-                      name='Phone'
+                      name='phone'
                       onBlur={handleBlur}
                       type='number'
                       onChange={handleChange}
                       variant='outlined'
-                      placeholder={'Phone'}
-                    />
-                  </Grid>
-                  <Grid item md={6} xs={12}>
-                    <TextField
-                      error={Boolean(touched.Cedula && errors.Cedula)}
-                      helperText={touched.Cedula && errors.Cedula}
-                      fullWidth
-                      name='Cedula'
-                      onBlur={handleBlur}
-                      type='number'
-                      onChange={handleChange}
-                      variant='outlined'
-                      placeholder={'Numero de identificacion'}
+                      placeholder={me.phone ? `${me.phone}` : 'Escriba su numero de telefono'}
                     />
                   </Grid>
                 </Grid>
@@ -110,7 +114,7 @@ export const ProfileDetails = () => {
               <Divider />
               <Box display='flex' justifyContent='flex-end' p={2}>
                 <Button
-                  color='primary'
+                  color='secondary'
                   disabled={isSubmitting}
                   fullWidth
                   size='large'

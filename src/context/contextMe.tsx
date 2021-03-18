@@ -12,6 +12,7 @@ interface Me {
   created_at: Date | string;
   avatar: string;
   provider: string;
+  phone: number | null;
 }
 
 interface Props {
@@ -34,6 +35,7 @@ export const MeContext = createContext<Values>({
     created_at: '',
     avatar: '',
     provider: '',
+    phone: 0,
   },
   setMe: () => false,
 });
@@ -48,6 +50,7 @@ export const MeContextProvider = ({ children }: Props) => {
     created_at: '',
     avatar: '',
     provider: '',
+    phone: 0,
   });
 
   const Values: Values = {

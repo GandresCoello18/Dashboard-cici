@@ -21,7 +21,7 @@ import { Auth } from '../view/auth';
 import { useContext, useEffect } from 'react';
 import { GetMeUser } from '../api/users';
 import { MeContext } from '../context/contextMe';
-import { toast } from 'react-toast';
+import { toast, ToastContainer } from 'react-toast';
 
 const token = Cookies.get('access-token-cici');
 
@@ -55,6 +55,7 @@ const routes = [
     children: [
       { path: '404', element: <NotFound /> },
       { path: '/login', element: NotPathSesion(Auth) },
+      { path: '/', element: NotPathSesion(Auth) },
       { path: '*', element: <Navigate to='/404' /> },
     ],
   },
@@ -79,6 +80,7 @@ const App = () => {
 
   return (
     <ThemeProvider theme={theme}>
+      <ToastContainer delay={3000} position='top-right' />
       <GlobalStyles />
       {routing}
     </ThemeProvider>

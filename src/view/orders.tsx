@@ -44,18 +44,19 @@ export const Ordens = () => {
   useEffect(() => {
     setLoading(true);
 
-    try {
-      const Fetch = async () => {
+    const Fetch = async () => {
+      try {
         const { ordenes } = await (await GetOrdens({ token })).data;
         setFetchOrden(ordenes);
-      };
 
-      Fetch();
-    } catch (error) {
-      toast.error(error.message);
-    }
+        setLoading(false);
+      } catch (error) {
+        toast.error(error.message);
+        setLoading(false);
+      }
+    };
 
-    setLoading(false);
+    Fetch();
   }, [token]);
 
   return (

@@ -41,16 +41,16 @@ export const Customenrs = () => {
   useEffect(() => {
     setLoading(true);
 
-    try {
-      const Fetch = async () => {
+    const Fetch = async () => {
+      try {
         const { users } = await (await GetUsers({ token })).data;
         setFetchCustomenrs(users);
-      };
+      } catch (error) {
+        toast.error(error.message);
+      }
+    };
 
-      Fetch();
-    } catch (error) {
-      toast.error(error.message);
-    }
+    Fetch();
 
     setLoading(false);
   }, [token]);

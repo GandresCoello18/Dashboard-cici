@@ -6,6 +6,12 @@ interface LoginUser {
   provider: string;
 }
 
+export interface UpdateMeUser {
+  email: string;
+  userName: string;
+  phone: number;
+}
+
 export const GetUsers = async (option: { token: string }) => {
   api.defaults.headers['access-token'] = option.token;
   const response = await api({
@@ -39,6 +45,33 @@ export const GetMeUser = async (options: { token: string | undefined }) => {
   const response = await api({
     method: 'GET',
     url: '/users/me',
+  });
+  return response;
+};
+
+export const UpdateUser = async (options: { token: string | undefined; data: UpdateMeUser }) => {
+  api.defaults.headers['access-token'] = options.token;
+  const response = await api({
+    method: 'PUT',
+    url: '/users',
+    data: options.data,
+  });
+  return response;
+};
+
+export const UpdatePasswordUser = async (options: {
+  token: string | undefined;
+  currentKey: string;
+  newKey: string;
+}) => {
+  api.defaults.headers['access-token'] = options.token;
+  const response = await api({
+    method: 'PUT',
+    url: '/users/password',
+    data: {
+      newKey: options.newKey,
+      currentKey: options.currentKey,
+    },
   });
   return response;
 };

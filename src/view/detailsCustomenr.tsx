@@ -42,8 +42,8 @@ export const DetailsCustomenr = () => {
   useEffect(() => {
     setLoading(true);
 
-    try {
-      const FetchUser = async () => {
+    const FetchUser = async () => {
+      try {
         const { user } = await (await GetUser({ token, idUser: params.idUser })).data;
         setUser(user);
 
@@ -52,14 +52,15 @@ export const DetailsCustomenr = () => {
 
         const { products } = await (await GetFavoriteByUser({ token, idUser: params.idUser })).data;
         setFavorites(products);
-      };
 
-      params.idUser && FetchUser();
-    } catch (error) {
-      toast.error(error.message);
-    }
+        setLoading(false);
+      } catch (error) {
+        toast.error(error.message);
+        setLoading(false);
+      }
+    };
 
-    setLoading(false);
+    params.idUser && FetchUser();
   }, [params, token]);
 
   return (
