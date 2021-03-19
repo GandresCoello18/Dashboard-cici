@@ -15,6 +15,7 @@ export interface OrdenProduct {
   idOrder: string;
   created_at: string | Date;
   update_at: string | Date;
+  sent: boolean;
   shipping: number;
   discount: string;
   status: string;

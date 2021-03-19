@@ -49,6 +49,7 @@ export const TableOrders = ({ Orders, Loading, setSelectOrder }: Props) => {
                 <TableCell>Metodo</TableCell>
                 <TableCell>ID de pago</TableCell>
                 <TableCell>Estado</TableCell>
+                <TableCell>Enviado</TableCell>
                 <TableCell>Creado el</TableCell>
                 <TableCell>Total</TableCell>
               </TableRow>
@@ -63,6 +64,12 @@ export const TableOrders = ({ Orders, Loading, setSelectOrder }: Props) => {
                       <Chip
                         label={orden.status}
                         color={orden.status === 'Paid' ? 'secondary' : 'primary'}
+                      />
+                    </TableCell>
+                    <TableCell>
+                      <Chip
+                        label={orden.sent ? 'Si' : 'No'}
+                        color={orden.sent ? 'secondary' : 'primary'}
                       />
                     </TableCell>
                     <TableCell>{orden.created_at}</TableCell>

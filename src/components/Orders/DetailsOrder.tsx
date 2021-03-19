@@ -18,6 +18,7 @@ import { SelectUpdate } from './SelectUpdate';
 import { Dialogo } from '../Dialogo';
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { ModalElement } from '../ModalElment';
+import { FormNewShipping } from '../Shipping/FormNewShipping';
 
 const useStyles = makeStyles(theme => ({
   root: {},
@@ -141,6 +142,13 @@ export const DetailsOrder = ({ Order, setReloadOrders, isDetails }: Props) => {
                     color={Order?.status === 'Paid' ? 'secondary' : 'primary'}
                   />
                 </Grid>
+                <Grid item xs={6}>
+                  Enviado:{' '}
+                  <Chip
+                    label={Order?.sent ? 'Si' : 'No'}
+                    color={Order?.sent ? 'secondary' : 'primary'}
+                  />
+                </Grid>
               </Grid>
             </Box>
             <Divider />
@@ -208,7 +216,7 @@ export const DetailsOrder = ({ Order, setReloadOrders, isDetails }: Props) => {
       />
 
       <ModalElement visible={Modal} setVisible={setModal}>
-        dfef
+        <FormNewShipping idOrder={Order?.idOrder} setReloadOrders={setReloadOrders} />
       </ModalElement>
     </>
   );
