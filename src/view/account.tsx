@@ -1,5 +1,6 @@
 /* eslint-disable react/react-in-jsx-scope */
 import { Container, Grid, makeStyles } from '@material-ui/core';
+import { ResetPassword } from '../components/Account/Password';
 import { Profile } from '../components/Account/Profile';
 import { ProfileDetails } from '../components/Account/ProfileDetails';
 import Page from '../components/page';
@@ -25,6 +26,9 @@ export const Account = () => {
           </Grid>
           <Grid item lg={8} md={6} xs={12}>
             <ProfileDetails />
+          </Grid>
+          <Grid item lg={8} md={6} xs={12}>
+            <ResetPassword />
           </Grid>
         </Grid>
       </Container>

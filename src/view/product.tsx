@@ -40,7 +40,9 @@ export const Products = () => {
 
     const Fetch = async () => {
       try {
-        const { products } = await (await GetProducts({ token })).data;
+        const { products } = await (
+          await GetProducts({ token, findProduct: SearchProduct || undefined })
+        ).data;
         setFetchProducts(products);
 
         setLoading(false);
@@ -51,7 +53,7 @@ export const Products = () => {
     };
 
     Fetch();
-  }, [token]);
+  }, [token, SearchProduct]);
 
   return (
     <Page className={classes.root} title='Productos'>
@@ -80,7 +82,7 @@ export const Products = () => {
           </Card>
         </Box>
         <Box mt={3}>
-          <TableProduct SearchProduct={SearchProduct} products={FetchProducts} Loading={Loading} />
+          <TableProduct products={FetchProducts} Loading={Loading} />
         </Box>
       </Container>
     </Page>

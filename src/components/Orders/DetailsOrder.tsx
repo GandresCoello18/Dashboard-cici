@@ -28,9 +28,10 @@ const useStyles = makeStyles(theme => ({
 
 interface Props {
   Order: OrdenProduct | undefined;
+  isDetails?: boolean;
 }
 
-export const DetailsOrder = ({ Order }: Props) => {
+export const DetailsOrder = ({ Order, isDetails }: Props) => {
   const classes = useStyles();
 
   return (
@@ -155,7 +156,12 @@ export const DetailsOrder = ({ Order }: Props) => {
         </>
       ) : (
         <>
-          <img src='../no-data.svg' alt='no data order' width='100%' style={{ padding: 10 }} />
+          <img
+            src={isDetails ? '../../no-data.svg' : '../no-data.svg'}
+            alt='no data order'
+            width='100%'
+            style={{ padding: 10 }}
+          />
           <Alert severity='info'>Selecciona alguna orden para ver mas detalles.</Alert>
         </>
       )}

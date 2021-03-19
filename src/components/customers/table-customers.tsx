@@ -10,6 +10,7 @@ import {
   TableCell,
   Card,
   TableHead,
+  Chip,
   TableRow,
   Typography,
   TablePagination,
@@ -31,11 +32,10 @@ const useStyles = makeStyles(theme => ({
 
 interface Props {
   customers: Customers[];
-  SearchClient: string;
   Loading: boolean;
 }
 
-export const TableCustomer = ({ customers, SearchClient, Loading }: Props) => {
+export const TableCustomer = ({ customers, Loading }: Props) => {
   const classes = useStyles();
   const { me } = useContext(MeContext);
   const [limit, setLimit] = useState<number>(10);
@@ -63,61 +63,59 @@ export const TableCustomer = ({ customers, SearchClient, Loading }: Props) => {
               <TableCell>Email</TableCell>
               <TableCell>Proveedor</TableCell>
               <TableCell>Admin</TableCell>
-              <TableCell>Registration date</TableCell>
+              <TableCell>Registrado el</TableCell>
               <TableCell>Opciones</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {!Loading &&
-              customers
-                .filter(item => {
-                  return (
-                    item.userName.toLowerCase().includes(SearchClient.toLowerCase()) ||
-                    item.email.toLowerCase().includes(SearchClient.toLowerCase())
-                  );
-                })
-                .map(customer => (
-                  <TableRow hover key={customer.idUser}>
-                    <TableCell>
-                      <Box alignItems='center' display='flex'>
-                        <Avatar className={classes.avatar} src={customer.avatar}>
-                          {getInitials(customer.userName)}
-                        </Avatar>
-                        <Typography color='textPrimary' variant='body1'>
-                          {customer.userName}
-                        </Typography>
-                      </Box>
-                    </TableCell>
-                    <TableCell>{customer.email}</TableCell>
-                    <TableCell>{customer.provider}</TableCell>
-                    <TableCell>{customer.isAdmin || 'No'}</TableCell>
-                    <TableCell>{customer.created_at}</TableCell>
-                    <TableCell>
-                      {me.idUser !== customer.idUser ? (
-                        <>
-                          <Link to={`/app/customers/${customer.idUser}`}>
-                            <Button size='small' variant='contained' color='primary'>
-                              Detalles
-                            </Button>
-                          </Link>
-                          &nbsp; &nbsp;
-                          <Button
-                            size='small'
-                            variant='contained'
-                            onClick={() => {
-                              /* setDialogo(true);
-                        setIdUser(customer.idUser); */
-                            }}
-                          >
-                            ELiminar
+              customers.map(customer => (
+                <TableRow hover key={customer.idUser}>
+                  <TableCell>
+                    <Box alignItems='center' display='flex'>
+                      <Avatar className={classes.avatar} src={customer.avatar}>
+                        {getInitials(customer.userName)}
+                      </Avatar>
+                      <Typography color='textPrimary' variant='body1'>
+                        {customer.userName}
+                      </Typography>
+                    </Box>
+                  </TableCell>
+                  <TableCell>{customer.email}</TableCell>
+                  <TableCell>
+                    <Chip
+                      label={customer.provider}
+                      color={customer.provider === 'cici' ? 'primary' : 'secondary'}
+                    />
+                  </TableCell>
+                  <TableCell>{customer.isAdmin ? 'Si' : 'No'}</TableCell>
+                  <TableCell>{customer.created_at}</TableCell>
+                  <TableCell>
+                    {me.idUser !== customer.idUser ? (
+                      <>
+                        <Link to={`/app/customers/${customer.idUser}`}>
+                          <Button size='small' variant='contained' color='primary'>
+                            Detalles
                           </Button>
-                        </>
-                      ) : (
-                        ''
-                      )}
-                    </TableCell>
-                  </TableRow>
-                ))}
+                        </Link>
+                        &nbsp; &nbsp;
+                        <Button
+                          size='small'
+                          variant='contained'
+                          onClick={() => {
+                            /* setDialogo(true);
+                        setIdUser(customer.idUser); */
+                          }}
+                        >
+                          ELiminar
+                        </Button>
+                      </>
+                    ) : (
+                      ''
+                    )}
+                  </TableCell>
+                </TableRow>
+              ))}
           </TableBody>
         </Table>
 

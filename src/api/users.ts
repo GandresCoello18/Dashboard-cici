@@ -12,11 +12,11 @@ export interface UpdateMeUser {
   phone: number;
 }
 
-export const GetUsers = async (option: { token: string }) => {
+export const GetUsers = async (option: { token: string | undefined; findUser?: string }) => {
   api.defaults.headers['access-token'] = option.token;
   const response = await api({
     method: 'GET',
-    url: '/users',
+    url: `${option.findUser ? `/users?findUser=${option.findUser}` : '/users'}`,
   });
   return response;
 };

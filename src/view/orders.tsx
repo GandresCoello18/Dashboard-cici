@@ -46,7 +46,8 @@ export const Ordens = () => {
 
     const Fetch = async () => {
       try {
-        const { ordenes } = await (await GetOrdens({ token })).data;
+        const { ordenes } = await (await GetOrdens({ token, idPago: SearchOrden || undefined }))
+          .data;
         setFetchOrden(ordenes);
 
         setLoading(false);
@@ -57,7 +58,7 @@ export const Ordens = () => {
     };
 
     Fetch();
-  }, [token]);
+  }, [token, SearchOrden]);
 
   return (
     <Page className={classes.root} title='Clientes'>
@@ -93,12 +94,7 @@ export const Ordens = () => {
               </Card>
             </Box>
             <Box mt={3}>
-              <TableOrders
-                Orders={FetchOrden}
-                SearchOrden={SearchOrden}
-                Loading={Loading}
-                setSelectOrder={setSelectOrder}
-              />
+              <TableOrders Orders={FetchOrden} Loading={Loading} setSelectOrder={setSelectOrder} />
             </Box>
           </Grid>
           <Grid item xs={12} lg={4}>

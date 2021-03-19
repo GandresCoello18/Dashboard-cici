@@ -9,26 +9,23 @@ import {
   CardContent,
   Card,
   SvgIcon,
-  CardActions,
-  Grid,
+  Accordion,
+  AccordionDetails,
   Typography,
-  Select,
-  CardActionArea,
-  MenuItem,
-  Button,
-  CardMedia,
+  AccordionSummary,
   TextField,
   InputAdornment,
+  Button,
 } from '@material-ui/core';
 import Page from '../components/page';
 import SearchIcon from '@material-ui/icons/Search';
 import { toast } from 'react-toast';
-import { Coupon } from '../interfaces/Coupon';
-import Skeleton from '@material-ui/lab/Skeleton';
-import Alert from '@material-ui/lab/Alert';
+import { Coupon, CouponsAssing } from '../interfaces/Coupon';
 import { MeContext } from '../context/contextMe';
-import { GetCoupons } from '../api/coupons';
-import { renderSource } from '../helpers/coupons';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import { GetAssignCoupons, GetCoupons } from '../api/coupons';
+import { CardCoupons } from '../components/Coupons/cardsCupons';
+import { TableCouponUser } from '../components/Coupons/tableCouponUser';
 
 const useStyles = makeStyles((theme: any) => ({
   root: {
@@ -37,11 +34,12 @@ const useStyles = makeStyles((theme: any) => ({
     paddingBottom: theme.spacing(3),
     paddingTop: theme.spacing(3),
   },
-  card: {
-    maxWidth: 345,
+  heading: {
+    fontSize: theme.typography.pxToRem(15),
+    fontWeight: theme.typography.fontWeightRegular,
   },
-  media: {
-    height: 140,
+  space: {
+    marginLeft: 10,
   },
 }));
 
@@ -49,38 +47,34 @@ export const Coupons = () => {
   const classes = useStyles();
   const { token } = useContext(MeContext);
   const [Loading, setLoading] = useState<boolean>(false);
-  const [IdCoupon, setIdCoupon] = useState<string>('');
   const [SearchCoupon, setSearchCoupon] = useState<string>('');
   const [FetchCoupons, setFetchCoupons] = useState<Coupon[]>([]);
+  const [FetchAssingCoupons, setFetchAssingCoupons] = useState<CouponsAssing[]>([]);
+
+  console.log(SearchCoupon);
 
   useEffect(() => {
     setLoading(true);
 
-    try {
-      const Fetch = async () => {
+    const Fetch = async () => {
+      try {
         const { coupons } = await (await GetCoupons({ token })).data;
         setFetchCoupons(coupons);
-      };
 
-      Fetch();
-    } catch (error) {
-      toast.error(error.message);
-    }
+        const { CouponsAssing } = await (
+          await GetAssignCoupons({ token, id_user_coupon: SearchCoupon || undefined })
+        ).data;
+        setFetchAssingCoupons(CouponsAssing);
 
-    setLoading(false);
-  }, [token]);
+        setLoading(false);
+      } catch (error) {
+        toast.error(error.message);
+        setLoading(false);
+      }
+    };
 
-  const SkeletonCuopon = () => {
-    return (
-      <Grid container spacing={3}>
-        {[0, 1, 2, 3].map(item => (
-          <Grid item xs={12} md={4} lg={3} key={item}>
-            <Skeleton style={{ padding: 15 }} variant='rect' width={280} height={180} />
-          </Grid>
-        ))}
-      </Grid>
-    );
-  };
+    Fetch();
+  }, [token, SearchCoupon]);
 
   return (
     <Page className={classes.root} title='Cupones'>
@@ -88,7 +82,7 @@ export const Coupons = () => {
         <Box mt={3}>
           <Card>
             <CardContent>
-              <Box maxWidth={500}>
+              <Box maxWidth={500} display='flex'>
                 <TextField
                   fullWidth
                   onChange={event => setSearchCoupon(event.target.value)}
@@ -101,81 +95,37 @@ export const Coupons = () => {
                       </InputAdornment>
                     ),
                   }}
-                  placeholder='Buscar cupon'
+                  placeholder='Buscar cupon por ID'
                   variant='outlined'
                 />
+                <Button
+                  color='secondary'
+                  variant='contained'
+                  onClick={() => setSearchCoupon('')}
+                  className={classes.space}
+                >
+                  Limpiar
+                </Button>
               </Box>
             </CardContent>
           </Card>
         </Box>
         <Box mt={3}>
-          <Card style={{ padding: 20 }}>
-            {Loading ? (
-              SkeletonCuopon()
-            ) : (
-              <Grid container spacing={10}>
-                {FetchCoupons.filter(item => {
-                  return (
-                    item.type.toLowerCase().includes(SearchCoupon.toLowerCase()) ||
-                    item.descripcion.toLowerCase().includes(SearchCoupon.toLowerCase())
-                  );
-                }).map(coupon => (
-                  <Grid item xs={12} md={4} lg={3} key={coupon.idCoupon}>
-                    <Card className={classes.card}>
-                      <CardActionArea>
-                        <CardMedia
-                          className={classes.media}
-                          image={`../${renderSource(coupon.type)}`}
-                          title={coupon.type}
-                        />
-                        <CardContent>
-                          <Typography gutterBottom variant='h5' component='h2'>
-                            {coupon.type}
-                          </Typography>
-                          <Typography variant='body2' color='textSecondary' component='p'>
-                            {coupon.descripcion}
-                          </Typography>
-                        </CardContent>
-                      </CardActionArea>
-                      <CardActions>
-                        <Button size='small' style={{ color: 'red' }}>
-                          Eliminar
-                        </Button>
-                        <Button
-                          size='small'
-                          color='secondary'
-                          onClick={() => setIdCoupon(coupon.idCoupon)}
-                        >
-                          {coupon.status}
-                        </Button>
-                        {IdCoupon === coupon.idCoupon && (
-                          <Select
-                            labelId='demo-controlled-open-select-label'
-                            id='demo-controlled-open-select'
-                            open={IdCoupon === coupon.idCoupon}
-                            value=''
-                            onClose={() => setIdCoupon('')}
-                            onOpen={() => setIdCoupon(coupon.idCoupon)}
-                            onChange={event => console.log(event.target.value)}
-                            style={{ width: '80%' }}
-                          >
-                            <MenuItem value='Block'>Bloquear</MenuItem>
-                            <MenuItem value='Active'>Activar</MenuItem>
-                          </Select>
-                        )}
-                      </CardActions>
-                    </Card>
-                  </Grid>
-                ))}
-              </Grid>
-            )}
-
-            {!Loading && FetchCoupons.length === 0 && (
-              <Alert severity='info'>
-                Por el momento no hay <strong>Cupones</strong> para mostrar.
-              </Alert>
-            )}
-          </Card>
+          <Accordion>
+            <AccordionSummary
+              expandIcon={<ExpandMoreIcon />}
+              aria-controls='panel1a-content'
+              id='panel1a-header'
+            >
+              <Typography className={classes.heading}>Nuestros Cupones</Typography>
+            </AccordionSummary>
+            <AccordionDetails>
+              <CardCoupons Loading={Loading} Coupons={FetchCoupons} />
+            </AccordionDetails>
+          </Accordion>
+        </Box>
+        <Box mt={3}>
+          <TableCouponUser Coupons={FetchAssingCoupons} Loading={Loading} />
         </Box>
       </Container>
     </Page>

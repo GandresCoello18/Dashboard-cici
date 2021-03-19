@@ -33,11 +33,10 @@ const useStyles = makeStyles(theme => ({
 
 interface Props {
   products: Product[];
-  SearchProduct: string;
   Loading: boolean;
 }
 
-export const TableProduct = ({ products, SearchProduct, Loading }: Props) => {
+export const TableProduct = ({ products, Loading }: Props) => {
   const classes = useStyles();
   const [limit, setLimit] = useState<number>(10);
   const [page, setPage] = useState<number>(0);
@@ -77,61 +76,54 @@ export const TableProduct = ({ products, SearchProduct, Loading }: Props) => {
             </TableHead>
             <TableBody>
               {!Loading &&
-                products
-                  .filter(item => {
-                    return (
-                      item.title.toLowerCase().includes(SearchProduct.toLowerCase()) ||
-                      item.description.toLowerCase().includes(SearchProduct.toLowerCase())
-                    );
-                  })
-                  .map(product => (
-                    <TableRow hover key={product.idProducts}>
-                      <TableCell>
-                        <Box alignItems='center' display='flex'>
-                          <Avatar
-                            className={classes.avatar}
-                            src={`${BASE_API}/static/${product.source}`}
-                          >
-                            {getInitials(product.title)}
-                          </Avatar>
-                          <Typography color='textPrimary' variant='body1'>
-                            {product.title}
-                          </Typography>
-                        </Box>
-                      </TableCell>
-                      <TableCell>${product.price}</TableCell>
-                      <TableCell>{product.available}</TableCell>
-                      <TableCell>{product.sold}</TableCell>
-                      <TableCell>{product.stars}</TableCell>
-                      <TableCell>{product.brand}</TableCell>
-                      <TableCell>{product.size}</TableCell>
-                      <TableCell>{product.model}</TableCell>
-                      <TableCell>{product.discount}%</TableCell>
-                      <TableCell>
-                        <Chip label={product.status} color='secondary' />
-                      </TableCell>
-                      <TableCell>{product.created_at}</TableCell>
-                      <TableCell>
-                        <Link to={`/app/products/${product.idProducts}`}>
-                          <Button size='small' variant='contained' color='primary'>
-                            Detalles
-                          </Button>
-                        </Link>
-                        <br />
-                        <br />
-                        <Button
-                          size='small'
-                          variant='contained'
-                          onClick={() => {
-                            /* setDialogo(true);
-                          setIdUser(customer.idUser); */
-                          }}
+                products.map(product => (
+                  <TableRow hover key={product.idProducts}>
+                    <TableCell>
+                      <Box alignItems='center' display='flex'>
+                        <Avatar
+                          className={classes.avatar}
+                          src={`${BASE_API}/static/${product.source}`}
                         >
-                          ELiminar
+                          {getInitials(product.title)}
+                        </Avatar>
+                        <Typography color='textPrimary' variant='body1'>
+                          {product.title}
+                        </Typography>
+                      </Box>
+                    </TableCell>
+                    <TableCell>${product.price}</TableCell>
+                    <TableCell>{product.available}</TableCell>
+                    <TableCell>{product.sold}</TableCell>
+                    <TableCell>{product.stars}</TableCell>
+                    <TableCell>{product.brand}</TableCell>
+                    <TableCell>{product.size}</TableCell>
+                    <TableCell>{product.model}</TableCell>
+                    <TableCell>{product.discount}%</TableCell>
+                    <TableCell>
+                      <Chip label={product.status} color='secondary' />
+                    </TableCell>
+                    <TableCell>{product.created_at}</TableCell>
+                    <TableCell>
+                      <Link to={`/app/products/${product.idProducts}`}>
+                        <Button size='small' variant='contained' color='primary'>
+                          Detalles
                         </Button>
-                      </TableCell>
-                    </TableRow>
-                  ))}
+                      </Link>
+                      <br />
+                      <br />
+                      <Button
+                        size='small'
+                        variant='contained'
+                        onClick={() => {
+                          /* setDialogo(true);
+                          setIdUser(customer.idUser); */
+                        }}
+                      >
+                        ELiminar
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                ))}
             </TableBody>
           </Table>
 

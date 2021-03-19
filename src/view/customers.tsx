@@ -43,7 +43,8 @@ export const Customenrs = () => {
 
     const Fetch = async () => {
       try {
-        const { users } = await (await GetUsers({ token })).data;
+        const { users } = await (await GetUsers({ token, findUser: SearchClient || undefined }))
+          .data;
         setFetchCustomenrs(users);
       } catch (error) {
         toast.error(error.message);
@@ -53,7 +54,7 @@ export const Customenrs = () => {
     Fetch();
 
     setLoading(false);
-  }, [token]);
+  }, [token, SearchClient]);
 
   return (
     <Page className={classes.root} title='Clientes'>
@@ -87,11 +88,7 @@ export const Customenrs = () => {
           </Card>
         </Box>
         <Box mt={3}>
-          <TableCustomer
-            SearchClient={SearchClient}
-            customers={FetchCustomenrs}
-            Loading={Loading}
-          />
+          <TableCustomer customers={FetchCustomenrs} Loading={Loading} />
         </Box>
       </Container>
 

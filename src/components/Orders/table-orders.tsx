@@ -19,12 +19,11 @@ import { OrdenProduct } from '../../interfaces/orden';
 
 interface Props {
   Orders: OrdenProduct[];
-  SearchOrden: string;
   Loading: boolean;
   setSelectOrder: Dispatch<SetStateAction<OrdenProduct | undefined>>;
 }
 
-export const TableOrders = ({ Orders, SearchOrden, Loading, setSelectOrder }: Props) => {
+export const TableOrders = ({ Orders, Loading, setSelectOrder }: Props) => {
   const [limit, setLimit] = useState<number>(10);
   const [page, setPage] = useState<number>(0);
 
@@ -56,12 +55,7 @@ export const TableOrders = ({ Orders, SearchOrden, Loading, setSelectOrder }: Pr
             </TableHead>
             <TableBody>
               {!Loading &&
-                Orders.filter(item => {
-                  return (
-                    item.paymentId.toLowerCase().includes(SearchOrden.toLowerCase()) ||
-                    item.paymentMethod.toLowerCase().includes(SearchOrden.toLowerCase())
-                  );
-                }).map(orden => (
+                Orders.map(orden => (
                   <TableRow onClick={() => setSelectOrder(orden)} hover key={orden.idOrder}>
                     <TableCell>{orden.paymentMethod}</TableCell>
                     <TableCell>{orden.paymentId}</TableCell>

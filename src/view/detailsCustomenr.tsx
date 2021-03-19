@@ -20,6 +20,10 @@ import { GetAddressByUser } from '../api/address';
 import Alert from '@material-ui/lab/Alert';
 import { GetFavoriteByUser } from '../api/favorite';
 import { Product } from '../interfaces/Product';
+import { TableOrders } from '../components/Orders/table-orders';
+import { DetailsOrder } from '../components/Orders/DetailsOrder';
+import { OrdenProduct } from '../interfaces/orden';
+import { GetOrdensByUser } from '../api/orders';
 
 const useStyles = makeStyles((theme: any) => ({
   root: {
@@ -38,6 +42,8 @@ export const DetailsCustomenr = () => {
   const [User, setUser] = useState<Customers>();
   const [Address, setAddress] = useState<Addresses[]>([]);
   const [Favorites, setFavorites] = useState<Product[]>([]);
+  const [FetchOrden, setFetchOrden] = useState<OrdenProduct[]>([]);
+  const [SelectOrder, setSelectOrder] = useState<OrdenProduct>();
 
   useEffect(() => {
     setLoading(true);
@@ -52,6 +58,9 @@ export const DetailsCustomenr = () => {
 
         const { products } = await (await GetFavoriteByUser({ token, idUser: params.idUser })).data;
         setFavorites(products);
+
+        const { ordenes } = await (await GetOrdensByUser({ token, idUser: params.idUser })).data;
+        setFetchOrden(ordenes);
 
         setLoading(false);
       } catch (error) {
@@ -104,7 +113,7 @@ export const DetailsCustomenr = () => {
 
           <Grid container spacing={3} direction='row' justify='center' alignItems='center'>
             <Box padding={5}>
-              <TableProduct products={Favorites} SearchProduct='' Loading={Loading} />
+              <TableProduct products={Favorites} Loading={Loading} />
             </Box>
           </Grid>
         </Card>
@@ -117,7 +126,20 @@ export const DetailsCustomenr = () => {
 
           <Grid container spacing={3} direction='row' justify='center' alignItems='center'>
             <Box padding={5}>
-              <TableProduct products={[]} SearchProduct='' Loading={false} />
+              <Grid container spacing={3}>
+                <Grid item xs={12} lg={8}>
+                  <Box mt={3}>
+                    <TableOrders
+                      Orders={FetchOrden}
+                      Loading={Loading}
+                      setSelectOrder={setSelectOrder}
+                    />
+                  </Box>
+                </Grid>
+                <Grid item xs={12} lg={4}>
+                  <DetailsOrder Order={SelectOrder} isDetails />
+                </Grid>
+              </Grid>
             </Box>
           </Grid>
         </Card>
