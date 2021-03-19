@@ -17,3 +17,19 @@ export const GetOrdensByUser = async (option: { token: string | undefined; idUse
   });
   return response;
 };
+
+export const UpdateStatusOrden = async (option: {
+  token: string | undefined;
+  idOrden: string;
+  status: string;
+}) => {
+  api.defaults.headers['access-token'] = option.token;
+  const response = await api({
+    method: 'PUT',
+    url: `/orden/status/${option.idOrden}`,
+    data: {
+      status: option.status,
+    },
+  });
+  return response;
+};

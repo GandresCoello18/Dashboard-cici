@@ -5,7 +5,6 @@ import {
   Container,
   makeStyles,
   Box,
-  Button,
   CardContent,
   Card,
   Grid,
@@ -16,7 +15,6 @@ import {
 import Page from '../components/page';
 import SearchIcon from '@material-ui/icons/Search';
 import { toast } from 'react-toast';
-import { ModalElement } from '../components/ModalElment';
 import { GetOrdens } from '../api/orders';
 import { MeContext } from '../context/contextMe';
 import { OrdenProduct } from '../interfaces/orden';
@@ -35,8 +33,8 @@ const useStyles = makeStyles((theme: any) => ({
 export const Ordens = () => {
   const classes = useStyles();
   const { token } = useContext(MeContext);
-  const [Modal, setModal] = useState<boolean>(false);
   const [Loading, setLoading] = useState<boolean>(false);
+  const [ReloadOrders, setReloadOrders] = useState<boolean>(false);
   const [SearchOrden, setSearchOrden] = useState<string>('');
   const [SelectOrder, setSelectOrder] = useState<OrdenProduct>();
   const [FetchOrden, setFetchOrden] = useState<OrdenProduct[]>([]);
@@ -58,18 +56,17 @@ export const Ordens = () => {
     };
 
     Fetch();
-  }, [token, SearchOrden]);
+
+    if (ReloadOrders) {
+      setReloadOrders(false);
+    }
+  }, [token, SearchOrden, ReloadOrders]);
 
   return (
     <Page className={classes.root} title='Clientes'>
       <Container maxWidth='xl'>
         <Grid container spacing={3}>
           <Grid item xs={12} lg={8}>
-            <Box display='flex' justifyContent='flex-end'>
-              <Button color='secondary' variant='contained' onClick={() => setModal(true)}>
-                Nueva Orden
-              </Button>
-            </Box>
             <Box mt={3}>
               <Card>
                 <CardContent>
@@ -98,14 +95,10 @@ export const Ordens = () => {
             </Box>
           </Grid>
           <Grid item xs={12} lg={4}>
-            <DetailsOrder Order={SelectOrder} />
+            <DetailsOrder Order={SelectOrder} setReloadOrders={setReloadOrders} />
           </Grid>
         </Grid>
       </Container>
-
-      <ModalElement visible={Modal} setVisible={setModal}>
-        dfef
-      </ModalElement>
     </Page>
   );
 };

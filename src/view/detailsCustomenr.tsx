@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-use-before-define */
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable react/react-in-jsx-scope */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
@@ -39,6 +41,7 @@ export const DetailsCustomenr = () => {
   const params = useParams();
   const { token } = useContext(MeContext);
   const [Loading, setLoading] = useState<boolean>(false);
+  const [ReloadOrders, setReloadOrders] = useState<boolean>(false);
   const [User, setUser] = useState<Customers>();
   const [Address, setAddress] = useState<Addresses[]>([]);
   const [Favorites, setFavorites] = useState<Product[]>([]);
@@ -59,8 +62,7 @@ export const DetailsCustomenr = () => {
         const { products } = await (await GetFavoriteByUser({ token, idUser: params.idUser })).data;
         setFavorites(products);
 
-        const { ordenes } = await (await GetOrdensByUser({ token, idUser: params.idUser })).data;
-        setFetchOrden(ordenes);
+        GetOrders();
 
         setLoading(false);
       } catch (error) {
@@ -71,6 +73,23 @@ export const DetailsCustomenr = () => {
 
     params.idUser && FetchUser();
   }, [params, token]);
+
+  useEffect(() => {
+    GetOrders();
+
+    if (ReloadOrders) {
+      setReloadOrders(false);
+    }
+  }, [ReloadOrders]);
+
+  const GetOrders = async () => {
+    try {
+      const { ordenes } = await (await GetOrdensByUser({ token, idUser: params.idUser })).data;
+      setFetchOrden(ordenes);
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
 
   return (
     <Page className={classes.root} title={`Detalles de ${User?.userName}`}>
@@ -137,7 +156,7 @@ export const DetailsCustomenr = () => {
                   </Box>
                 </Grid>
                 <Grid item xs={12} lg={4}>
-                  <DetailsOrder Order={SelectOrder} isDetails />
+                  <DetailsOrder Order={SelectOrder} setReloadOrders={setReloadOrders} isDetails />
                 </Grid>
               </Grid>
             </Box>
