@@ -25,7 +25,6 @@ import { Link } from 'react-router-dom';
 import { BASE_API } from '../../api';
 
 const useStyles = makeStyles(theme => ({
-  root: {},
   avatar: {
     marginRight: theme.spacing(2),
   },
@@ -65,9 +64,6 @@ export const TableProduct = ({ products, Loading }: Props) => {
                 <TableCell>Disponible</TableCell>
                 <TableCell>Vendidos</TableCell>
                 <TableCell>Calificacion</TableCell>
-                <TableCell>Marca</TableCell>
-                <TableCell>Tamaño</TableCell>
-                <TableCell>Modelo</TableCell>
                 <TableCell>Descuento</TableCell>
                 <TableCell>Estado</TableCell>
                 <TableCell>Creado</TableCell>
@@ -79,7 +75,7 @@ export const TableProduct = ({ products, Loading }: Props) => {
                 products.map(product => (
                   <TableRow hover key={product.idProducts}>
                     <TableCell>
-                      <Box alignItems='center' display='flex'>
+                      <Box alignItems='center' display='flex' maxWidth={400}>
                         <Avatar
                           className={classes.avatar}
                           src={`${BASE_API}/static/${product.source}`}
@@ -95,9 +91,6 @@ export const TableProduct = ({ products, Loading }: Props) => {
                     <TableCell>{product.available}</TableCell>
                     <TableCell>{product.sold}</TableCell>
                     <TableCell>{product.stars}</TableCell>
-                    <TableCell>{product.brand}</TableCell>
-                    <TableCell>{product.size}</TableCell>
-                    <TableCell>{product.model}</TableCell>
                     <TableCell>{product.discount}%</TableCell>
                     <TableCell>
                       <Chip label={product.status} color='secondary' />

@@ -15,7 +15,6 @@ import {
   AccordionSummary,
   TextField,
   InputAdornment,
-  Button,
 } from '@material-ui/core';
 import Page from '../components/page';
 import SearchIcon from '@material-ui/icons/Search';
@@ -98,14 +97,6 @@ export const Coupons = () => {
                   placeholder='Buscar cupon por ID'
                   variant='outlined'
                 />
-                <Button
-                  color='secondary'
-                  variant='contained'
-                  onClick={() => setSearchCoupon('')}
-                  className={classes.space}
-                >
-                  Limpiar
-                </Button>
               </Box>
             </CardContent>
           </Card>

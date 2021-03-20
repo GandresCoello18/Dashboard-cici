@@ -72,7 +72,7 @@ export const DetailsOrder = ({ Order, setReloadOrders, isDetails }: Props) => {
                     setReloadOrders={setReloadOrders}
                   />
                 </Grid>
-                {Order.status === 'Paid' && (
+                {Order.status === 'Paid' && !Order.sent && (
                   <Grid item xs={4}>
                     <Button
                       variant='contained'

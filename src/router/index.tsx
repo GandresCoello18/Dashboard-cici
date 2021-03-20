@@ -22,6 +22,7 @@ import { useContext, useEffect } from 'react';
 import { GetMeUser } from '../api/users';
 import { MeContext } from '../context/contextMe';
 import { toast, ToastContainer } from 'react-toast';
+import { ShippingView } from '../view/shipping';
 
 const token = Cookies.get('access-token-cici');
 
@@ -45,6 +46,7 @@ const routes = [
       { path: 'products/:idProduct', element: PathSesion(DetailsProduct) },
       { path: 'coupons', element: PathSesion(Coupons) },
       { path: 'shopping', element: PathSesion(Ordens) },
+      { path: 'shipping', element: PathSesion(ShippingView) },
       { path: 'account', element: PathSesion(Account) },
       { path: '*', element: <Navigate to='/404' /> },
     ],

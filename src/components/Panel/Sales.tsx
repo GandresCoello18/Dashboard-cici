@@ -1,5 +1,5 @@
 /* eslint-disable react/react-in-jsx-scope */
-import { Bar } from 'react-chartjs-2';
+import { Line } from 'react-chartjs-2';
 import {
   Box,
   Button,
@@ -100,7 +100,7 @@ const Sales = () => {
       <Divider />
       <CardContent>
         <Box height={400} position='relative'>
-          <Bar data={data} options={options} />
+          <Line data={data} options={options} />
         </Box>
       </CardContent>
       <Divider />

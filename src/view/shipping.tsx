@@ -15,11 +15,10 @@ import {
 import Page from '../components/page';
 import SearchIcon from '@material-ui/icons/Search';
 import { toast } from 'react-toast';
-import { GetOrdens } from '../api/orders';
+import { GetShipping } from '../api/shipping';
 import { MeContext } from '../context/contextMe';
-import { OrdenProduct } from '../interfaces/orden';
-import { TableOrders } from '../components/Orders/table-orders';
-import { DetailsOrder } from '../components/Orders/DetailsOrder';
+import { TableShipping } from '../components/Shipping/tableShippong';
+import { Shipping } from '../interfaces/Shipping';
 
 const useStyles = makeStyles((theme: any) => ({
   root: {
@@ -30,23 +29,23 @@ const useStyles = makeStyles((theme: any) => ({
   },
 }));
 
-export const Ordens = () => {
+export const ShippingView = () => {
   const classes = useStyles();
   const { token } = useContext(MeContext);
   const [Loading, setLoading] = useState<boolean>(false);
   const [ReloadOrders, setReloadOrders] = useState<boolean>(false);
-  const [SearchOrden, setSearchOrden] = useState<string>('');
-  const [SelectOrder, setSelectOrder] = useState<OrdenProduct>();
-  const [FetchOrden, setFetchOrden] = useState<OrdenProduct[]>([]);
+  const [SearchShipping, setSearchShipping] = useState<string>('');
+  const [Shipping, setShipping] = useState<Shipping[]>([]);
 
   useEffect(() => {
     setLoading(true);
 
     const Fetch = async () => {
       try {
-        const { ordenes } = await (await GetOrdens({ token, idPago: SearchOrden || undefined }))
-          .data;
-        setFetchOrden(ordenes);
+        const { shipping } = await (
+          await GetShipping({ token, idPago: SearchShipping || undefined })
+        ).data;
+        setShipping(shipping);
 
         setLoading(false);
       } catch (error) {
@@ -60,20 +59,20 @@ export const Ordens = () => {
     if (ReloadOrders) {
       setReloadOrders(false);
     }
-  }, [token, SearchOrden, ReloadOrders]);
+  }, [token, SearchShipping, ReloadOrders]);
 
   return (
-    <Page className={classes.root} title='Ordenes'>
+    <Page className={classes.root} title='Envios'>
       <Container maxWidth='xl'>
         <Grid container spacing={3}>
-          <Grid item xs={12} lg={8}>
+          <Grid item xs={12} lg={10}>
             <Box mt={3}>
               <Card>
                 <CardContent>
                   <Box maxWidth={500}>
                     <TextField
                       fullWidth
-                      onChange={event => setSearchOrden(event.target.value)}
+                      onChange={event => setSearchShipping(event.target.value)}
                       InputProps={{
                         startAdornment: (
                           <InputAdornment position='start'>
@@ -83,7 +82,7 @@ export const Ordens = () => {
                           </InputAdornment>
                         ),
                       }}
-                      placeholder='Buscar orden'
+                      placeholder='Buscar por ID de pago'
                       variant='outlined'
                     />
                   </Box>
@@ -91,11 +90,8 @@ export const Ordens = () => {
               </Card>
             </Box>
             <Box mt={3}>
-              <TableOrders Orders={FetchOrden} Loading={Loading} setSelectOrder={setSelectOrder} />
+              <TableShipping Shipping={Shipping} Loading={Loading} />
             </Box>
-          </Grid>
-          <Grid item xs={12} lg={4}>
-            <DetailsOrder Order={SelectOrder} setReloadOrders={setReloadOrders} />
           </Grid>
         </Grid>
       </Container>

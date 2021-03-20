@@ -12,6 +12,8 @@ import {
   List,
   Typography,
   makeStyles,
+  Button,
+  ListItem,
 } from '@material-ui/core';
 import AcUnitIcon from '@material-ui/icons/AcUnit';
 import EqualizerIcon from '@material-ui/icons/Equalizer';
@@ -22,13 +24,14 @@ import PersonIcon from '@material-ui/icons/Person';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import NavItem from './NavItem';
 import { MeContext } from '../../../context/contextMe';
+import Cookies from 'js-cookie';
 
 interface Props {
   onMobileClose: () => any;
   openMobile: boolean;
 }
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles(theme => ({
   mobileDrawer: {
     width: 256,
   },
@@ -43,6 +46,24 @@ const useStyles = makeStyles(() => ({
     height: 64,
   },
   navItem: {},
+  item: {
+    display: 'flex',
+    paddingTop: 0,
+    paddingBottom: 0,
+  },
+  button: {
+    color: theme.palette.text.secondary,
+    fontWeight: theme.typography.fontWeightMedium,
+    justifyContent: 'flex-start',
+    letterSpacing: 0,
+    padding: '10px 8px',
+    textTransform: 'none',
+    width: '100%',
+  },
+  title: {
+    marginRight: 'auto',
+    color: 'red',
+  },
 }));
 
 const NavBar = ({ onMobileClose, openMobile }: Props) => {
@@ -76,7 +97,7 @@ const NavBar = ({ onMobileClose, openMobile }: Props) => {
       title: 'Compras',
     },
     {
-      href: '/app/envios',
+      href: '/app/shipping',
       icon: LocalShippingIcon,
       title: 'Envios',
     },
@@ -86,6 +107,11 @@ const NavBar = ({ onMobileClose, openMobile }: Props) => {
       title: 'Mi cuenta',
     },
   ];
+
+  const closeSesion = () => {
+    Cookies.remove('access-token-cici');
+    window.location.href = '/login';
+  };
 
   useEffect(() => {
     if (openMobile && onMobileClose) {
@@ -116,6 +142,11 @@ const NavBar = ({ onMobileClose, openMobile }: Props) => {
           {items.map((item: any) => (
             <NavItem href={item.href} key={item.title} title={item.title} icon={item.icon} />
           ))}
+          <ListItem className={classes.item} disableGutters>
+            <Button className={classes.button} onClick={closeSesion}>
+              <span className={classes.title}>Salir</span>
+            </Button>
+          </ListItem>
         </List>
       </Box>
       <Box flexGrow={1} />

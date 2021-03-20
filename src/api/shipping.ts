@@ -10,3 +10,12 @@ export const CreateShipping = async (option: { token: string | undefined; data: 
   });
   return response;
 };
+
+export const GetShipping = async (option: { token: string | undefined; idPago?: string }) => {
+  api.defaults.headers['access-token'] = option.token;
+  const response = await api({
+    method: 'GET',
+    url: `${option.idPago ? `/shipping?idPago=${option.idPago}` : '/shipping'}`,
+  });
+  return response;
+};
