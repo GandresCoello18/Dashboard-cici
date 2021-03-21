@@ -10,7 +10,10 @@ import {
   makeStyles,
 } from '@material-ui/core';
 import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward';
+import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
 import PeopleIcon from '@material-ui/icons/PeopleOutlined';
+import Skeleton from '@material-ui/lab/Skeleton';
+import { useEffect, useState } from 'react';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -21,17 +24,42 @@ const useStyles = makeStyles(theme => ({
     height: 56,
     width: 56,
   },
-  differenceIcon: {
+  differenceNegativeIcon: {
+    color: colors.red[900],
+  },
+  differencePositiveIcon: {
     color: colors.green[900],
   },
-  differenceValue: {
+  differencePositiveValue: {
     color: colors.green[900],
+    marginRight: theme.spacing(1),
+  },
+  differenceNegativeValue: {
+    color: colors.red[900],
     marginRight: theme.spacing(1),
   },
 }));
 
-const TotalCustomers = () => {
+interface Props {
+  user: number | undefined;
+  totalUser: number | undefined;
+  lasTotalUser: number | undefined;
+  Loading: boolean;
+}
+
+const TotalCustomers = ({ user, totalUser, lasTotalUser, Loading }: Props) => {
   const classes = useStyles();
+  const [Result, setResult] = useState<number>(0);
+  const [Actual, setActual] = useState<number>(0);
+  const [Anterior, setAnterior] = useState<number>(0);
+
+  useEffect(() => {
+    if (totalUser && lasTotalUser) {
+      setActual(totalUser);
+      setAnterior(lasTotalUser);
+      setResult((totalUser * lasTotalUser) / 100);
+    }
+  }, [totalUser, lasTotalUser]);
 
   return (
     <Card className={classes.root}>
@@ -42,7 +70,7 @@ const TotalCustomers = () => {
               TOTAL DE CLIENTES
             </Typography>
             <Typography color='textPrimary' variant='h3'>
-              1,600
+              {Loading ? <Skeleton variant='text' width={300} /> : user}
             </Typography>
           </Grid>
           <Grid item>
@@ -52,9 +80,18 @@ const TotalCustomers = () => {
           </Grid>
         </Grid>
         <Box mt={2} display='flex' alignItems='center'>
-          <ArrowUpwardIcon className={classes.differenceIcon} />
-          <Typography className={classes.differenceValue} variant='body2'>
-            16%
+          {Anterior > Actual ? (
+            <ArrowDownwardIcon className={classes.differenceNegativeIcon} />
+          ) : (
+            <ArrowUpwardIcon className={classes.differencePositiveIcon} />
+          )}
+          <Typography
+            className={
+              Anterior > Actual ? classes.differenceNegativeValue : classes.differencePositiveValue
+            }
+            variant='body2'
+          >
+            {Loading ? <Skeleton variant='text' width={300} /> : Result}%
           </Typography>
           <Typography color='textSecondary' variant='caption'>
             Desde el mes pasado

@@ -1,5 +1,4 @@
 /* eslint-disable react/react-in-jsx-scope */
-import PropTypes from 'prop-types';
 import {
   Avatar,
   Box,
@@ -11,7 +10,10 @@ import {
   makeStyles,
 } from '@material-ui/core';
 import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
+import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward';
 import MoneyIcon from '@material-ui/icons/Money';
+import Skeleton from '@material-ui/lab/Skeleton';
+import { useEffect, useState } from 'react';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -22,17 +24,42 @@ const useStyles = makeStyles(theme => ({
     height: 56,
     width: 56,
   },
-  differenceIcon: {
+  differenceNegativeIcon: {
     color: colors.red[900],
   },
-  differenceValue: {
+  differencePositiveIcon: {
+    color: colors.green[900],
+  },
+  differenceNegativeValue: {
     color: colors.red[900],
+    marginRight: theme.spacing(1),
+  },
+  differencePositiveValue: {
+    color: colors.green[900],
     marginRight: theme.spacing(1),
   },
 }));
 
-const Budget = () => {
+interface Props {
+  order: number | undefined;
+  totalOrders: number | undefined;
+  lasTotalOrders: number | undefined;
+  Loading: boolean;
+}
+
+const Budget = ({ order, totalOrders, lasTotalOrders, Loading }: Props) => {
   const classes = useStyles();
+  const [Result, setResult] = useState<number>(0);
+  const [Actual, setActual] = useState<number>(0);
+  const [Anterior, setAnterior] = useState<number>(0);
+
+  useEffect(() => {
+    if (totalOrders && lasTotalOrders) {
+      setActual(totalOrders);
+      setAnterior(lasTotalOrders);
+      setResult((totalOrders * lasTotalOrders) / 100);
+    }
+  }, [totalOrders, lasTotalOrders]);
 
   return (
     <Card>
@@ -40,10 +67,10 @@ const Budget = () => {
         <Grid container justify='space-between' spacing={3}>
           <Grid item>
             <Typography color='textSecondary' gutterBottom variant='h6'>
-              PRESUPUESTO
+              ORDERS
             </Typography>
             <Typography color='textPrimary' variant='h3'>
-              $24,000
+              {Loading ? <Skeleton variant='text' width={300} /> : order}
             </Typography>
           </Grid>
           <Grid item>
@@ -53,9 +80,18 @@ const Budget = () => {
           </Grid>
         </Grid>
         <Box mt={2} display='flex' alignItems='center'>
-          <ArrowDownwardIcon className={classes.differenceIcon} />
-          <Typography className={classes.differenceValue} variant='body2'>
-            12%
+          {Anterior > Actual ? (
+            <ArrowDownwardIcon className={classes.differenceNegativeIcon} />
+          ) : (
+            <ArrowUpwardIcon className={classes.differencePositiveIcon} />
+          )}
+          <Typography
+            className={
+              Anterior > Actual ? classes.differenceNegativeValue : classes.differencePositiveValue
+            }
+            variant='body2'
+          >
+            {Loading ? <Skeleton variant='text' width={300} /> : Result}%
           </Typography>
           <Typography color='textSecondary' variant='caption'>
             Desde el mes pasado
@@ -64,10 +100,6 @@ const Budget = () => {
       </CardContent>
     </Card>
   );
-};
-
-Budget.propTypes = {
-  className: PropTypes.string,
 };
 
 export default Budget;

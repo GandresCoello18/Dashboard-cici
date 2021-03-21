@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable react/react-in-jsx-scope */
 import { Container, makeStyles, Grid } from '@material-ui/core';
@@ -9,6 +10,11 @@ import TasksProgress from '../components/Panel/TasksProgress';
 import TotalCustomers from '../components/Panel/TotalCustomers';
 import TotalProfit from '../components/Panel/TotalProfit';
 import TrafficByDevice from '../components/Panel/TrafficByDevice';
+import { useState, useEffect, useContext } from 'react';
+import { toast } from 'react-toast';
+import { GetStatisticTotal } from '../api/statistic';
+import { MeContext } from '../context/contextMe';
+import { Statistics } from '../interfaces/Statistics';
 
 const useStyles = makeStyles((theme: any) => ({
   root: {
@@ -21,16 +27,47 @@ const useStyles = makeStyles((theme: any) => ({
 
 export const Panel = () => {
   const classes = useStyles();
+  const { token } = useContext(MeContext);
+  const [Loading, setLoading] = useState<boolean>(false);
+  const [Statistic, setStatistic] = useState<Statistics>();
+
+  useEffect(() => {
+    setLoading(true);
+
+    const Fetch = async () => {
+      try {
+        const { statistics } = await (await GetStatisticTotal({ token })).data;
+        setStatistic(statistics);
+
+        setLoading(false);
+      } catch (error) {
+        toast.error(error.message);
+        setLoading(false);
+      }
+    };
+
+    Fetch();
+  }, [token]);
 
   return (
     <Page className={classes.root} title='Panel'>
       <Container maxWidth={undefined}>
         <Grid container spacing={3}>
           <Grid item lg={3} sm={6} xl={3} xs={12}>
-            <Budget />
+            <Budget
+              order={Statistic?.order.order}
+              totalOrders={Statistic?.order.totalOrders}
+              lasTotalOrders={Statistic?.order.totalLasOrders}
+              Loading={Loading}
+            />
           </Grid>
           <Grid item lg={3} sm={6} xl={3} xs={12}>
-            <TotalCustomers />
+            <TotalCustomers
+              user={Statistic?.user.user}
+              totalUser={Statistic?.user.totalLasUser}
+              lasTotalUser={Statistic?.user.totalLasUser}
+              Loading={Loading}
+            />
           </Grid>
           <Grid item lg={3} sm={6} xl={3} xs={12}>
             <TasksProgress />

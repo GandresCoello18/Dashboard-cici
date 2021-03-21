@@ -50,8 +50,6 @@ export const Coupons = () => {
   const [FetchCoupons, setFetchCoupons] = useState<Coupon[]>([]);
   const [FetchAssingCoupons, setFetchAssingCoupons] = useState<CouponsAssing[]>([]);
 
-  console.log(SearchCoupon);
-
   useEffect(() => {
     setLoading(true);
 
