@@ -10,26 +10,31 @@ import {
   useTheme,
   colors,
 } from '@material-ui/core';
-import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 import ArrowRightIcon from '@material-ui/icons/ArrowRight';
 
-const Sales = () => {
+interface Props {
+  fechas: string[] | undefined;
+  ventas: number[] | undefined;
+  comision: number[] | undefined;
+}
+
+const Sales = ({ fechas, ventas, comision }: Props) => {
   const theme = useTheme();
 
   const data = {
     datasets: [
       {
-        backgroundColor: colors.indigo[500],
-        data: [18, 5, 19, 27, 29, 19, 20],
-        label: 'This year',
+        backgroundColor: '#fec4d2',
+        data: ventas,
+        label: 'Ventas',
       },
       {
         backgroundColor: colors.grey[200],
-        data: [11, 20, 12, 29, 30, 25, 13],
-        label: 'Last year',
+        data: comision,
+        label: 'Comision',
       },
     ],
-    labels: ['1 Aug', '2 Aug', '3 Aug', '4 Aug', '5 Aug', '6 Aug'],
+    labels: fechas,
   };
 
   const options = {
@@ -47,7 +52,7 @@ const Sales = () => {
           barPercentage: 0.5,
           categoryPercentage: 0.5,
           ticks: {
-            fontColor: theme.palette.text.secondary,
+            fontColor: theme.palette.text.primary,
           },
           gridLines: {
             display: false,
@@ -58,14 +63,14 @@ const Sales = () => {
       yAxes: [
         {
           ticks: {
-            fontColor: theme.palette.text.secondary,
+            fontColor: theme.palette.text.primary,
             beginAtZero: true,
             min: 0,
           },
           gridLines: {
-            borderDash: [2],
+            borderDash: [8],
             borderDashOffset: [2],
-            color: theme.palette.divider,
+            color: theme.palette.primary,
             drawBorder: false,
             zeroLineBorderDash: [2],
             zeroLineBorderDashOffset: [2],
@@ -76,7 +81,7 @@ const Sales = () => {
     },
     tooltips: {
       backgroundColor: theme.palette.background.default,
-      bodyFontColor: theme.palette.text.secondary,
+      bodyFontColor: theme.palette.text.primary,
       borderColor: theme.palette.divider,
       borderWidth: 1,
       enabled: true,
@@ -89,14 +94,7 @@ const Sales = () => {
 
   return (
     <Card>
-      <CardHeader
-        action={
-          <Button endIcon={<ArrowDropDownIcon />} size='small' variant='text'>
-            Last 7 days
-          </Button>
-        }
-        title='Últimas ventas'
-      />
+      <CardHeader title='Ventas de este mes' />
       <Divider />
       <CardContent>
         <Box height={400} position='relative'>

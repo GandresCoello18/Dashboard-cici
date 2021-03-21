@@ -82,7 +82,7 @@ export const ShippingView = () => {
                           </InputAdornment>
                         ),
                       }}
-                      placeholder='Buscar por ID de pago'
+                      placeholder='Buscar por ID de pago o Guia'
                       variant='outlined'
                     />
                   </Box>

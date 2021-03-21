@@ -4,7 +4,6 @@
 import { Container, makeStyles, Grid } from '@material-ui/core';
 import Page from '../components/page';
 import Budget from '../components/Panel/Budget';
-import LatestOrders from '../components/Panel/LatestOrders';
 import Sales from '../components/Panel/Sales';
 import TasksProgress from '../components/Panel/TasksProgress';
 import TotalCustomers from '../components/Panel/TotalCustomers';
@@ -73,16 +72,17 @@ export const Panel = () => {
             <TasksProgress />
           </Grid>
           <Grid item lg={3} sm={6} xl={3} xs={12}>
-            <TotalProfit />
+            <TotalProfit Amount={Statistic?.Amount} ComisionAmount={Statistic?.ComisionAmount} />
           </Grid>
           <Grid item lg={8} md={12} xl={9} xs={12}>
-            <Sales />
+            <Sales
+              fechas={Statistic?.grafico.fechas}
+              ventas={Statistic?.grafico.ventas}
+              comision={Statistic?.grafico.comision}
+            />
           </Grid>
           <Grid item lg={4} md={6} xl={3} xs={12}>
             <TrafficByDevice />
-          </Grid>
-          <Grid item md={12} xl={9} xs={12}>
-            <LatestOrders />
           </Grid>
         </Grid>
       </Container>

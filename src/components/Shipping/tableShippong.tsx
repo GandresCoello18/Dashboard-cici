@@ -79,8 +79,20 @@ export const TableShipping = ({ Loading, Shipping }: Props) => {
                         </Typography>
                       </Box>
                     </TableCell>
-                    <TableCell>{envio.method || 'None'}</TableCell>
-                    <TableCell>{envio.guide || 'None'}</TableCell>
+                    <TableCell>{envio.method ? <Chip label={envio.method} /> : 'None'}</TableCell>
+                    <TableCell>
+                      {envio.guide ? (
+                        <a
+                          href={`https://www.servientrega.com.ec/rastreo/guia/${envio.guide}`}
+                          target='_blank'
+                          rel='noopener noreferrer'
+                        >
+                          {envio.guide}
+                        </a>
+                      ) : (
+                        'None'
+                      )}
+                    </TableCell>
                     <TableCell>
                       <Chip
                         label={envio.status}

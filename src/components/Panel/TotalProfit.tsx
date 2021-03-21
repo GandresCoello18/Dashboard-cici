@@ -13,7 +13,12 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const TotalProfit = () => {
+interface Props {
+  Amount: number | undefined;
+  ComisionAmount: number | undefined;
+}
+
+const TotalProfit = ({ Amount, ComisionAmount }: Props) => {
   const classes = useStyles();
 
   return (
@@ -24,8 +29,15 @@ const TotalProfit = () => {
             <Typography color='textSecondary' gutterBottom variant='h6'>
               TOTAL DE INGRESOS
             </Typography>
-            <Typography color='textPrimary' variant='h3'>
-              $23,200
+            <Typography color='textPrimary' variant='h5'>
+              ${Amount}
+            </Typography>
+
+            <Typography color='textSecondary' gutterBottom variant='h6'>
+              TOTAL DE COMISION
+            </Typography>
+            <Typography color='textPrimary' variant='h5'>
+              ${ComisionAmount}
             </Typography>
           </Grid>
           <Grid item>

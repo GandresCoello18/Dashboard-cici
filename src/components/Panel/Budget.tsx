@@ -67,7 +67,7 @@ const Budget = ({ order, totalOrders, lasTotalOrders, Loading }: Props) => {
         <Grid container justify='space-between' spacing={3}>
           <Grid item>
             <Typography color='textSecondary' gutterBottom variant='h6'>
-              ORDERS
+              ORDENES
             </Typography>
             <Typography color='textPrimary' variant='h3'>
               {Loading ? <Skeleton variant='text' width={300} /> : order}
