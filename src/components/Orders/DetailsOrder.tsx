@@ -15,7 +15,7 @@ import { OrdenProduct } from '../../interfaces/orden';
 import getInitials from '../../util/getInitials';
 import Alert from '@material-ui/lab/Alert';
 import { SelectUpdate } from './SelectUpdate';
-import { Dialogo } from '../Dialogo';
+import { DialogoMessage } from '../DialogoMessage';
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { ModalElement } from '../ModalElment';
 import { FormNewShipping } from '../Shipping/FormNewShipping';
@@ -207,7 +207,7 @@ export const DetailsOrder = ({ Order, setReloadOrders, isDetails }: Props) => {
         )}
       </Card>
 
-      <Dialogo
+      <DialogoMessage
         title='Aviso importante'
         Open={VisibleDialog}
         setOpen={setVisibleDialog}

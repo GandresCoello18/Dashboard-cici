@@ -18,7 +18,7 @@ interface Props {
   content: string;
 }
 
-export const Dialogo = ({ Open, setOpen, setAceptDialog, title, content }: Props) => {
+export const DialogoMessage = ({ Open, setOpen, setAceptDialog, title, content }: Props) => {
   return (
     <Dialog
       open={Open}

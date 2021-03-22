@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable react/react-in-jsx-scope */
-import { useState } from 'react';
+import { Dispatch, SetStateAction, useContext, useState } from 'react';
 import {
   Box,
   Table,
@@ -8,6 +8,7 @@ import {
   TableCell,
   makeStyles,
   Chip,
+  Button,
   Avatar,
   Typography,
   Card,
@@ -20,10 +21,14 @@ import Alert from '@material-ui/lab/Alert';
 import Skeleton from '@material-ui/lab/Skeleton';
 import { Shipping } from '../../interfaces/Shipping';
 import getInitials from '../../util/getInitials';
+import { UpdateStatusShipping } from '../../api/shipping';
+import { toast } from 'react-toast';
+import { MeContext } from '../../context/contextMe';
 
 interface Props {
   Loading: boolean;
   Shipping: Shipping[];
+  setReloadShipping: Dispatch<SetStateAction<boolean>>;
 }
 
 const useStyles = makeStyles(theme => ({
@@ -32,9 +37,11 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export const TableShipping = ({ Loading, Shipping }: Props) => {
+export const TableShipping = ({ Loading, Shipping, setReloadShipping }: Props) => {
   const classes = useStyles();
 
+  const { token } = useContext(MeContext);
+  const [LoadingUpdate, setLoading] = useState<boolean>(false);
   const [limit, setLimit] = useState<number>(10);
   const [page, setPage] = useState<number>(0);
 
@@ -48,6 +55,31 @@ export const TableShipping = ({ Loading, Shipping }: Props) => {
     return [0, 1, 2, 3, 4, 5, 6, 7].map(item => (
       <Skeleton key={item} style={{ marginBottom: 10 }} variant='rect' width='100%' height={40} />
     ));
+  };
+
+  const validateStatus = (status: string) => {
+    if (status === 'Sent') {
+      return 'Entregado';
+    }
+    return 'Enviado';
+  };
+
+  const handleStatusShipping = async (idShipping: string, status: string) => {
+    setLoading(true);
+
+    try {
+      await UpdateStatusShipping({
+        token,
+        status: validateStatus(status) === 'Entregado' ? 'Delivered' : 'Sent',
+        idShipping,
+      });
+
+      setReloadShipping(true);
+      setLoading(false);
+    } catch (error) {
+      toast.error(error.message);
+      setLoading(false);
+    }
   };
 
   return (
@@ -96,11 +128,20 @@ export const TableShipping = ({ Loading, Shipping }: Props) => {
                     <TableCell>
                       <Chip
                         label={envio.status}
-                        color={envio.status === 'delivered' ? 'secondary' : 'primary'}
+                        color={envio.status === 'Delivered' ? 'secondary' : 'primary'}
                       />
                     </TableCell>
                     <TableCell>{envio.created_at}</TableCell>
                     <TableCell>{envio.paymentId}</TableCell>
+                    <TableCell>
+                      <Button
+                        variant='contained'
+                        color='secondary'
+                        onClick={() => handleStatusShipping(envio.idShipping, envio.status)}
+                      >
+                        {LoadingUpdate ? 'Cargando...' : validateStatus(envio.status)}
+                      </Button>
+                    </TableCell>
                   </TableRow>
                 ))}
             </TableBody>

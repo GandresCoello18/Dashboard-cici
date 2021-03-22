@@ -26,6 +26,8 @@ import { TableOrders } from '../components/Orders/table-orders';
 import { DetailsOrder } from '../components/Orders/DetailsOrder';
 import { OrdenProduct } from '../interfaces/orden';
 import { GetOrdensByUser } from '../api/orders';
+import { GetCouponsAmountByUser } from '../api/coupons';
+import { CouponAmount } from '../interfaces/Coupon';
 
 const useStyles = makeStyles((theme: any) => ({
   root: {
@@ -46,6 +48,7 @@ export const DetailsCustomenr = () => {
   const [Address, setAddress] = useState<Addresses[]>([]);
   const [Favorites, setFavorites] = useState<Product[]>([]);
   const [FetchOrden, setFetchOrden] = useState<OrdenProduct[]>([]);
+  const [FetchCouponAmount, setFetchCouponAmount] = useState<CouponAmount[]>([]);
   const [SelectOrder, setSelectOrder] = useState<OrdenProduct>();
 
   useEffect(() => {
@@ -61,6 +64,11 @@ export const DetailsCustomenr = () => {
 
         const { products } = await (await GetFavoriteByUser({ token, idUser: params.idUser })).data;
         setFavorites(products);
+
+        const { CouponsAmountAssing } = await (
+          await GetCouponsAmountByUser({ token, idUser: params.idUser })
+        ).data;
+        setFetchCouponAmount(CouponsAmountAssing);
 
         GetOrders();
 
@@ -99,7 +107,7 @@ export const DetailsCustomenr = () => {
             <CardProfile User={User} Loading={Loading} />
           </Grid>
           <Grid item xs={12} md={4}>
-            <CardCoupons />
+            <CardCoupons AmountCoupons={FetchCouponAmount} />
           </Grid>
         </Grid>
 

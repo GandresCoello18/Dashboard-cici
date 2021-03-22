@@ -11,6 +11,7 @@ import {
   Divider,
   ListItemText,
 } from '@material-ui/core';
+import { CouponAmount } from '../../../interfaces/Coupon';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -19,7 +20,11 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-export const CardCoupons = () => {
+interface Props {
+  AmountCoupons: CouponAmount[];
+}
+
+export const CardCoupons = ({ AmountCoupons }: Props) => {
   const classes = useStyles();
 
   return (
@@ -27,21 +32,15 @@ export const CardCoupons = () => {
       <CardHeader title='Cupones' />
       <Divider />
       <CardContent className={classes.root}>
-        <Box display='flex'>
-          <ListItemText primary='+ 1 favorito' />
-          <Chip label='3' color='secondary' />
-        </Box>
-        <Divider />
-        <Box display='flex'>
-          <ListItemText primary='15% Descuento' />
-          <Chip label='1' color='secondary' />
-        </Box>
-        <Divider />
-        <Box display='flex'>
-          <ListItemText primary='Envio gratis' />
-          <Chip label='1' color='secondary' />
-        </Box>
-        <Divider />
+        {AmountCoupons.map(coupon => (
+          <>
+            <Box display='flex' key={coupon.type}>
+              <ListItemText primary={coupon.type} />
+              <Chip label={coupon.cantidad} color='secondary' />
+            </Box>
+            <Divider />
+          </>
+        ))}
       </CardContent>
     </Card>
   );

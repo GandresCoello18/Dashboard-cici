@@ -12,6 +12,13 @@ export interface UpdateMeUser {
   phone: number;
 }
 
+interface NewUsers {
+  email: string;
+  userName: string;
+  password: string;
+  provider: string;
+}
+
 export const GetUsers = async (option: { token: string | undefined; findUser?: string }) => {
   api.defaults.headers['access-token'] = option.token;
   const response = await api({
@@ -49,6 +56,15 @@ export const GetMeUser = async (options: { token: string | undefined }) => {
   return response;
 };
 
+export const NewUser = async (options: { data: NewUsers }) => {
+  const response = await api({
+    method: 'POST',
+    url: '/users',
+    data: options.data,
+  });
+  return response;
+};
+
 export const UpdateUser = async (options: { token: string | undefined; data: UpdateMeUser }) => {
   api.defaults.headers['access-token'] = options.token;
   const response = await api({
@@ -72,6 +88,15 @@ export const UpdatePasswordUser = async (options: {
       newKey: options.newKey,
       currentKey: options.currentKey,
     },
+  });
+  return response;
+};
+
+export const DeleteUser = async (options: { token: string | undefined; IdUser: string }) => {
+  api.defaults.headers['access-token'] = options.token;
+  const response = await api({
+    method: 'DELETE',
+    url: `/users/${options.IdUser}`,
   });
   return response;
 };

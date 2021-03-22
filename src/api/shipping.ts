@@ -19,3 +19,19 @@ export const GetShipping = async (option: { token: string | undefined; idPago?: 
   });
   return response;
 };
+
+export const UpdateStatusShipping = async (option: {
+  token: string | undefined;
+  status: string;
+  idShipping: string;
+}) => {
+  api.defaults.headers['access-token'] = option.token;
+  const response = await api({
+    method: 'PUT',
+    url: `/shipping/status/${option.idShipping}`,
+    data: {
+      status: option.status,
+    },
+  });
+  return response;
+};

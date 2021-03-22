@@ -33,7 +33,7 @@ export const ShippingView = () => {
   const classes = useStyles();
   const { token } = useContext(MeContext);
   const [Loading, setLoading] = useState<boolean>(false);
-  const [ReloadOrders, setReloadOrders] = useState<boolean>(false);
+  const [ReloadShipping, setReloadShipping] = useState<boolean>(false);
   const [SearchShipping, setSearchShipping] = useState<string>('');
   const [Shipping, setShipping] = useState<Shipping[]>([]);
 
@@ -56,10 +56,10 @@ export const ShippingView = () => {
 
     Fetch();
 
-    if (ReloadOrders) {
-      setReloadOrders(false);
+    if (ReloadShipping) {
+      setReloadShipping(false);
     }
-  }, [token, SearchShipping, ReloadOrders]);
+  }, [token, SearchShipping, ReloadShipping]);
 
   return (
     <Page className={classes.root} title='Envios'>
@@ -90,7 +90,11 @@ export const ShippingView = () => {
               </Card>
             </Box>
             <Box mt={3}>
-              <TableShipping Shipping={Shipping} Loading={Loading} />
+              <TableShipping
+                Shipping={Shipping}
+                Loading={Loading}
+                setReloadShipping={setReloadShipping}
+              />
             </Box>
           </Grid>
         </Grid>

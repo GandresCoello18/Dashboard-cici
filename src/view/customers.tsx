@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable react/react-in-jsx-scope */
 import { useContext, useEffect, useState } from 'react';
@@ -17,9 +18,10 @@ import Page from '../components/page';
 import SearchIcon from '@material-ui/icons/Search';
 import { Customers } from '../interfaces/Customers';
 import { toast } from 'react-toast';
-import { ModalElement } from '../components/ModalElment';
 import { GetUsers } from '../api/users';
 import { MeContext } from '../context/contextMe';
+import { DialogoForm } from '../components/DialogoForm';
+import { NewCustoment } from '../components/customers/new-customers';
 
 const useStyles = makeStyles((theme: any) => ({
   root: {
@@ -33,8 +35,9 @@ const useStyles = makeStyles((theme: any) => ({
 export const Customenrs = () => {
   const classes = useStyles();
   const { token } = useContext(MeContext);
-  const [Modal, setModal] = useState<boolean>(false);
+  const [visible, setVisible] = useState<boolean>(false);
   const [Loading, setLoading] = useState<boolean>(false);
+  const [ReloadCustoment, setReloadCustoment] = useState<boolean>(false);
   const [SearchClient, setSearchClient] = useState<string>('');
   const [FetchCustomenrs, setFetchCustomenrs] = useState<Customers[]>([]);
 
@@ -53,14 +56,19 @@ export const Customenrs = () => {
 
     Fetch();
 
+    if (ReloadCustoment) {
+      setReloadCustoment(false);
+      setVisible(false);
+    }
+
     setLoading(false);
-  }, [token, SearchClient]);
+  }, [token, SearchClient, ReloadCustoment]);
 
   return (
     <Page className={classes.root} title='Clientes'>
       <Container maxWidth={undefined}>
         <Box display='flex' justifyContent='flex-end'>
-          <Button color='secondary' variant='contained' onClick={() => setModal(true)}>
+          <Button color='secondary' variant='contained' onClick={() => setVisible(true)}>
             Nuevo cliente
           </Button>
         </Box>
@@ -88,13 +96,17 @@ export const Customenrs = () => {
           </Card>
         </Box>
         <Box mt={3}>
-          <TableCustomer customers={FetchCustomenrs} Loading={Loading} />
+          <TableCustomer
+            customers={FetchCustomenrs}
+            Loading={Loading}
+            setReloadCustoment={setReloadCustoment}
+          />
         </Box>
       </Container>
 
-      <ModalElement visible={Modal} setVisible={setModal}>
-        dfef
-      </ModalElement>
+      <DialogoForm Open={visible} setOpen={setVisible} title=''>
+        <NewCustoment setReloadCustoment={setReloadCustoment} />
+      </DialogoForm>
     </Page>
   );
 };
