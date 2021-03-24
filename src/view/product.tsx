@@ -97,7 +97,11 @@ export const Products = () => {
             </Card>
           </Box>
           <Box mt={3}>
-            <TableProduct products={FetchProducts} Loading={Loading} />
+            <TableProduct
+              products={FetchProducts}
+              Loading={Loading}
+              setReloadProduct={setReloadPrducts}
+            />
           </Box>
         </Container>
       </Page>

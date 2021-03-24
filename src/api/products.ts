@@ -40,3 +40,12 @@ export const NewProducto = async (option: { token: string | undefined; data: For
   });
   return response;
 };
+
+export const DeleteProducto = async (option: { token: string | undefined; IdProduct: string }) => {
+  api.defaults.headers['access-token'] = option.token;
+  const response = await api({
+    method: 'DELETE',
+    url: `/products/${option.IdProduct}`,
+  });
+  return response;
+};

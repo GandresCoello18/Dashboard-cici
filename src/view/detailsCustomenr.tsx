@@ -44,6 +44,7 @@ export const DetailsCustomenr = () => {
   const { token } = useContext(MeContext);
   const [Loading, setLoading] = useState<boolean>(false);
   const [ReloadOrders, setReloadOrders] = useState<boolean>(false);
+  const [ReloadFav, setReloadFav] = useState<boolean>(false);
   const [User, setUser] = useState<Customers>();
   const [Address, setAddress] = useState<Addresses[]>([]);
   const [Favorites, setFavorites] = useState<Product[]>([]);
@@ -62,15 +63,13 @@ export const DetailsCustomenr = () => {
         const { address } = await (await GetAddressByUser({ token, idUser: params.idUser })).data;
         setAddress(address);
 
-        const { products } = await (await GetFavoriteByUser({ token, idUser: params.idUser })).data;
-        setFavorites(products);
-
         const { CouponsAmountAssing } = await (
           await GetCouponsAmountByUser({ token, idUser: params.idUser })
         ).data;
         setFetchCouponAmount(CouponsAmountAssing);
 
         GetOrders();
+        GetFavorite();
 
         setLoading(false);
       } catch (error) {
@@ -83,12 +82,27 @@ export const DetailsCustomenr = () => {
   }, [params, token]);
 
   useEffect(() => {
-    GetOrders();
-
     if (ReloadOrders) {
       setReloadOrders(false);
+      GetOrders();
     }
   }, [ReloadOrders]);
+
+  useEffect(() => {
+    if (ReloadFav) {
+      setReloadFav(false);
+      GetFavorite();
+    }
+  }, [ReloadFav]);
+
+  const GetFavorite = async () => {
+    try {
+      const { products } = await (await GetFavoriteByUser({ token, idUser: params.idUser })).data;
+      setFavorites(products);
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
 
   const GetOrders = async () => {
     try {
@@ -140,7 +154,11 @@ export const DetailsCustomenr = () => {
 
           <Grid container spacing={3} direction='row' justify='center' alignItems='center'>
             <Box padding={5}>
-              <TableProduct products={Favorites} Loading={Loading} />
+              <TableProduct
+                products={Favorites}
+                Loading={Loading}
+                setReloadProduct={setReloadFav}
+              />
             </Box>
           </Grid>
         </Card>
