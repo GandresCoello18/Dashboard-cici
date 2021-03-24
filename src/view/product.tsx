@@ -5,6 +5,7 @@ import {
   Container,
   makeStyles,
   Box,
+  Button,
   CardContent,
   Card,
   SvgIcon,
@@ -18,6 +19,8 @@ import { TableProduct } from '../components/Products/table-productos';
 import { Product } from '../interfaces/Product';
 import { MeContext } from '../context/contextMe';
 import { GetProducts } from '../api/products';
+import { DialogoScreenFull } from '../components/DialogoScreenFull';
+import { NewProduct } from '../components/Products/new-product';
 
 const useStyles = makeStyles((theme: any) => ({
   root: {
@@ -31,7 +34,9 @@ const useStyles = makeStyles((theme: any) => ({
 export const Products = () => {
   const classes = useStyles();
   const { token } = useContext(MeContext);
+  const [visible, setVisible] = useState<boolean>(false);
   const [Loading, setLoading] = useState<boolean>(false);
+  const [ReloadPrducts, setReloadPrducts] = useState<boolean>(false);
   const [SearchProduct, setSearchProduct] = useState<string>('');
   const [FetchProducts, setFetchProducts] = useState<Product[]>([]);
 
@@ -53,38 +58,55 @@ export const Products = () => {
     };
 
     Fetch();
-  }, [token, SearchProduct]);
+
+    if (ReloadPrducts) {
+      setReloadPrducts(false);
+    }
+  }, [token, SearchProduct, ReloadPrducts]);
 
   return (
-    <Page className={classes.root} title='Productos'>
-      <Container maxWidth='xl'>
-        <Box mt={3}>
-          <Card>
-            <CardContent>
-              <Box maxWidth={500}>
-                <TextField
-                  fullWidth
-                  onChange={event => setSearchProduct(event.target.value)}
-                  InputProps={{
-                    startAdornment: (
-                      <InputAdornment position='start'>
-                        <SvgIcon fontSize='small' color='action'>
-                          <SearchIcon />
-                        </SvgIcon>
-                      </InputAdornment>
-                    ),
-                  }}
-                  placeholder='Buscar producto'
-                  variant='outlined'
-                />
-              </Box>
-            </CardContent>
-          </Card>
+    <>
+      <Page className={classes.root} title='Productos'>
+        <Container maxWidth='xl'>
+          <Box display='flex' justifyContent='flex-end'>
+            <Button color='secondary' variant='contained' onClick={() => setVisible(true)}>
+              Nuevo producto
+            </Button>
+          </Box>
+          <Box mt={3}>
+            <Card>
+              <CardContent>
+                <Box maxWidth={500}>
+                  <TextField
+                    fullWidth
+                    onChange={event => setSearchProduct(event.target.value)}
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position='start'>
+                          <SvgIcon fontSize='small' color='action'>
+                            <SearchIcon />
+                          </SvgIcon>
+                        </InputAdornment>
+                      ),
+                    }}
+                    placeholder='Buscar producto'
+                    variant='outlined'
+                  />
+                </Box>
+              </CardContent>
+            </Card>
+          </Box>
+          <Box mt={3}>
+            <TableProduct products={FetchProducts} Loading={Loading} />
+          </Box>
+        </Container>
+      </Page>
+
+      <DialogoScreenFull Open={visible} setOpen={setVisible}>
+        <Box mt={3} p={1}>
+          <NewProduct setOpen={setVisible} setReloadPrducts={setReloadPrducts} />
         </Box>
-        <Box mt={3}>
-          <TableProduct products={FetchProducts} Loading={Loading} />
-        </Box>
-      </Container>
-    </Page>
+      </DialogoScreenFull>
+    </>
   );
 };

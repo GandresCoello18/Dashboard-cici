@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 import { api } from '.';
 
 export const GetProducts = async (option: { token: string | undefined; findProduct?: string }) => {
@@ -26,6 +27,16 @@ export const GetProductReview = async (option: {
   const response = await api({
     method: 'GET',
     url: `/products/review/${option.idProduct}`,
+  });
+  return response;
+};
+
+export const NewProducto = async (option: { token: string | undefined; data: FormData }) => {
+  api.defaults.headers['access-token'] = option.token;
+  const response = await api({
+    method: 'POST',
+    url: '/products',
+    data: option.data,
   });
   return response;
 };
