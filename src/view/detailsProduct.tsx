@@ -1,9 +1,11 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable @typescript-eslint/no-use-before-define */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable react/react-in-jsx-scope */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 /* eslint-disable no-undef */
 /* eslint-disable react/jsx-no-undef */
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import {
   Container,
   makeStyles,
@@ -17,6 +19,7 @@ import {
   CardMedia,
   CardContent,
   Divider,
+  Button,
 } from '@material-ui/core';
 import Rating from '@material-ui/lab/Rating';
 import Page from '../components/page';
@@ -24,10 +27,13 @@ import { useParams } from 'react-router-dom';
 import { toast } from 'react-toast';
 import { ListImagen } from '../components/Products/Details/listImagen';
 import { Product } from '../interfaces/Product';
-import { GetProduct } from '../api/products';
+import { GetProduct, MoreSourcesProducto } from '../api/products';
 import Skeleton from '@material-ui/lab/Skeleton';
 import { BASE_API } from '../api';
 import { Resenas } from '../components/Products/Details/resenas';
+import { ImageListType } from 'react-images-uploading';
+import { UploadImage } from '../components/UploadImage';
+import { MeContext } from '../context/contextMe';
 
 const useStyles = makeStyles((theme: any) => ({
   root: {
@@ -43,30 +49,57 @@ const useStyles = makeStyles((theme: any) => ({
 }));
 
 export const DetailsProduct = () => {
+  const [images, setImages] = useState<ImageListType | any>([]);
   const classes = useStyles();
+  const { token } = useContext(MeContext);
   const params = useParams();
   const [Loading, setLoading] = useState<boolean>(false);
+  const [IsMoreUpload, setIsMoreUpload] = useState<boolean>(false);
   const [Product, setProduct] = useState<Product>();
 
   useEffect(() => {
     setLoading(true);
-
-    const FetchProduct = async () => {
-      try {
-        const { product } = await (
-          await GetProduct({ token: undefined, idProduct: params.idProduct })
-        ).data;
-        setProduct(product);
-
-        setLoading(false);
-      } catch (error) {
-        toast.error(error.message);
-        setLoading(false);
-      }
-    };
-
     params.idProduct && FetchProduct();
   }, [params]);
+
+  const FetchProduct = async () => {
+    try {
+      const { product } = await (
+        await GetProduct({ token: undefined, idProduct: params.idProduct })
+      ).data;
+      setProduct(product);
+
+      setLoading(false);
+    } catch (error) {
+      toast.error(error.message);
+      setLoading(false);
+    }
+  };
+
+  const onChange = (imageList: ImageListType) => setImages(imageList as never[]);
+
+  const uploadSources = async () => {
+    setLoading(true);
+
+    const sources: FormData = new FormData();
+    const onlyFiles = images.map((img: any) => img.file);
+
+    onlyFiles.map((file: any) => sources.append('more_sources', file));
+    sources.append('idProduct', params.idProduct);
+
+    try {
+      await MoreSourcesProducto({ token, data: sources });
+      setLoading(false);
+      setIsMoreUpload(false);
+
+      FetchProduct();
+
+      toast.success('Fuentes agregadas para este producto');
+    } catch (error) {
+      toast.error(error.message);
+      setLoading(false);
+    }
+  };
 
   return (
     <Page className={classes.root} title='Detalles'>
@@ -227,8 +260,31 @@ export const DetailsProduct = () => {
                     </Grid>
                   ) : (
                     <>
-                      Imagenes Relacionadas:{' '}
-                      {Product && <ListImagen sources={Product.related_sources} />}
+                      <Button
+                        color='primary'
+                        variant='contained'
+                        onClick={() => setIsMoreUpload(!IsMoreUpload)}
+                      >
+                        {IsMoreUpload ? 'Cancelar subir fuentes' : 'Subir mas fuentes'}
+                      </Button>
+                      <br />
+                      <br />
+                      {IsMoreUpload ? (
+                        <>
+                          <UploadImage images={images} maxNumber={4} onChange={onChange} />
+                          <br />
+                          {images.length > 0 && (
+                            <Button variant='contained' color='primary' onClick={uploadSources}>
+                              Subir fuentes
+                            </Button>
+                          )}
+                        </>
+                      ) : (
+                        <>
+                          Imagenes Relacionadas:{' '}
+                          {Product && <ListImagen sources={Product.related_sources} />}
+                        </>
+                      )}
                     </>
                   )}
                 </Grid>

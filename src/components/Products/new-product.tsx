@@ -230,7 +230,7 @@ export const NewProduct = ({ setOpen, setReloadPrducts }: Props) => {
                       onChange={handleChange}
                       onBlur={handleBlur}
                       variant='outlined'
-                      placeholder='Cuanto medi el producto ya sea en Cm, Ml, Mt'
+                      placeholder='Cuanto mide el producto ya sea en Cm, Ml, Mt'
                     />
                   </Grid>
                   <Grid item md={4} lg={3} sm={6} xs={12}>

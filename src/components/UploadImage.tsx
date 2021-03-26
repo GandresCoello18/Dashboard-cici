@@ -13,11 +13,12 @@ interface Props {
 export const UploadImage = ({ images, maxNumber, onChange }: Props) => {
   return (
     <ImageUploading
-      multiple
+      multiple={true}
       value={images}
       onChange={onChange}
       maxNumber={maxNumber}
       dataURLKey='data_url'
+      acceptType={['jpg', 'gif', 'png']}
     >
       {({
         imageList,
@@ -39,7 +40,7 @@ export const UploadImage = ({ images, maxNumber, onChange }: Props) => {
               color='secondary'
               variant='contained'
             >
-              Subir imagen
+              Seleccionar imagen
             </Button>
           )}
           &nbsp;

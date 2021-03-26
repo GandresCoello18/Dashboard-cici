@@ -41,6 +41,19 @@ export const NewProducto = async (option: { token: string | undefined; data: For
   return response;
 };
 
+export const MoreSourcesProducto = async (option: {
+  token: string | undefined;
+  data: FormData;
+}) => {
+  api.defaults.headers['access-token'] = option.token;
+  const response = await api({
+    method: 'POST',
+    url: '/products/moreSources',
+    data: option.data,
+  });
+  return response;
+};
+
 export const DeleteProducto = async (option: { token: string | undefined; IdProduct: string }) => {
   api.defaults.headers['access-token'] = option.token;
   const response = await api({
