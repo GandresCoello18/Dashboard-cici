@@ -25,6 +25,7 @@ import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import NavItem from './NavItem';
 import { MeContext } from '../../../context/contextMe';
 import Cookies from 'js-cookie';
+import { SourceAvatar } from '../../../helpers/sourceAvatar';
 
 interface Props {
   onMobileClose: () => any;
@@ -126,7 +127,7 @@ const NavBar = ({ onMobileClose, openMobile }: Props) => {
         <Avatar
           className={classes.avatar}
           component={RouterLink}
-          src={me.avatar}
+          src={SourceAvatar(me.avatar)}
           to='/app/account'
         />
         <Typography color='textPrimary' variant='h5'>

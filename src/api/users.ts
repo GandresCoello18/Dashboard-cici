@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 import { api } from '.';
 
 interface LoginUser {
@@ -70,6 +71,16 @@ export const UpdateUser = async (options: { token: string | undefined; data: Upd
   const response = await api({
     method: 'PUT',
     url: '/users',
+    data: options.data,
+  });
+  return response;
+};
+
+export const UpdateAvatarUser = async (options: { token: string | undefined; data: FormData }) => {
+  api.defaults.headers['access-token'] = options.token;
+  const response = await api({
+    method: 'PUT',
+    url: '/users/avatar',
     data: options.data,
   });
   return response;
