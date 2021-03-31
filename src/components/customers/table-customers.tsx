@@ -89,8 +89,10 @@ export const TableCustomer = ({ customers, Loading, setReloadCustoment }: Props)
                 <TableRow>
                   <TableCell>Nombre de usuario</TableCell>
                   <TableCell>Email</TableCell>
+                  <TableCell>Telefono</TableCell>
                   <TableCell>Proveedor</TableCell>
                   <TableCell>Admin</TableCell>
+                  <TableCell>Banner</TableCell>
                   <TableCell>Registrado el</TableCell>
                   <TableCell>Opciones</TableCell>
                 </TableRow>
@@ -110,6 +112,7 @@ export const TableCustomer = ({ customers, Loading, setReloadCustoment }: Props)
                         </Box>
                       </TableCell>
                       <TableCell>{customer.email}</TableCell>
+                      <TableCell>{customer.phone || 'Sin telefono'}</TableCell>
                       <TableCell>
                         <Chip
                           label={customer.provider}
@@ -117,6 +120,7 @@ export const TableCustomer = ({ customers, Loading, setReloadCustoment }: Props)
                         />
                       </TableCell>
                       <TableCell>{customer.isAdmin ? 'Si' : 'No'}</TableCell>
+                      <TableCell>{customer.isBanner ? 'Si' : 'No'}</TableCell>
                       <TableCell>{customer.created_at}</TableCell>
                       <TableCell>
                         {me.idUser !== customer.idUser ? (

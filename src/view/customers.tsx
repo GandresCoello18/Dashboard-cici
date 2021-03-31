@@ -66,7 +66,7 @@ export const Customenrs = () => {
 
   return (
     <Page className={classes.root} title='Clientes'>
-      <Container maxWidth={undefined}>
+      <Container maxWidth='xl'>
         <Box display='flex' justifyContent='flex-end'>
           <Button color='secondary' variant='contained' onClick={() => setVisible(true)}>
             Nuevo cliente

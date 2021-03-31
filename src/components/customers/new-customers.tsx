@@ -28,12 +28,14 @@ export const NewCustoment = ({ setReloadCustoment }: Props) => {
           email: '',
           userName: '',
           password: '',
+          phone: '',
           provider: 'cici',
         }}
         validationSchema={Yup.object().shape({
           email: Yup.string().email('Esta direccion es invalida').max(100),
           userName: Yup.string().max(100),
           password: Yup.string().max(100),
+          phone: Yup.string().max(10),
         })}
         onSubmit={async (values, actions) => {
           if (values.password.length >= 7) {
@@ -93,6 +95,19 @@ export const NewCustoment = ({ setReloadCustoment }: Props) => {
                       onChange={handleChange}
                       variant='outlined'
                       placeholder={'Escriba una clave con 7 o mas digitos'}
+                    />
+                  </Grid>
+                  <Grid item md={6} xs={12}>
+                    <TextField
+                      error={Boolean(touched.phone && errors.phone)}
+                      helperText={touched.phone && errors.phone}
+                      fullWidth
+                      name='phone'
+                      onBlur={handleBlur}
+                      type='number'
+                      onChange={handleChange}
+                      variant='outlined'
+                      placeholder={'Escriba numero telefonico'}
                     />
                   </Grid>
                 </Grid>
