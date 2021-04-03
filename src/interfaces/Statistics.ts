@@ -23,3 +23,17 @@ export interface Statistics {
   Amount: number;
   ComisionAmount: number;
 }
+export interface Received {
+  total: number;
+  received: string;
+}
+
+export interface Recommendation {
+  total: number;
+  recommendation: string;
+}
+
+export interface StatisticProduct {
+  Received: Received[];
+  Recommendation: Recommendation[];
+}

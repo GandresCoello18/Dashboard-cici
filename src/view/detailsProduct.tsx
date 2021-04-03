@@ -34,6 +34,10 @@ import { Resenas } from '../components/Products/Details/resenas';
 import { ImageListType } from 'react-images-uploading';
 import { UploadImage } from '../components/UploadImage';
 import { MeContext } from '../context/contextMe';
+import Recibidos from '../components/Products/Details/staticsRecibido';
+import { GetStatisticProduct } from '../api/statistic';
+import { StatisticProduct } from '../interfaces/Statistics';
+import Recomendado from '../components/Products/Details/staticsRecomendado';
 
 const useStyles = makeStyles((theme: any) => ({
   root: {
@@ -50,6 +54,7 @@ const useStyles = makeStyles((theme: any) => ({
 
 export const DetailsProduct = () => {
   const [images, setImages] = useState<ImageListType | any>([]);
+  const [StatiscProduct, setStatisticProduct] = useState<StatisticProduct>();
   const classes = useStyles();
   const { token } = useContext(MeContext);
   const params = useParams();
@@ -59,8 +64,25 @@ export const DetailsProduct = () => {
 
   useEffect(() => {
     setLoading(true);
-    params.idProduct && FetchProduct();
+    if (params.idProduct) {
+      FetchProduct();
+      FetchStatisticProduct();
+    }
   }, [params]);
+
+  const FetchStatisticProduct = async () => {
+    setLoading(true);
+
+    try {
+      const { StatisticsReview } = await (
+        await GetStatisticProduct({ token, idProduct: params.idProduct })
+      ).data;
+      setStatisticProduct(StatisticsReview);
+    } catch (error) {
+      toast.error(error.message);
+      setLoading(false);
+    }
+  };
 
   const FetchProduct = async () => {
     try {
@@ -287,6 +309,15 @@ export const DetailsProduct = () => {
                       )}
                     </>
                   )}
+                </Grid>
+              </Grid>
+
+              <Grid container spacing={3} direction='row' justify='center' alignItems='center'>
+                <Grid item xs={12} md={6}>
+                  <Recibidos Received={StatiscProduct?.Received} />
+                </Grid>
+                <Grid item xs={12} md={6}>
+                  <Recomendado Recommendation={StatiscProduct?.Recommendation} />
                 </Grid>
               </Grid>
             </CardContent>
