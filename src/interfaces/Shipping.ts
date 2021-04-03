@@ -8,6 +8,7 @@ export interface Shipping {
   idOrder: string;
   paymentId: string;
   created_at: string | Date;
+  update_at: string | Date;
   status: string;
   guide: string;
   method: string;

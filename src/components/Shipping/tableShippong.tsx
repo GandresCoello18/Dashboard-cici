@@ -24,6 +24,7 @@ import getInitials from '../../util/getInitials';
 import { UpdateStatusShipping } from '../../api/shipping';
 import { toast } from 'react-toast';
 import { MeContext } from '../../context/contextMe';
+import { SourceAvatar } from '../../helpers/sourceAvatar';
 
 interface Props {
   Loading: boolean;
@@ -94,7 +95,7 @@ export const TableShipping = ({ Loading, Shipping, setReloadShipping }: Props) =
                 <TableCell>Guia</TableCell>
                 <TableCell>Estado</TableCell>
                 <TableCell>Creado el</TableCell>
-                <TableCell>ID de pago</TableCell>
+                <TableCell>Actualizado</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -103,7 +104,7 @@ export const TableShipping = ({ Loading, Shipping, setReloadShipping }: Props) =
                   <TableRow hover key={envio.idShipping}>
                     <TableCell>
                       <Box alignItems='center' display='flex'>
-                        <Avatar className={classes.avatar} src={envio.avatar || ''}>
+                        <Avatar className={classes.avatar} src={SourceAvatar(envio.avatar)}>
                           {getInitials(envio.userName)}
                         </Avatar>
                         <Typography color='textPrimary' variant='body1'>
@@ -132,7 +133,9 @@ export const TableShipping = ({ Loading, Shipping, setReloadShipping }: Props) =
                       />
                     </TableCell>
                     <TableCell>{envio.created_at}</TableCell>
-                    <TableCell>{envio.paymentId}</TableCell>
+                    <TableCell>
+                      {envio.update_at === envio.created_at ? 'Ninguno' : envio.created_at}
+                    </TableCell>
                     <TableCell>
                       <Button
                         variant='contained'
