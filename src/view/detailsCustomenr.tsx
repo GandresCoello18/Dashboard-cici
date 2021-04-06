@@ -139,9 +139,11 @@ export const DetailsCustomenr = () => {
             ))}
 
             {!Loading && Address.length === 0 && (
-              <Alert severity='info'>
-                Por el momento no hay <strong>Direcciones</strong> para mostrar.
-              </Alert>
+              <Grid item>
+                <Alert severity='info'>
+                  Por el momento no hay <strong>Direcciones</strong> para mostrar.
+                </Alert>
+              </Grid>
             )}
           </Grid>
         </Card>

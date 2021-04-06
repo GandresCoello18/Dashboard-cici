@@ -303,7 +303,7 @@ export const DetailsProduct = () => {
                         </>
                       ) : (
                         <>
-                          Imagenes Relacionadas:{' '}
+                          <strong>Imagenes Relacionadas:</strong>{' '}
                           {Product && <ListImagen sources={Product.related_sources} />}
                         </>
                       )}

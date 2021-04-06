@@ -4,6 +4,7 @@ import {
   Avatar,
   Box,
   Button,
+  Grid,
   Card,
   CircularProgress,
   CardActions,
@@ -88,7 +89,11 @@ export const Profile = () => {
           <CircularProgress color='secondary' />
         ) : (
           <>
-            <UploadImage images={images} maxNumber={1} onChange={onChange} />
+            <Grid container spacing={3} direction='row' justify='center' alignItems='center'>
+              <Grid item>
+                <UploadImage images={images} maxNumber={1} onChange={onChange} />
+              </Grid>
+            </Grid>
             <br />
             {images.length ? (
               <Button

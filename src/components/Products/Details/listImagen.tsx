@@ -32,7 +32,7 @@ export const ListImagen = ({ sources }: Props) => {
   return (
     <Carousel responsive={responsive}>
       {sources.map((item: SourcesProduct) => (
-        <div key={item.idSourceProduct}>
+        <div key={item.idSourceProduct} style={{ background: '#fff', padding: 5 }}>
           {item.kind === 'IMAGEN' ? (
             <img
               width='100%'

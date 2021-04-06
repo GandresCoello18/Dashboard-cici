@@ -15,7 +15,10 @@ const Page = forwardRef(({ children, title, className }: Props, ref: any) => {
     <div ref={ref} className={className}>
       <Helmet>
         <title>Dashboard | {title}</title>
-        <link rel='icon' href='../logo-cici.jpg' />
+        <link
+          rel='icon'
+          href='https://res.cloudinary.com/cici/image/upload/v1617738023/util/logo-cici_trmlbe.jpg'
+        />
       </Helmet>
       {children}
     </div>

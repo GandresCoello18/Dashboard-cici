@@ -11,6 +11,7 @@ import {
   Divider,
   ListItemText,
 } from '@material-ui/core';
+import Alert from '@material-ui/lab/Alert';
 import { CouponAmount } from '../../../interfaces/Coupon';
 
 const useStyles = makeStyles(() => ({
@@ -41,6 +42,12 @@ export const CardCoupons = ({ AmountCoupons }: Props) => {
             <Divider />
           </>
         ))}
+
+        {AmountCoupons.length === 0 && (
+          <Alert severity='info'>
+            Por el momento no hay <strong>Cupones</strong> para mostrar.
+          </Alert>
+        )}
       </CardContent>
     </Card>
   );
