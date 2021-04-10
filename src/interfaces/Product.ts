@@ -22,6 +22,12 @@ export interface Product {
   created_at: string | Date;
   discount: number;
   starsPeople: number;
+  colors: string;
+}
+
+export interface Colors {
+  hex: string;
+  disabled: boolean;
 }
 
 export interface ProductReview {

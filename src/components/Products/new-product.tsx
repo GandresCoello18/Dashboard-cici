@@ -22,7 +22,9 @@ import { MeContext } from '../../context/contextMe';
 import { toast } from 'react-toast';
 import { UploadImage } from '../UploadImage';
 import { ImageListType } from 'react-images-uploading';
+import Alert from '@material-ui/lab/Alert';
 import { NewProducto } from '../../api/products';
+import { Colors } from '../../interfaces/Product';
 
 const BootstrapInput = withStyles(theme => ({
   root: {
@@ -65,6 +67,8 @@ interface Props {
 
 export const NewProduct = ({ setOpen, setReloadPrducts }: Props) => {
   const [images, setImages] = useState<ImageListType>([]);
+  const [colors, setColors] = useState<Colors[]>([]);
+  const [SelectColor, setSelectColor] = useState<string>('');
   const [Status, setStatus] = useState<string>('Disponible');
   const { token } = useContext(MeContext);
 
@@ -116,6 +120,7 @@ export const NewProduct = ({ setOpen, setReloadPrducts }: Props) => {
           form.append('discount', discount);
           form.append('status', Status);
           form.append('source', images[0].file || '');
+          form.append('colors', JSON.stringify(colors) || '');
 
           try {
             await NewProducto({ token, data: form });
@@ -259,6 +264,30 @@ export const NewProduct = ({ setOpen, setReloadPrducts }: Props) => {
                       type='number'
                       placeholder='Ejemplo: 10 = 10% de descuento'
                     />
+                  </Grid>
+                  <Grid item md={4} lg={3} sm={6} xs={12}>
+                    <input type='color' onChange={event => setSelectColor(event.target.value)} />
+                    <Button
+                      color='secondary'
+                      type='button'
+                      onClick={() =>
+                        setColors([
+                          ...colors,
+                          {
+                            hex: SelectColor,
+                            disabled: false,
+                          },
+                        ])
+                      }
+                    >
+                      Elegir color
+                    </Button>
+
+                    {colors.map(color => (
+                      <Alert key={color.hex} style={{ background: color.hex }}>
+                        {color.hex}
+                      </Alert>
+                    ))}
                   </Grid>
                   <Grid item md={4} lg={3} sm={6} xs={12}>
                     <UploadImage images={images} maxNumber={1} onChange={onChange} />
