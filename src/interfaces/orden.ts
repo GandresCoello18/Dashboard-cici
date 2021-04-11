@@ -3,6 +3,7 @@ export interface ProductOrden {
   title: string;
   quantity: number;
   price: number;
+  colour: string;
 }
 
 export interface UserOrden {

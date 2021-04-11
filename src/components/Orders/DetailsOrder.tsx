@@ -187,6 +187,12 @@ export const DetailsOrder = ({ Order, setReloadOrders, isDetails }: Props) => {
                       <p>
                         Cantidad: <strong>{product.quantity}</strong>
                       </p>
+                      {product.colour && (
+                        <p>
+                          Color: <Chip label={product.colour} />
+                        </p>
+                      )}
+                      {}
                     </Grid>
                     <Divider />
                   </>
