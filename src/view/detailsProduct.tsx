@@ -38,6 +38,7 @@ import Recibidos from '../components/Products/Details/staticsRecibido';
 import { GetStatisticProduct } from '../api/statistic';
 import { StatisticProduct } from '../interfaces/Statistics';
 import Recomendado from '../components/Products/Details/staticsRecomendado';
+import { DialogoMessage } from '../components/DialogoMessage';
 
 const useStyles = makeStyles((theme: any) => ({
   root: {
@@ -50,6 +51,13 @@ const useStyles = makeStyles((theme: any) => ({
     height: 240,
     width: '100%',
   },
+  btnDelete: {
+    backgroundColor: 'red',
+    color: '#fff',
+  },
+  btnEdit: {
+    background: 'orange',
+  },
 }));
 
 export const DetailsProduct = () => {
@@ -59,8 +67,12 @@ export const DetailsProduct = () => {
   const { token } = useContext(MeContext);
   const params = useParams();
   const [Loading, setLoading] = useState<boolean>(false);
+  const [VisibleDialog, setVisibleDialog] = useState<boolean>(false);
+  const [AceptDialog, setAceptDialog] = useState<boolean>(false);
   const [IsMoreUpload, setIsMoreUpload] = useState<boolean>(false);
   const [Product, setProduct] = useState<Product>();
+
+  console.log(AceptDialog);
 
   useEffect(() => {
     setLoading(true);
@@ -124,7 +136,7 @@ export const DetailsProduct = () => {
   };
 
   return (
-    <Page className={classes.root} title='Detalles'>
+    <Page className={classes.root} title={`Detalles: ${Product?.title}`}>
       <Container maxWidth='xl'>
         <Card className={classes.root}>
           <CardActionArea>
@@ -138,19 +150,31 @@ export const DetailsProduct = () => {
               />
             )}
             <CardContent>
-              <Typography gutterBottom variant='h5' component='h2'>
-                {Loading ? <Skeleton variant='text' /> : Product?.title}
-              </Typography>
-              <Typography variant='body2' color='textSecondary' component='p'>
-                {Loading ? (
-                  <>
-                    <Skeleton variant='text' width='80%' />
-                    <Skeleton variant='text' />
-                  </>
-                ) : (
-                  Product?.description
-                )}
-              </Typography>
+              <Grid container spacing={3} direction='row' justify='flex-end'>
+                <Grid item xs={12}>
+                  <Typography gutterBottom variant='h5' component='h2'>
+                    {Loading ? <Skeleton variant='text' /> : Product?.title}
+                  </Typography>
+                  <Typography variant='body2' color='textSecondary' component='p'>
+                    {Loading ? (
+                      <>
+                        <Skeleton variant='text' width='80%' />
+                        <Skeleton variant='text' />
+                      </>
+                    ) : (
+                      Product?.description
+                    )}
+                  </Typography>
+                </Grid>
+                <Grid item>
+                  <Button className={classes.btnEdit}>Editar</Button>
+                </Grid>
+                <Grid item>
+                  <Button className={classes.btnDelete} onClick={() => setVisibleDialog(true)}>
+                    Eliminar
+                  </Button>
+                </Grid>
+              </Grid>
 
               <br />
               <Divider />
@@ -239,11 +263,29 @@ export const DetailsProduct = () => {
                 </Grid>
 
                 <Grid item xs={12} sm={6} md={4} lg={3}>
+                  Actualizado el:{' '}
+                  {Loading ? (
+                    <Skeleton variant='text' width={85} />
+                  ) : (
+                    <strong>{Product?.updated_at}</strong>
+                  )}
+                </Grid>
+
+                <Grid item xs={12} sm={6} md={4} lg={3}>
                   Descuento:{' '}
                   {Loading ? (
                     <Skeleton variant='text' width={85} />
                   ) : (
                     <strong>{Product?.discount}%</strong>
+                  )}
+                </Grid>
+
+                <Grid item xs={12} sm={6} md={4} lg={3}>
+                  Termina desct:{' '}
+                  {Loading ? (
+                    <Skeleton variant='text' width={85} />
+                  ) : (
+                    <strong>{Product?.offer_expires_date || 'Sin fecha'}</strong>
                   )}
                 </Grid>
 
@@ -265,7 +307,7 @@ export const DetailsProduct = () => {
                   )}
                 </Grid>
 
-                <Grid item xs={12} md={6}>
+                <Grid item xs={12}>
                   {Loading ? (
                     <Grid
                       container
@@ -337,6 +379,14 @@ export const DetailsProduct = () => {
           </Grid>
         </Card>
       </Container>
+
+      <DialogoMessage
+        title='Aviso importante'
+        Open={VisibleDialog}
+        setOpen={setVisibleDialog}
+        setAceptDialog={setAceptDialog}
+        content='¿Esta seguro que deseas eliminar este registro?, una vez hecho sera irrecuperable.'
+      />
     </Page>
   );
 };

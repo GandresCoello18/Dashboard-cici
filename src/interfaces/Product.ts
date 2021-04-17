@@ -20,9 +20,11 @@ export interface Product {
   model: string;
   related_sources: SourcesProduct[];
   created_at: string | Date;
+  updated_at: string | Date;
   discount: number;
   starsPeople: number;
   colors: string;
+  offer_expires_date: string | Date;
 }
 
 export interface Colors {

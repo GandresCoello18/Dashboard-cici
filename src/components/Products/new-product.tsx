@@ -88,6 +88,7 @@ export const NewProduct = ({ setOpen, setReloadPrducts }: Props) => {
           model: '',
           discount: '',
           source: '',
+          offer_expires_date: '',
         }}
         validationSchema={Yup.object().shape({
           title: Yup.string().required('Este campo es requerido').max(100),
@@ -99,6 +100,7 @@ export const NewProduct = ({ setOpen, setReloadPrducts }: Props) => {
           model: Yup.string().max(50),
           discount: Yup.string().max(3),
           source: Yup.array(),
+          offer_expires_date: Yup.string(),
         })}
         onSubmit={async (values, actions) => {
           if (images.length === 0) {
@@ -106,7 +108,17 @@ export const NewProduct = ({ setOpen, setReloadPrducts }: Props) => {
             return false;
           }
 
-          const { title, price, size, description, available, brand, model, discount } = values;
+          const {
+            title,
+            price,
+            size,
+            description,
+            available,
+            brand,
+            model,
+            discount,
+            offer_expires_date,
+          } = values;
 
           const form: FormData = new FormData();
 
@@ -121,6 +133,7 @@ export const NewProduct = ({ setOpen, setReloadPrducts }: Props) => {
           form.append('status', Status);
           form.append('source', images[0].file || '');
           form.append('colors', JSON.stringify(colors) || '');
+          form.append('offer_expires_date', offer_expires_date);
 
           try {
             await NewProducto({ token, data: form });
@@ -135,7 +148,7 @@ export const NewProduct = ({ setOpen, setReloadPrducts }: Props) => {
           actions.setSubmitting(false);
         }}
       >
-        {({ errors, handleBlur, handleChange, handleSubmit, isSubmitting, touched }) => (
+        {({ errors, handleBlur, handleChange, handleSubmit, isSubmitting, touched, values }) => (
           <form onSubmit={handleSubmit}>
             <Card>
               <CardHeader
@@ -263,6 +276,20 @@ export const NewProduct = ({ setOpen, setReloadPrducts }: Props) => {
                       variant='outlined'
                       type='number'
                       placeholder='Ejemplo: 10 = 10% de descuento'
+                    />
+                  </Grid>
+                  <Grid item md={4} lg={3} sm={6} xs={12}>
+                    <TextField
+                      error={Boolean(touched.offer_expires_date && errors.offer_expires_date)}
+                      helperText={touched.offer_expires_date && errors.offer_expires_date}
+                      fullWidth
+                      label='Descuento disponible hasta'
+                      name='offer_expires_date'
+                      onChange={handleChange}
+                      disabled={!values.discount}
+                      onBlur={handleBlur}
+                      variant='outlined'
+                      type='date'
                     />
                   </Grid>
                   <Grid item md={4} lg={3} sm={6} xs={12}>
