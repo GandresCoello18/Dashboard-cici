@@ -9,6 +9,7 @@ import {
   CardContent,
   Card,
   SvgIcon,
+  Button,
   Accordion,
   AccordionDetails,
   Typography,
@@ -25,6 +26,8 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { GetAssignCoupons, GetCoupons } from '../api/coupons';
 import { CardCoupons } from '../components/Coupons/cardsCupons';
 import { TableCouponUser } from '../components/Coupons/tableCouponUser';
+import { DialogoForm } from '../components/DialogoForm';
+import { NewCoupons } from '../components/Coupons/new-coupons';
 
 const useStyles = makeStyles((theme: any) => ({
   root: {
@@ -46,6 +49,8 @@ export const Coupons = () => {
   const classes = useStyles();
   const { token } = useContext(MeContext);
   const [Loading, setLoading] = useState<boolean>(false);
+  const [visible, setVisible] = useState<boolean>(false);
+  const [ReloadCoupon, setReloadCoupon] = useState<boolean>(false);
   const [SearchCoupon, setSearchCoupon] = useState<string>('');
   const [FetchCoupons, setFetchCoupons] = useState<Coupon[]>([]);
   const [FetchAssingCoupons, setFetchAssingCoupons] = useState<CouponsAssing[]>([]);
@@ -71,11 +76,20 @@ export const Coupons = () => {
     };
 
     Fetch();
-  }, [token, SearchCoupon]);
+
+    if (ReloadCoupon) {
+      setReloadCoupon(false);
+    }
+  }, [token, SearchCoupon, ReloadCoupon]);
 
   return (
     <Page className={classes.root} title='Cupones'>
       <Container maxWidth={undefined}>
+        <Box display='flex' justifyContent='flex-end'>
+          <Button color='secondary' variant='contained' onClick={() => setVisible(true)}>
+            Nuevo cupon
+          </Button>
+        </Box>
         <Box mt={3}>
           <Card>
             <CardContent>
@@ -109,7 +123,12 @@ export const Coupons = () => {
               <Typography className={classes.heading}>Nuestros Cupones</Typography>
             </AccordionSummary>
             <AccordionDetails>
-              <CardCoupons Loading={Loading} Coupons={FetchCoupons} />
+              <CardCoupons
+                Loading={Loading}
+                setLoading={setLoading}
+                setReloadCoupon={setReloadCoupon}
+                Coupons={FetchCoupons}
+              />
             </AccordionDetails>
           </Accordion>
         </Box>
@@ -117,6 +136,10 @@ export const Coupons = () => {
           <TableCouponUser Coupons={FetchAssingCoupons} Loading={Loading} />
         </Box>
       </Container>
+
+      <DialogoForm Open={visible} setOpen={setVisible} title='Nuevo Cupon'>
+        <NewCoupons setReloadCoupon={setReloadCoupon} />
+      </DialogoForm>
     </Page>
   );
 };

@@ -3,6 +3,7 @@ export interface Coupon {
   type: string;
   descripcion: string;
   status: string;
+  source: string;
 }
 
 export interface CouponsAssing {

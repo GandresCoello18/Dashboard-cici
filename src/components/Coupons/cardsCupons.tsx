@@ -14,8 +14,12 @@ import {
 } from '@material-ui/core';
 import Alert from '@material-ui/lab/Alert';
 import Skeleton from '@material-ui/lab/Skeleton';
-import { useState } from 'react';
-import { renderSource } from '../../helpers/coupons';
+import { Dispatch, SetStateAction } from 'react';
+import { useContext, useState } from 'react';
+import { toast } from 'react-toast';
+import { BASE_API_IMAGES_CLOUDINNARY } from '../../api';
+import { DeleteCoupon } from '../../api/coupons';
+import { MeContext } from '../../context/contextMe';
 import { Coupon } from '../../interfaces/Coupon';
 
 const useStyles = makeStyles(() => ({
@@ -29,11 +33,14 @@ const useStyles = makeStyles(() => ({
 
 interface Props {
   Loading: boolean;
+  setLoading: Dispatch<SetStateAction<boolean>>;
+  setReloadCoupon: Dispatch<SetStateAction<boolean>>;
   Coupons: Coupon[];
 }
 
-export const CardCoupons = ({ Loading, Coupons }: Props) => {
+export const CardCoupons = ({ Loading, setLoading, setReloadCoupon, Coupons }: Props) => {
   const classes = useStyles();
+  const { token } = useContext(MeContext);
   const [IdCoupon, setIdCoupon] = useState<string>('');
 
   const SkeletonCuopon = () => {
@@ -48,6 +55,20 @@ export const CardCoupons = ({ Loading, Coupons }: Props) => {
     );
   };
 
+  const RemoveCoupon = async (idCoupon: string) => {
+    setLoading(true);
+
+    try {
+      await DeleteCoupon({ token, idCoupon });
+      setLoading(false);
+
+      setReloadCoupon(true);
+    } catch (error) {
+      toast.error(error.message);
+      setLoading(false);
+    }
+  };
+
   return (
     <Card style={{ padding: 20 }}>
       {Loading ? (
@@ -60,7 +81,7 @@ export const CardCoupons = ({ Loading, Coupons }: Props) => {
                 <CardActionArea>
                   <CardMedia
                     className={classes.media}
-                    image={`../${renderSource(coupon.type)}`}
+                    image={`${BASE_API_IMAGES_CLOUDINNARY}/${coupon.source}`}
                     title={coupon.type}
                   />
                   <CardContent>
@@ -73,7 +94,11 @@ export const CardCoupons = ({ Loading, Coupons }: Props) => {
                   </CardContent>
                 </CardActionArea>
                 <CardActions>
-                  <Button size='small' style={{ color: 'red' }}>
+                  <Button
+                    size='small'
+                    onClick={() => RemoveCoupon(coupon.idCoupon)}
+                    style={{ color: 'red' }}
+                  >
                     Eliminar
                   </Button>
                   <Button
