@@ -69,7 +69,7 @@ export const PageContacts = () => {
 
   const SkeletonCardContact = () => {
     return [0, 1, 2, 3, 4, 5, 6, 7].map(item => (
-      <Skeleton key={item} style={{ marginBottom: 10 }} variant='rect' width='100%' height={40} />
+      <Skeleton key={item} style={{ marginBottom: 10 }} variant='rect' width='100%' height={70} />
     ));
   };
 
@@ -101,9 +101,14 @@ export const PageContacts = () => {
           </Card>
         </Box>
         <Box mt={3}>
-          {Contacts.map(item => (
-            <CardContact key={item.idContact} Contact={item} />
-          ))}
+          {!Loading &&
+            Contacts.map(item => (
+              <CardContact
+                key={item.idContact}
+                Contact={item}
+                setReloadContact={setReloadContact}
+              />
+            ))}
 
           {Loading && SkeletonCardContact()}
         </Box>
