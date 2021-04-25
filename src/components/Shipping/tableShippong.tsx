@@ -134,7 +134,7 @@ export const TableShipping = ({ Loading, Shipping, setReloadShipping }: Props) =
                     </TableCell>
                     <TableCell>{envio.created_at}</TableCell>
                     <TableCell>
-                      {envio.update_at === envio.created_at ? 'Ninguno' : envio.created_at}
+                      {envio.update_at === envio.created_at ? 'Ninguno' : envio.update_at}
                     </TableCell>
                     <TableCell>
                       <Button

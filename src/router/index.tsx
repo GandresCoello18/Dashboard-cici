@@ -23,6 +23,7 @@ import { GetMeUser } from '../api/users';
 import { MeContext } from '../context/contextMe';
 import { toast, ToastContainer } from 'react-toast';
 import { ShippingView } from '../view/shipping';
+import { PageContacts } from '../view/contacto';
 
 const token = Cookies.get('access-token-cici');
 
@@ -41,6 +42,7 @@ const routes = [
     children: [
       { path: 'dashboard', element: PathSesion(Panel) },
       { path: 'customers', element: PathSesion(Customenrs) },
+      { path: 'message', element: PathSesion(PageContacts) },
       { path: 'customers/:idUser', element: PathSesion(DetailsCustomenr) },
       { path: 'products', element: PathSesion(Products) },
       { path: 'products/:idProduct', element: PathSesion(DetailsProduct) },

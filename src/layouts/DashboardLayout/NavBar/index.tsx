@@ -20,6 +20,7 @@ import EqualizerIcon from '@material-ui/icons/Equalizer';
 import PeopleIcon from '@material-ui/icons/People';
 import CardMembershipIcon from '@material-ui/icons/CardMembership';
 import LocalShippingIcon from '@material-ui/icons/LocalShipping';
+import EmailIcon from '@material-ui/icons/Email';
 import PersonIcon from '@material-ui/icons/Person';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import NavItem from './NavItem';
@@ -81,6 +82,11 @@ const NavBar = ({ onMobileClose, openMobile }: Props) => {
       href: '/app/customers',
       icon: PeopleIcon,
       title: 'Clientes',
+    },
+    {
+      href: '/app/message',
+      icon: EmailIcon,
+      title: 'Mensajes',
     },
     {
       href: '/app/products',
