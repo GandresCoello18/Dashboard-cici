@@ -1,6 +1,7 @@
+/* eslint-disable no-undef */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable react/react-in-jsx-scope */
-import { Link as RouterLink, useNavigate } from 'react-router-dom';
+import { Link as RouterLink } from 'react-router-dom';
 import { AppBar, Box, Hidden, IconButton, Toolbar } from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
 import InputIcon from '@material-ui/icons/Input';
@@ -11,11 +12,9 @@ interface Props {
 }
 
 const TopBar = ({ onMobileNavOpen, ...rest }: Props) => {
-  const navigate = useNavigate();
-
   const closeSesion = () => {
     Cookies.remove('access-token-cici');
-    navigate('/login');
+    window.location.href = '/login';
   };
 
   return (

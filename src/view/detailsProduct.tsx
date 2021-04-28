@@ -29,7 +29,7 @@ import { ListImagen } from '../components/Products/Details/listImagen';
 import { Product } from '../interfaces/Product';
 import { GetProduct, MoreSourcesProducto } from '../api/products';
 import Skeleton from '@material-ui/lab/Skeleton';
-import { BASE_API } from '../api';
+import { BASE_API_IMAGES_CLOUDINNARY } from '../api';
 import { Resenas } from '../components/Products/Details/resenas';
 import { ImageListType } from 'react-images-uploading';
 import { UploadImage } from '../components/UploadImage';
@@ -145,7 +145,7 @@ export const DetailsProduct = () => {
             ) : (
               <CardMedia
                 className={classes.media}
-                image={`${BASE_API}/static/${Product?.source}`}
+                image={`${BASE_API_IMAGES_CLOUDINNARY}/${Product?.source}`}
                 title='Contemplative Reptile'
               />
             )}

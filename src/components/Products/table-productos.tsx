@@ -22,7 +22,7 @@ import Skeleton from '@material-ui/lab/Skeleton';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import { Product } from '../../interfaces/Product';
 import { Link } from 'react-router-dom';
-import { BASE_API } from '../../api';
+import { BASE_API_IMAGES_CLOUDINNARY } from '../../api';
 import { DialogoMessage } from '../DialogoMessage';
 import { toast } from 'react-toast';
 import { MeContext } from '../../context/contextMe';
@@ -106,7 +106,7 @@ export const TableProduct = ({ products, Loading, setReloadProduct }: Props) => 
                         <Box alignItems='center' display='flex' maxWidth={400}>
                           <Avatar
                             className={classes.avatar}
-                            src={`${BASE_API}/static/${product.source}`}
+                            src={`${BASE_API_IMAGES_CLOUDINNARY}/${product.source}`}
                           >
                             {getInitials(product.title)}
                           </Avatar>

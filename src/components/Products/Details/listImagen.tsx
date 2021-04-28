@@ -1,7 +1,7 @@
 /* eslint-disable react/react-in-jsx-scope */
 // import { Card } from '@material-ui/core';
 import Carousel from 'react-multi-carousel';
-import { BASE_API } from '../../../api';
+import { BASE_API_IMAGES_CLOUDINNARY } from '../../../api';
 import { SourcesProduct } from '../../../interfaces/Product';
 
 interface Props {
@@ -39,15 +39,21 @@ export const ListImagen = ({ sources }: Props) => {
               style={{ padding: 10 }}
               src={
                 item.idSourceProduct === 'generado'
-                  ? `${BASE_API}/static/${item.source}`
-                  : `${BASE_API}/static/more-source/${item.source}`
+                  ? `${BASE_API_IMAGES_CLOUDINNARY}/${item.source}`
+                  : `${BASE_API_IMAGES_CLOUDINNARY}/more-sources/${item.source}`
               }
               title=''
             />
           ) : (
             <video width='100%'>
-              <source src={`${BASE_API}/static/more-source/${item.source}`} type='video/mp4' />
-              <source src={`${BASE_API}/static/more-source/${item.source}`} type='video/ogg' />
+              <source
+                src={`${BASE_API_IMAGES_CLOUDINNARY}/more-sources/${item.source}`}
+                type='video/mp4'
+              />
+              <source
+                src={`${BASE_API_IMAGES_CLOUDINNARY}/more-sources/${item.source}`}
+                type='video/ogg'
+              />
             </video>
           )}
         </div>

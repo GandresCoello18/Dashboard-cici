@@ -10,7 +10,7 @@ import {
   Divider,
   Button,
 } from '@material-ui/core';
-import { BASE_API } from '../../api';
+import { BASE_API_IMAGES_CLOUDINNARY } from '../../api';
 import { OrdenProduct } from '../../interfaces/orden';
 import getInitials from '../../util/getInitials';
 import Alert from '@material-ui/lab/Alert';
@@ -174,7 +174,7 @@ export const DetailsOrder = ({ Order, setReloadOrders, isDetails }: Props) => {
                     <Grid item xs={12} key={product.title}>
                       <img
                         width={100}
-                        src={`${BASE_API}/static/${product.source}`}
+                        src={`${BASE_API_IMAGES_CLOUDINNARY}/static/${product.source}`}
                         alt={product.title}
                       />
                       <br />
