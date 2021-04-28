@@ -120,7 +120,18 @@ export const NewProduct = ({ setOpen, setReloadPrducts }: Props) => {
             offer_expires_date,
           } = values;
 
+          if (new Date(offer_expires_date).getTime() < new Date().getTime()) {
+            toast.error('La fecha de expiracion debe ser mayor a la fecha actual');
+            return false;
+          }
+
           const form: FormData = new FormData();
+
+          let setColors = JSON.stringify(colors);
+
+          if (setColors === '[]') {
+            setColors = '';
+          }
 
           form.append('title', title);
           form.append('price', price);
@@ -132,7 +143,7 @@ export const NewProduct = ({ setOpen, setReloadPrducts }: Props) => {
           form.append('discount', discount);
           form.append('status', Status);
           form.append('source', images[0].file || '');
-          form.append('colors', JSON.stringify(colors) || '');
+          form.append('colors', setColors || '');
           form.append('offer_expires_date', offer_expires_date);
 
           try {
