@@ -37,6 +37,9 @@ export const NewProducto = async (option: { token: string | undefined; data: For
     method: 'POST',
     url: '/products',
     data: option.data,
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+    },
   });
   return response;
 };
@@ -50,6 +53,9 @@ export const MoreSourcesProducto = async (option: {
     method: 'POST',
     url: '/products/moreSources',
     data: option.data,
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+    },
   });
   return response;
 };
