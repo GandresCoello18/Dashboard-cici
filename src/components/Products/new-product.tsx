@@ -92,13 +92,13 @@ export const NewProduct = ({ setOpen, setReloadPrducts }: Props) => {
         }}
         validationSchema={Yup.object().shape({
           title: Yup.string().required('Este campo es requerido').max(100),
-          price: Yup.string().required('Este campo es requerido').max(3),
-          description: Yup.string().required('Este campo es requerido').max(100),
+          price: Yup.string().required('Este campo es requerido').max(4),
+          description: Yup.string().required('Este campo es requerido').max(300),
           available: Yup.string().required('Este campo es requerido').max(3),
           brand: Yup.string().max(50),
           size: Yup.string().required('Este campo es requerido').max(50),
           model: Yup.string().max(50),
-          discount: Yup.string().max(3),
+          discount: Yup.string().max(4),
           source: Yup.array(),
           offer_expires_date: Yup.string(),
         })}

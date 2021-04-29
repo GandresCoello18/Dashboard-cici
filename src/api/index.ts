@@ -11,3 +11,5 @@ export const BASE_API = apiProd;
 export const api = axios.default.create({
   baseURL: `${BASE_API}/api`,
 });
+
+api.defaults.headers.post['Access-Control-Allow-Origin'] = '*';
