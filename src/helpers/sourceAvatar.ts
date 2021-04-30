@@ -1,4 +1,4 @@
-import { BASE_API_IMAGES_CLOUDINNARY } from '../api';
+import { BASE_API_IMAGES_CLOUDINNARY_SCALE } from '../api';
 
 export const SourceAvatar = (source: string) => {
   if (source) {
@@ -6,7 +6,7 @@ export const SourceAvatar = (source: string) => {
       return source;
     }
 
-    return `${BASE_API_IMAGES_CLOUDINNARY}/${source}`;
+    return `${BASE_API_IMAGES_CLOUDINNARY_SCALE}/${source}`;
   }
 
   return '';
