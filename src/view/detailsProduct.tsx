@@ -222,7 +222,7 @@ export const DetailsProduct = () => {
                   {Loading ? (
                     <Skeleton variant='text' width={85} />
                   ) : (
-                    <Rating name='read-only' value={4} readOnly />
+                    <Rating name='read-only' value={Product?.stars} readOnly />
                   )}
                 </Grid>
 

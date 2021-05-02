@@ -11,6 +11,7 @@ import {
   SvgIcon,
   TextField,
   InputAdornment,
+  Grid,
 } from '@material-ui/core';
 import Page from '../components/page';
 import SearchIcon from '@material-ui/icons/Search';
@@ -21,6 +22,11 @@ import { MeContext } from '../context/contextMe';
 import { GetProducts } from '../api/products';
 import { DialogoScreenFull } from '../components/DialogoScreenFull';
 import { NewProduct } from '../components/Products/new-product';
+import { DialogoForm } from '../components/DialogoForm';
+import { ListCategory } from '../components/Products/list-category';
+import { GetCategoryProduct } from '../api/category';
+import { CategoryCountProduct } from '../interfaces/Category';
+import { NewCategory } from '../components/Products/new-category';
 
 const useStyles = makeStyles((theme: any) => ({
   root: {
@@ -29,16 +35,21 @@ const useStyles = makeStyles((theme: any) => ({
     paddingBottom: theme.spacing(3),
     paddingTop: theme.spacing(3),
   },
+  marginLeft: {
+    marginRight: 10,
+  },
 }));
 
 export const Products = () => {
   const classes = useStyles();
   const { token } = useContext(MeContext);
-  const [visible, setVisible] = useState<boolean>(false);
+  const [visibleProduct, setVisibleProduct] = useState<boolean>(false);
+  const [visibleCategory, setVisibleCategory] = useState<boolean>(false);
   const [Loading, setLoading] = useState<boolean>(false);
   const [ReloadPrducts, setReloadPrducts] = useState<boolean>(false);
   const [SearchProduct, setSearchProduct] = useState<string>('');
   const [FetchProducts, setFetchProducts] = useState<Product[]>([]);
+  const [FetchCategoryProduct, setFetchCategoryProduct] = useState<CategoryCountProduct[]>([]);
 
   useEffect(() => {
     setLoading(true);
@@ -49,6 +60,9 @@ export const Products = () => {
           await GetProducts({ token, findProduct: SearchProduct || undefined })
         ).data;
         setFetchProducts(products);
+
+        const { categoryProducts } = await (await GetCategoryProduct({ token })).data;
+        setFetchCategoryProduct(categoryProducts);
 
         setLoading(false);
       } catch (error) {
@@ -69,7 +83,15 @@ export const Products = () => {
       <Page className={classes.root} title='Productos'>
         <Container maxWidth='xl'>
           <Box display='flex' justifyContent='flex-end'>
-            <Button color='secondary' variant='contained' onClick={() => setVisible(true)}>
+            <Button
+              color='secondary'
+              className={classes.marginLeft}
+              variant='contained'
+              onClick={() => setVisibleCategory(true)}
+            >
+              Categorias
+            </Button>
+            <Button color='secondary' variant='contained' onClick={() => setVisibleProduct(true)}>
               Nuevo producto
             </Button>
           </Box>
@@ -106,11 +128,26 @@ export const Products = () => {
         </Container>
       </Page>
 
-      <DialogoScreenFull Open={visible} setOpen={setVisible}>
+      <DialogoScreenFull Open={visibleProduct} setOpen={setVisibleProduct}>
         <Box mt={3} p={1}>
-          <NewProduct setOpen={setVisible} setReloadPrducts={setReloadPrducts} />
+          <NewProduct setOpen={setVisibleProduct} setReloadPrducts={setReloadPrducts} />
         </Box>
       </DialogoScreenFull>
+
+      <DialogoForm
+        title='Categoria y Productos'
+        Open={visibleCategory}
+        setOpen={setVisibleCategory}
+      >
+        <Grid container spacing={3}>
+          <Grid item xs={12} md={3}>
+            <NewCategory />
+          </Grid>
+          <Grid item xs={12} md={9}>
+            <ListCategory CategoryCountProduct={FetchCategoryProduct} />
+          </Grid>
+        </Grid>
+      </DialogoForm>
     </>
   );
 };
