@@ -1,3 +1,5 @@
+import { ResProductCategory } from './Category';
+
 export interface SourcesProduct {
   idSourceProduct: string;
   source: string;
@@ -19,6 +21,7 @@ export interface Product {
   size: string;
   model: string;
   related_sources: SourcesProduct[];
+  categorys?: ResProductCategory[];
   created_at: string | Date;
   updated_at: string | Date;
   discount: number;

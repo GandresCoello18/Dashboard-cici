@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable react/react-in-jsx-scope */
 import { useContext, useEffect, useState } from 'react';
@@ -47,9 +48,20 @@ export const Products = () => {
   const [visibleCategory, setVisibleCategory] = useState<boolean>(false);
   const [Loading, setLoading] = useState<boolean>(false);
   const [ReloadPrducts, setReloadPrducts] = useState<boolean>(false);
+  const [ReloadCategory, setReloadCategory] = useState<boolean>(false);
   const [SearchProduct, setSearchProduct] = useState<string>('');
   const [FetchProducts, setFetchProducts] = useState<Product[]>([]);
   const [FetchCategoryProduct, setFetchCategoryProduct] = useState<CategoryCountProduct[]>([]);
+
+  const FetchCategory = async () => {
+    try {
+      const { categoryProducts } = await (await GetCategoryProduct({ token })).data;
+      setFetchCategoryProduct(categoryProducts);
+    } catch (error) {
+      toast.error(error.message);
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
     setLoading(true);
@@ -61,8 +73,7 @@ export const Products = () => {
         ).data;
         setFetchProducts(products);
 
-        const { categoryProducts } = await (await GetCategoryProduct({ token })).data;
-        setFetchCategoryProduct(categoryProducts);
+        FetchCategory();
 
         setLoading(false);
       } catch (error) {
@@ -77,6 +88,13 @@ export const Products = () => {
       setReloadPrducts(false);
     }
   }, [token, SearchProduct, ReloadPrducts]);
+
+  useEffect(() => {
+    if (ReloadCategory) {
+      setReloadCategory(false);
+      FetchCategory();
+    }
+  }, [ReloadCategory]);
 
   return (
     <>
@@ -144,7 +162,10 @@ export const Products = () => {
             <NewCategory />
           </Grid>
           <Grid item xs={12} md={9}>
-            <ListCategory CategoryCountProduct={FetchCategoryProduct} />
+            <ListCategory
+              CategoryCountProduct={FetchCategoryProduct}
+              setReloadCategory={setReloadCategory}
+            />
           </Grid>
         </Grid>
       </DialogoForm>

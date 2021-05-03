@@ -39,6 +39,9 @@ import { GetStatisticProduct } from '../api/statistic';
 import { StatisticProduct } from '../interfaces/Statistics';
 import Recomendado from '../components/Products/Details/staticsRecomendado';
 import { DialogoMessage } from '../components/DialogoMessage';
+import { DialogoForm } from '../components/DialogoForm';
+import { AddCategory } from '../components/Products/Details/addCategory';
+import { DeleteProductCategory } from '../api/category';
 
 const useStyles = makeStyles((theme: any) => ({
   root: {
@@ -58,6 +61,10 @@ const useStyles = makeStyles((theme: any) => ({
   btnEdit: {
     background: 'orange',
   },
+  TextDelete: {
+    color: 'red',
+    padding: 3,
+  },
 }));
 
 export const DetailsProduct = () => {
@@ -67,7 +74,9 @@ export const DetailsProduct = () => {
   const { token } = useContext(MeContext);
   const params = useParams();
   const [Loading, setLoading] = useState<boolean>(false);
+  const [ReloadProduct, setReloadProduct] = useState<boolean>(false);
   const [VisibleDialog, setVisibleDialog] = useState<boolean>(false);
+  const [visibleAddCategory, setVisibleAddCategory] = useState<boolean>(false);
   const [AceptDialog, setAceptDialog] = useState<boolean>(false);
   const [IsMoreUpload, setIsMoreUpload] = useState<boolean>(false);
   const [Product, setProduct] = useState<Product>();
@@ -81,6 +90,15 @@ export const DetailsProduct = () => {
       FetchStatisticProduct();
     }
   }, [params]);
+
+  useEffect(() => {
+    setLoading(true);
+    if (ReloadProduct) {
+      FetchProduct();
+      setReloadProduct(false);
+      setVisibleAddCategory(false);
+    }
+  }, [ReloadProduct]);
 
   const FetchStatisticProduct = async () => {
     setLoading(true);
@@ -135,6 +153,22 @@ export const DetailsProduct = () => {
     }
   };
 
+  const removeCategoryProduct = async (id_product_category: number) => {
+    setLoading(true);
+
+    try {
+      await DeleteProductCategory({ token, id_product_category });
+
+      toast.success('Se elimino la categoria de este producto');
+      setLoading(false);
+
+      FetchProduct();
+    } catch (error) {
+      toast.error(error.message);
+      setLoading(false);
+    }
+  };
+
   return (
     <Page className={classes.root} title={`Detalles: ${Product?.title}`}>
       <Container maxWidth='xl'>
@@ -165,6 +199,15 @@ export const DetailsProduct = () => {
                       Product?.description
                     )}
                   </Typography>
+                </Grid>
+                <Grid item>
+                  <Button
+                    color='secondary'
+                    variant='contained'
+                    onClick={() => setVisibleAddCategory(true)}
+                  >
+                    Añadir categoria
+                  </Button>
                 </Grid>
                 <Grid item>
                   <Button className={classes.btnEdit}>Editar</Button>
@@ -307,6 +350,33 @@ export const DetailsProduct = () => {
                   )}
                 </Grid>
 
+                <Grid item xs={12} sm={6} md={4} lg={3}>
+                  Categorias:{' '}
+                  {Loading ? (
+                    <>
+                      <Skeleton variant='text' width={85} />
+                      <Skeleton variant='text' width={85} />
+                      <Skeleton variant='text' width={85} />
+                    </>
+                  ) : (
+                    <ul>
+                      {Product?.categorys?.map(cate => (
+                        <>
+                          <li key={cate.id_product_category} style={{ marginTop: 10 }}>
+                            <span
+                              className={classes.TextDelete}
+                              onClick={() => removeCategoryProduct(cate.id_product_category)}
+                            >
+                              Eliminar
+                            </span>{' '}
+                            <strong>{cate.titleCategory}</strong>
+                          </li>
+                        </>
+                      ))}
+                    </ul>
+                  )}
+                </Grid>
+
                 <Grid item xs={12}>
                   {Loading ? (
                     <Grid
@@ -379,6 +449,14 @@ export const DetailsProduct = () => {
           </Grid>
         </Card>
       </Container>
+
+      <DialogoForm
+        title='Elige las categoria que pertenece este producto'
+        Open={visibleAddCategory}
+        setOpen={setVisibleAddCategory}
+      >
+        <AddCategory idProduct={params.idProduct} setReloadProduct={setReloadProduct} />
+      </DialogoForm>
 
       <DialogoMessage
         title='Aviso importante'
