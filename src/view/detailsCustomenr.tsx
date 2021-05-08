@@ -5,7 +5,16 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 /* eslint-disable no-undef */
 /* eslint-disable react/jsx-no-undef */
-import { Container, makeStyles, CardHeader, Grid, Card, Box, Divider } from '@material-ui/core';
+import {
+  Container,
+  makeStyles,
+  CardHeader,
+  Grid,
+  Card,
+  Box,
+  Divider,
+  Button,
+} from '@material-ui/core';
 import { CardAddress } from '../components/customers/Details/CardAddress';
 import { CardCoupons } from '../components/customers/Details/CardCoupon';
 import { CardProfile } from '../components/customers/Details/CardProfile';
@@ -15,7 +24,7 @@ import { useContext, useEffect, useState } from 'react';
 import { Customers } from '../interfaces/Customers';
 import { toast } from 'react-toast';
 import { useParams } from 'react-router';
-import { GetUser } from '../api/users';
+import { DeleteUser, GetUser } from '../api/users';
 import { MeContext } from '../context/contextMe';
 import { Addresses } from '../interfaces/Address';
 import { GetAddressByUser } from '../api/address';
@@ -28,6 +37,9 @@ import { OrdenProduct } from '../interfaces/orden';
 import { GetOrdensByUser } from '../api/orders';
 import { GetCouponsAmountByUser } from '../api/coupons';
 import { CouponAmount } from '../interfaces/Coupon';
+import { DialogoMessage } from '../components/DialogoMessage';
+import { DialogoForm } from '../components/DialogoForm';
+import { ResetPasswordEmail } from '../components/customers/Details/changePassword';
 
 const useStyles = makeStyles((theme: any) => ({
   root: {
@@ -36,12 +48,19 @@ const useStyles = makeStyles((theme: any) => ({
     paddingBottom: theme.spacing(3),
     paddingTop: theme.spacing(3),
   },
+  btnDelete: {
+    color: 'red',
+    marginLeft: 10,
+  },
 }));
 
 export const DetailsCustomenr = () => {
   const classes = useStyles();
   const params = useParams();
   const { token } = useContext(MeContext);
+  const [VisibleDialog, setVisibleDialog] = useState<boolean>(false);
+  const [VisibleDialogForm, setVisibleDialogForm] = useState<boolean>(false);
+  const [AceptDialog, setAceptDialog] = useState<boolean>(false);
   const [Loading, setLoading] = useState<boolean>(false);
   const [ReloadOrders, setReloadOrders] = useState<boolean>(false);
   const [ReloadFav, setReloadFav] = useState<boolean>(false);
@@ -113,9 +132,47 @@ export const DetailsCustomenr = () => {
     }
   };
 
+  useEffect(() => {
+    const FetchDelete = async () => {
+      try {
+        await DeleteUser({ token, IdUser: params.idUser });
+        toast.success('Usuario eliminado');
+
+        setAceptDialog(false);
+        setVisibleDialog(false);
+
+        window.location.href = '/app/customers';
+      } catch (error) {
+        toast.error(error.message);
+      }
+    };
+
+    AceptDialog && params.idUser && FetchDelete();
+  }, [AceptDialog, token]);
+
   return (
     <Page className={classes.root} title={`Detalles de ${User?.userName}`}>
       <Container maxWidth='xl'>
+        <Box display='flex' justifyContent='flex-end'>
+          {User?.provider === 'cici' ? (
+            <Button
+              color='secondary'
+              variant='contained'
+              onClick={() => setVisibleDialogForm(true)}
+            >
+              Cambiar contraseña
+            </Button>
+          ) : (
+            ''
+          )}
+          <Button
+            className={classes.btnDelete}
+            variant='contained'
+            onClick={() => setVisibleDialog(true)}
+          >
+            Eliminar
+          </Button>
+        </Box>
         <Grid container spacing={3} direction='row' justify='center' alignItems='center'>
           <Grid item xs={12} md={8}>
             <CardProfile User={User} Loading={Loading} />
@@ -191,6 +248,18 @@ export const DetailsCustomenr = () => {
           </Grid>
         </Card>
       </Container>
+
+      <DialogoMessage
+        title='Aviso importante'
+        Open={VisibleDialog}
+        setOpen={setVisibleDialog}
+        setAceptDialog={setAceptDialog}
+        content='¿Esta seguro que deseas eliminar este registro?, una vez hecho sera irrecuperable.'
+      />
+
+      <DialogoForm Open={VisibleDialogForm} setOpen={setVisibleDialogForm} title=''>
+        <ResetPasswordEmail email={User?.email || ''} />
+      </DialogoForm>
     </Page>
   );
 };

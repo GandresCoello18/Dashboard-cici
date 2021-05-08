@@ -103,6 +103,22 @@ export const UpdatePasswordUser = async (options: {
   return response;
 };
 
+export const UpdatePasswordEmail = async (options: {
+  token: string | undefined;
+  newKey: string;
+  email: string;
+}) => {
+  api.defaults.headers['access-token'] = options.token;
+  const response = await api({
+    method: 'PUT',
+    url: `/reset-password/${options.email}`,
+    data: {
+      newKey: options.newKey,
+    },
+  });
+  return response;
+};
+
 export const DeleteUser = async (options: { token: string | undefined; IdUser: string }) => {
   api.defaults.headers['access-token'] = options.token;
   const response = await api({

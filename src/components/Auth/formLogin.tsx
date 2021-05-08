@@ -46,7 +46,9 @@ export const Login = () => {
         try {
           const response = await (await LoginAccess({ token: undefined, data: values })).data;
           setMe(response.me.user);
-          Cookies.set('access-token-cici', response.me.token);
+
+          const tresHoras = new Date(new Date().getTime() + 180 * 60 * 1000);
+          Cookies.set('access-token-cici', response.me.token, { expires: tresHoras });
 
           window.location.href = '/app/dashboard';
         } catch (error) {
