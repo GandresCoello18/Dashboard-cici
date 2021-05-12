@@ -24,6 +24,7 @@ import getInitials from '../../util/getInitials';
 import { UpdateStatusShipping } from '../../api/shipping';
 import { toast } from 'react-toast';
 import { MeContext } from '../../context/contextMe';
+import DoneIcon from '@material-ui/icons/Done';
 import { SourceAvatar } from '../../helpers/sourceAvatar';
 
 interface Props {
@@ -137,13 +138,17 @@ export const TableShipping = ({ Loading, Shipping, setReloadShipping }: Props) =
                       {envio.update_at === envio.created_at ? 'Ninguno' : envio.update_at}
                     </TableCell>
                     <TableCell>
-                      <Button
-                        variant='contained'
-                        color='secondary'
-                        onClick={() => handleStatusShipping(envio.idShipping, envio.status)}
-                      >
-                        {LoadingUpdate ? 'Cargando...' : validateStatus(envio.status)}
-                      </Button>
+                      {envio.status === 'Delivered' ? (
+                        <Chip label={<DoneIcon />} color='secondary' />
+                      ) : (
+                        <Button
+                          variant='contained'
+                          color='secondary'
+                          onClick={() => handleStatusShipping(envio.idShipping, envio.status)}
+                        >
+                          {LoadingUpdate ? 'Cargando...' : validateStatus(envio.status)}
+                        </Button>
+                      )}
                     </TableCell>
                   </TableRow>
                 ))}

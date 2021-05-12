@@ -14,7 +14,7 @@ const Page = forwardRef(({ children, title, className }: Props, ref: any) => {
   return (
     <div ref={ref} className={className}>
       <Helmet>
-        <title>Dashboard | {title}</title>
+        <title>{title} | Dashboard</title>
         <link
           rel='icon'
           href='https://res.cloudinary.com/cici/image/upload/v1617738023/util/logo-cici_trmlbe.jpg'
