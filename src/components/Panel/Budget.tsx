@@ -70,7 +70,7 @@ const Budget = ({ order, totalOrders, lasTotalOrders, Loading }: Props) => {
               ORDENES
             </Typography>
             <Typography color='textPrimary' variant='h3'>
-              {Loading ? <Skeleton variant='text' width={300} /> : order}
+              {Loading ? <Skeleton variant='text' width={100} /> : order}
             </Typography>
           </Grid>
           <Grid item>
@@ -91,7 +91,7 @@ const Budget = ({ order, totalOrders, lasTotalOrders, Loading }: Props) => {
             }
             variant='body2'
           >
-            {Loading ? <Skeleton variant='text' width={300} /> : Result}%
+            {Loading ? <Skeleton variant='text' width={100} /> : Result}%
           </Typography>
           <Typography color='textSecondary' variant='caption'>
             Desde el mes pasado

@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable react/react-in-jsx-scope */
 import { useContext, useEffect, useState } from 'react';
@@ -13,6 +14,7 @@ import {
   InputAdornment,
 } from '@material-ui/core';
 import Page from '../components/page';
+import Pagination from '@material-ui/lab/Pagination';
 import SearchIcon from '@material-ui/icons/Search';
 import { toast } from 'react-toast';
 import { GetOrdens } from '../api/orders';
@@ -33,34 +35,40 @@ const useStyles = makeStyles((theme: any) => ({
 export const Ordens = () => {
   const classes = useStyles();
   const { token } = useContext(MeContext);
+  const [Count, setCount] = useState<number>(0);
   const [Loading, setLoading] = useState<boolean>(false);
   const [ReloadOrders, setReloadOrders] = useState<boolean>(false);
   const [SearchOrden, setSearchOrden] = useState<string>('');
   const [SelectOrder, setSelectOrder] = useState<OrdenProduct>();
   const [FetchOrden, setFetchOrden] = useState<OrdenProduct[]>([]);
 
-  useEffect(() => {
+  const Fetch = async (page: number) => {
     setLoading(true);
 
-    const Fetch = async () => {
-      try {
-        const { ordenes } = await (await GetOrdens({ token, idPago: SearchOrden || undefined }))
-          .data;
-        setFetchOrden(ordenes);
+    try {
+      const { ordenes, pages } = await (
+        await GetOrdens({ token, idPago: SearchOrden || undefined, page })
+      ).data;
 
-        setLoading(false);
-      } catch (error) {
-        toast.error(error.message);
-        setLoading(false);
-      }
-    };
+      setFetchOrden(ordenes);
+      setCount(pages);
 
-    Fetch();
+      setLoading(false);
+    } catch (error) {
+      toast.error(error.message);
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    Fetch(1);
 
     if (ReloadOrders) {
       setReloadOrders(false);
     }
   }, [token, SearchOrden, ReloadOrders]);
+
+  const SelectItemPagination = (page: number) => Fetch(page);
 
   return (
     <Page className={classes.root} title='Ordenes'>
@@ -92,6 +100,13 @@ export const Ordens = () => {
             </Box>
             <Box mt={3}>
               <TableOrders Orders={FetchOrden} Loading={Loading} setSelectOrder={setSelectOrder} />
+            </Box>
+            <Box mt={3} display='flex' justifyContent='center'>
+              <Pagination
+                count={Count}
+                color='secondary'
+                onChange={(event, page) => SelectItemPagination(page)}
+              />
             </Box>
           </Grid>
           <Grid item xs={12} lg={4}>

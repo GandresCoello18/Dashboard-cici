@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
 /* eslint-disable no-undef */
 import { api } from '.';
 
@@ -20,11 +21,19 @@ interface NewUsers {
   provider: string;
 }
 
-export const GetUsers = async (option: { token: string | undefined; findUser?: string }) => {
+export const GetUsers = async (option: {
+  token: string | undefined;
+  findUser?: string;
+  page: number;
+}) => {
   api.defaults.headers['access-token'] = option.token;
   const response = await api({
     method: 'GET',
-    url: `${option.findUser ? `/users?findUser=${option.findUser}` : '/users'}`,
+    url: `${
+      option.findUser
+        ? `/users?findUser=${option.findUser}&page=${option.page}`
+        : `/users?page=${option.page}`
+    }`,
   });
   return response;
 };

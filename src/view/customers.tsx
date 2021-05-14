@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable react/react-in-jsx-scope */
@@ -13,6 +14,7 @@ import {
   TextField,
   InputAdornment,
 } from '@material-ui/core';
+import Pagination from '@material-ui/lab/Pagination';
 import { TableCustomer } from '../components/customers/table-customers';
 import Page from '../components/page';
 import SearchIcon from '@material-ui/icons/Search';
@@ -37,32 +39,39 @@ export const Customenrs = () => {
   const { token } = useContext(MeContext);
   const [visible, setVisible] = useState<boolean>(false);
   const [Loading, setLoading] = useState<boolean>(false);
+  const [Count, setCount] = useState<number>(0);
   const [ReloadCustoment, setReloadCustoment] = useState<boolean>(false);
   const [SearchClient, setSearchClient] = useState<string>('');
   const [FetchCustomenrs, setFetchCustomenrs] = useState<Customers[]>([]);
 
-  useEffect(() => {
+  const Fetch = async (page: number) => {
     setLoading(true);
 
-    const Fetch = async () => {
-      try {
-        const { users } = await (await GetUsers({ token, findUser: SearchClient || undefined }))
-          .data;
-        setFetchCustomenrs(users);
-      } catch (error) {
-        toast.error(error.message);
-      }
-    };
+    try {
+      const { users, pages } = await (
+        await GetUsers({ token, findUser: SearchClient || undefined, page })
+      ).data;
 
-    Fetch();
+      setFetchCustomenrs(users);
+      setCount(pages || 1);
+
+      setLoading(false);
+    } catch (error) {
+      toast.error(error.message);
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    Fetch(1);
 
     if (ReloadCustoment) {
       setReloadCustoment(false);
       setVisible(false);
     }
-
-    setLoading(false);
   }, [token, SearchClient, ReloadCustoment]);
+
+  const SelectItemPagination = (page: number) => Fetch(page);
 
   return (
     <Page className={classes.root} title='Clientes'>
@@ -100,6 +109,13 @@ export const Customenrs = () => {
             customers={FetchCustomenrs}
             Loading={Loading}
             setReloadCustoment={setReloadCustoment}
+          />
+        </Box>
+        <Box mt={3} display='flex' justifyContent='center'>
+          <Pagination
+            count={Count}
+            color='secondary'
+            onChange={(event, page) => SelectItemPagination(page)}
           />
         </Box>
       </Container>

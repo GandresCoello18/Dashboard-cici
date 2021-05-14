@@ -13,7 +13,6 @@ import {
   Chip,
   TableRow,
   Typography,
-  TablePagination,
   makeStyles,
 } from '@material-ui/core';
 import { Customers } from '../../interfaces/Customers';
@@ -43,17 +42,9 @@ interface Props {
 export const TableCustomer = ({ customers, Loading, setReloadCustoment }: Props) => {
   const classes = useStyles();
   const { me, token } = useContext(MeContext);
-  const [limit, setLimit] = useState<number>(10);
   const [IdUser, setIdUser] = useState<string>('');
   const [VisibleDialog, setVisibleDialog] = useState<boolean>(false);
   const [AceptDialog, setAceptDialog] = useState<boolean>(false);
-  const [page, setPage] = useState<number>(0);
-
-  const handleLimitChange = (event: any) => {
-    setLimit(event.target.value);
-  };
-
-  const handlePageChange = (event: any, newPage: number) => setPage(newPage);
 
   const SkeletonCustomer = () => {
     return [0, 1, 2, 3, 4, 5, 6, 7].map(item => (
@@ -158,16 +149,6 @@ export const TableCustomer = ({ customers, Loading, setReloadCustoment }: Props)
                 Por el momento no hay <strong>Clientes</strong> para mostrar.
               </Alert>
             )}
-
-            <TablePagination
-              component='div'
-              count={customers.length}
-              onChangePage={handlePageChange}
-              onChangeRowsPerPage={handleLimitChange}
-              page={page}
-              rowsPerPage={limit}
-              rowsPerPageOptions={[5, 10, 25]}
-            />
           </Box>
         </PerfectScrollbar>
       </Card>

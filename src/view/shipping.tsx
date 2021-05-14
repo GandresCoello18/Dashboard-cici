@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable react/react-in-jsx-scope */
 import { useContext, useEffect, useState } from 'react';
@@ -15,6 +16,7 @@ import {
 import Page from '../components/page';
 import SearchIcon from '@material-ui/icons/Search';
 import { toast } from 'react-toast';
+import Pagination from '@material-ui/lab/Pagination';
 import { GetShipping } from '../api/shipping';
 import { MeContext } from '../context/contextMe';
 import { TableShipping } from '../components/Shipping/tableShippong';
@@ -32,34 +34,39 @@ const useStyles = makeStyles((theme: any) => ({
 export const ShippingView = () => {
   const classes = useStyles();
   const { token } = useContext(MeContext);
+  const [Count, setCount] = useState<number>(0);
   const [Loading, setLoading] = useState<boolean>(false);
   const [ReloadShipping, setReloadShipping] = useState<boolean>(false);
   const [SearchShipping, setSearchShipping] = useState<string>('');
   const [Shipping, setShipping] = useState<Shipping[]>([]);
 
+  const Fetch = async (page: number) => {
+    try {
+      const { shipping, pages } = await (
+        await GetShipping({ token, idPago: SearchShipping || undefined, page })
+      ).data;
+
+      setShipping(shipping);
+      setCount(pages);
+
+      setLoading(false);
+    } catch (error) {
+      toast.error(error.message);
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
     setLoading(true);
 
-    const Fetch = async () => {
-      try {
-        const { shipping } = await (
-          await GetShipping({ token, idPago: SearchShipping || undefined })
-        ).data;
-        setShipping(shipping);
-
-        setLoading(false);
-      } catch (error) {
-        toast.error(error.message);
-        setLoading(false);
-      }
-    };
-
-    Fetch();
+    Fetch(1);
 
     if (ReloadShipping) {
       setReloadShipping(false);
     }
   }, [token, SearchShipping, ReloadShipping]);
+
+  const SelectItemPagination = (page: number) => Fetch(page);
 
   return (
     <Page className={classes.root} title='Envios'>
@@ -94,6 +101,13 @@ export const ShippingView = () => {
                 Shipping={Shipping}
                 Loading={Loading}
                 setReloadShipping={setReloadShipping}
+              />
+            </Box>
+            <Box mt={3} display='flex' justifyContent='center'>
+              <Pagination
+                count={Count}
+                color='secondary'
+                onChange={(event, page) => SelectItemPagination(page)}
               />
             </Box>
           </Grid>

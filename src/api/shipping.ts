@@ -11,11 +11,19 @@ export const CreateShipping = async (option: { token: string | undefined; data: 
   return response;
 };
 
-export const GetShipping = async (option: { token: string | undefined; idPago?: string }) => {
+export const GetShipping = async (option: {
+  token: string | undefined;
+  idPago?: string;
+  page: number;
+}) => {
   api.defaults.headers['access-token'] = option.token;
   const response = await api({
     method: 'GET',
-    url: `${option.idPago ? `/shipping?idPago=${option.idPago}` : '/shipping'}`,
+    url: `${
+      option.idPago
+        ? `/shipping?idPago=${option.idPago}&page=${option.page}`
+        : `/shipping?page=${option.page}`
+    }`,
   });
   return response;
 };

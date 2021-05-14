@@ -1,10 +1,18 @@
 import { api } from '.';
 
-export const GetOrdens = async (option: { token: string | undefined; idPago?: string }) => {
+export const GetOrdens = async (option: {
+  token: string | undefined;
+  idPago?: string;
+  page: number;
+}) => {
   api.defaults.headers['access-token'] = option.token;
   const response = await api({
     method: 'GET',
-    url: `${option.idPago ? `/orden?idPago=${option.idPago}` : '/orden'}`,
+    url: `${
+      option.idPago
+        ? `/orden?idPago=${option.idPago}&page=${option.page}`
+        : `/orden?page=${option.page}`
+    }`,
   });
   return response;
 };

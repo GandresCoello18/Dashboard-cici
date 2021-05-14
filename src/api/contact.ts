@@ -1,11 +1,11 @@
 import { api } from '.';
 import { Contact } from '../interfaces/Contacto';
 
-export const GetContact = async (option: { token: string | undefined }) => {
+export const GetContact = async (option: { token: string | undefined; page: number }) => {
   api.defaults.headers['access-token'] = option.token;
   const response = await api({
     method: 'GET',
-    url: 'messages',
+    url: `/messages?page=${option.page}`,
   });
   return response;
 };
@@ -14,7 +14,7 @@ export const DeleteContact = async (option: { token: string | undefined; idConta
   api.defaults.headers['access-token'] = option.token;
   const response = await api({
     method: 'DELETE',
-    url: `messages/${option.idContact}`,
+    url: `/messages/${option.idContact}`,
   });
   return response;
 };
@@ -23,7 +23,7 @@ export const SendMessageContact = async (option: { token: string | undefined; da
   api.defaults.headers['access-token'] = option.token;
   const response = await api({
     method: 'POST',
-    url: 'messages/answer',
+    url: '/messages/answer',
     data: option.data,
   });
   return response;

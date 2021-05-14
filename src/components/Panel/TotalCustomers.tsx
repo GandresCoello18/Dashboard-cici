@@ -70,7 +70,7 @@ const TotalCustomers = ({ user, totalUser, lasTotalUser, Loading }: Props) => {
               TOTAL DE CLIENTES
             </Typography>
             <Typography color='textPrimary' variant='h3'>
-              {Loading ? <Skeleton variant='text' width={300} /> : user}
+              {Loading ? <Skeleton variant='text' width={100} /> : user}
             </Typography>
           </Grid>
           <Grid item>
@@ -91,7 +91,7 @@ const TotalCustomers = ({ user, totalUser, lasTotalUser, Loading }: Props) => {
             }
             variant='body2'
           >
-            {Loading ? <Skeleton variant='text' width={300} /> : Result}%
+            {Loading ? <Skeleton variant='text' width={100} /> : Result}%
           </Typography>
           <Typography color='textSecondary' variant='caption'>
             Desde el mes pasado
