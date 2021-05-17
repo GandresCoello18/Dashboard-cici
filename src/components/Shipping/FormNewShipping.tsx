@@ -20,6 +20,7 @@ import { Dispatch, SetStateAction, useContext, useState } from 'react';
 import { MeContext } from '../../context/contextMe';
 import { CreateShipping } from '../../api/shipping';
 import { toast } from 'react-toast';
+import { BASE_API_IMAGES_CLOUDINNARY_SCALE } from '../../api';
 
 interface Props {
   idOrder: string | undefined;
@@ -69,7 +70,11 @@ export const FormNewShipping = ({ idOrder, setReloadOrders }: Props) => {
             <Divider />
             <CardContent>
               <Box display='flex' justifyContent='center' style={{ padding: 10 }}>
-                <img src='../shipping.svg' alt='envio' width='70%' />
+                <img
+                  src={`${BASE_API_IMAGES_CLOUDINNARY_SCALE}/coupons/shipping_fjggsu.svg`}
+                  alt='envio'
+                  width='70%'
+                />
               </Box>
               <Grid container spacing={3}>
                 <Grid item xs={12}>

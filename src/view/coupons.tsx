@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable react/react-in-jsx-scope */
@@ -25,6 +26,7 @@ import { MeContext } from '../context/contextMe';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { GetAssignCoupons, GetCoupons } from '../api/coupons';
 import { CardCoupons } from '../components/Coupons/cardsCupons';
+import Pagination from '@material-ui/lab/Pagination';
 import { TableCouponUser } from '../components/Coupons/tableCouponUser';
 import { DialogoForm } from '../components/DialogoForm';
 import { NewCoupons } from '../components/Coupons/new-coupons';
@@ -48,6 +50,7 @@ const useStyles = makeStyles((theme: any) => ({
 export const Coupons = () => {
   const classes = useStyles();
   const { token } = useContext(MeContext);
+  const [Count, setCount] = useState<number>(0);
   const [Loading, setLoading] = useState<boolean>(false);
   const [visible, setVisible] = useState<boolean>(false);
   const [ReloadCoupon, setReloadCoupon] = useState<boolean>(false);
@@ -55,32 +58,36 @@ export const Coupons = () => {
   const [FetchCoupons, setFetchCoupons] = useState<Coupon[]>([]);
   const [FetchAssingCoupons, setFetchAssingCoupons] = useState<CouponsAssing[]>([]);
 
-  useEffect(() => {
+  const Fetch = async (page: number) => {
     setLoading(true);
 
-    const Fetch = async () => {
-      try {
-        const { coupons } = await (await GetCoupons({ token })).data;
-        setFetchCoupons(coupons);
+    try {
+      const { coupons } = await (await GetCoupons({ token })).data;
+      setFetchCoupons(coupons);
 
-        const { CouponsAssing } = await (
-          await GetAssignCoupons({ token, id_user_coupon: SearchCoupon || undefined })
-        ).data;
-        setFetchAssingCoupons(CouponsAssing);
+      const { CouponsAssing, pages } = await (
+        await GetAssignCoupons({ token, id_user_coupon: SearchCoupon || undefined, page })
+      ).data;
 
-        setLoading(false);
-      } catch (error) {
-        toast.error(error.message);
-        setLoading(false);
-      }
-    };
+      setCount(pages);
+      setFetchAssingCoupons(CouponsAssing);
 
-    Fetch();
+      setLoading(false);
+    } catch (error) {
+      toast.error(error.message);
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    Fetch(1);
 
     if (ReloadCoupon) {
       setReloadCoupon(false);
     }
   }, [token, SearchCoupon, ReloadCoupon]);
+
+  const SelectItemPagination = (page: number) => Fetch(page);
 
   return (
     <Page className={classes.root} title='Cupones'>
@@ -134,6 +141,13 @@ export const Coupons = () => {
         </Box>
         <Box mt={3}>
           <TableCouponUser Coupons={FetchAssingCoupons} Loading={Loading} />
+        </Box>
+        <Box mt={3} display='flex' justifyContent='center'>
+          <Pagination
+            count={Count}
+            color='secondary'
+            onChange={(event, page) => SelectItemPagination(page)}
+          />
         </Box>
       </Container>
 

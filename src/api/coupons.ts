@@ -13,14 +13,15 @@ export const GetCoupons = async (option: { token: string | undefined }) => {
 export const GetAssignCoupons = async (option: {
   token: string | undefined;
   id_user_coupon?: string;
+  page: number;
 }) => {
   api.defaults.headers['access-token'] = option.token;
   const response = await api({
     method: 'GET',
     url: `${
       option.id_user_coupon
-        ? `/coupons/assign?id_user_coupon=${option.id_user_coupon}`
-        : '/coupons/assign'
+        ? `/coupons/assign?id_user_coupon=${option.id_user_coupon}&page=${option.page}`
+        : `/coupons/assign?page=${option.page}`
     }`,
   });
   return response;
