@@ -24,6 +24,7 @@ export interface OrdenProduct {
   paymentId: string;
   totalAmount: number;
   id_user_coupons: string;
+  numberOfOrder: number;
   product: ProductOrden[];
   user: UserOrden;
 }

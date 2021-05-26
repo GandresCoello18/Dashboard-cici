@@ -57,7 +57,7 @@ export const DetailsOrder = ({ Order, setReloadOrders, isDetails }: Props) => {
         {Order ? (
           <>
             <Box className={classes.margen}>
-              <h3>Orden: 10548</h3>
+              <h3>Orden: {Order.numberOfOrder}</h3>
             </Box>
             <Divider />
             <Box className={classes.margen}>

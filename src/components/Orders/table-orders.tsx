@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable react/react-in-jsx-scope */
-import { Dispatch, SetStateAction, useState } from 'react';
+import { Dispatch, SetStateAction } from 'react';
 import {
   Box,
   Table,
@@ -10,7 +10,6 @@ import {
   Card,
   TableHead,
   TableRow,
-  TablePagination,
 } from '@material-ui/core';
 import Alert from '@material-ui/lab/Alert';
 import Skeleton from '@material-ui/lab/Skeleton';
@@ -24,15 +23,6 @@ interface Props {
 }
 
 export const TableOrders = ({ Orders, Loading, setSelectOrder }: Props) => {
-  const [limit, setLimit] = useState<number>(10);
-  const [page, setPage] = useState<number>(0);
-
-  const handleLimitChange = (event: any) => {
-    setLimit(event.target.value);
-  };
-
-  const handlePageChange = (event: any, newPage: number) => setPage(newPage);
-
   const SkeletonOrder = () => {
     return [0, 1, 2, 3, 4, 5, 6, 7].map(item => (
       <Skeleton key={item} style={{ marginBottom: 10 }} variant='rect' width='100%' height={40} />
@@ -86,16 +76,6 @@ export const TableOrders = ({ Orders, Loading, setSelectOrder }: Props) => {
               Por el momento no hay <strong>Ordenes</strong> para mostrar.
             </Alert>
           )}
-
-          <TablePagination
-            component='div'
-            count={Orders.length}
-            onChangePage={handlePageChange}
-            onChangeRowsPerPage={handleLimitChange}
-            page={page}
-            rowsPerPage={limit}
-            rowsPerPageOptions={[5, 10, 25]}
-          />
         </Box>
       </PerfectScrollbar>
     </Card>
