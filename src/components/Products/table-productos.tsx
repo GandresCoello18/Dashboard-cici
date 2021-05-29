@@ -13,7 +13,6 @@ import {
   TableHead,
   TableRow,
   Typography,
-  TablePagination,
   makeStyles,
 } from '@material-ui/core';
 import getInitials from '../../util/getInitials';
@@ -43,17 +42,9 @@ interface Props {
 export const TableProduct = ({ products, Loading, setReloadProduct }: Props) => {
   const classes = useStyles();
   const { token } = useContext(MeContext);
-  const [limit, setLimit] = useState<number>(10);
-  const [page, setPage] = useState<number>(0);
   const [IdProduct, setProduct] = useState<string>('');
   const [VisibleDialog, setVisibleDialog] = useState<boolean>(false);
   const [AceptDialog, setAceptDialog] = useState<boolean>(false);
-
-  const handleLimitChange = (event: any) => {
-    setLimit(event.target.value);
-  };
-
-  const handlePageChange = (event: any, newPage: number) => setPage(newPage);
 
   const SkeletonProduct = () => {
     return [0, 1, 2, 3, 4, 5, 6, 7].map(item => (
@@ -155,16 +146,6 @@ export const TableProduct = ({ products, Loading, setReloadProduct }: Props) => 
                 Por el momento no hay <strong>Productos</strong> para mostrar.
               </Alert>
             )}
-
-            <TablePagination
-              component='div'
-              count={products.length}
-              onChangePage={handlePageChange}
-              onChangeRowsPerPage={handleLimitChange}
-              page={page}
-              rowsPerPage={limit}
-              rowsPerPageOptions={[5, 10, 25]}
-            />
           </Box>
         </PerfectScrollbar>
       </Card>

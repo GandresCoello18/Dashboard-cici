@@ -20,6 +20,7 @@ import EqualizerIcon from '@material-ui/icons/Equalizer';
 import PeopleIcon from '@material-ui/icons/People';
 import CardMembershipIcon from '@material-ui/icons/CardMembership';
 import LocalShippingIcon from '@material-ui/icons/LocalShipping';
+import ListAltIcon from '@material-ui/icons/ListAlt';
 import EmailIcon from '@material-ui/icons/Email';
 import PersonIcon from '@material-ui/icons/Person';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
@@ -92,6 +93,11 @@ const NavBar = ({ onMobileClose, openMobile }: Props) => {
       href: '/app/products',
       icon: AcUnitIcon,
       title: 'Productos',
+    },
+    {
+      href: '/app/combos',
+      icon: ListAltIcon,
+      title: 'Combos',
     },
     {
       href: '/app/coupons',

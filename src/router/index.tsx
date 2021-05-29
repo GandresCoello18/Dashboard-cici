@@ -24,6 +24,7 @@ import { MeContext } from '../context/contextMe';
 import { toast, ToastContainer } from 'react-toast';
 import { ShippingView } from '../view/shipping';
 import { PageContacts } from '../view/contacto';
+import { Combos } from '../view/combos';
 
 const token = Cookies.get('access-token-cici');
 
@@ -46,6 +47,7 @@ const routes = [
       { path: 'customers/:idUser', element: PathSesion(DetailsCustomenr) },
       { path: 'products', element: PathSesion(Products) },
       { path: 'products/:idProduct', element: PathSesion(DetailsProduct) },
+      { path: 'combos', element: PathSesion(Combos) },
       { path: 'coupons', element: PathSesion(Coupons) },
       { path: 'shopping', element: PathSesion(Ordens) },
       { path: 'shipping', element: PathSesion(ShippingView) },
