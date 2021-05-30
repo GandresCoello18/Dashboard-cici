@@ -3,16 +3,25 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable react/react-in-jsx-scope */
 import { useContext, useEffect, useState } from 'react';
-import { Container, makeStyles, Box, Button } from '@material-ui/core';
+import {
+  Container,
+  makeStyles,
+  Box,
+  Button,
+  Typography,
+  Card,
+  CardActionArea,
+  CardContent,
+} from '@material-ui/core';
 import Page from '../components/page';
 import { toast } from 'react-toast';
 import { MeContext } from '../context/contextMe';
 import Skeleton from '@material-ui/lab/Skeleton';
 import { GetCombos } from '../api/combo';
 import { DialogoForm } from '../components/DialogoForm';
-import { NewCoupons } from '../components/Coupons/new-coupons';
 import { TableProductCombo } from '../components/Combos/table-product-combo';
 import { ProductsCombo } from '../interfaces/Combo';
+import { NewFormCombo } from '../components/Combos/new-combo';
 
 const useStyles = makeStyles((theme: any) => ({
   root: {
@@ -28,14 +37,17 @@ const useStyles = makeStyles((theme: any) => ({
   space: {
     marginLeft: 10,
   },
+  cardCombo: {
+    maxWidth: 345,
+  },
 }));
 
 export const Combos = () => {
   const classes = useStyles();
   const { token } = useContext(MeContext);
-  const [Loading, setLoading] = useState<boolean>(true);
+  const [Loading, setLoading] = useState<boolean>(false);
   const [visible, setVisible] = useState<boolean>(false);
-  const [ReloadCoupon, setReloadCoupon] = useState<boolean>(false);
+  const [ReloadCombo, setReloadCombo] = useState<boolean>(false);
   const [FetchCombos, setFetchCombos] = useState<ProductsCombo[]>([]);
 
   const Fetch = async () => {
@@ -45,7 +57,7 @@ export const Combos = () => {
       const { combos } = await (await GetCombos({ token })).data;
       setFetchCombos(combos);
 
-      setLoading(true);
+      setLoading(false);
     } catch (error) {
       toast.error(error.message);
       setLoading(false);
@@ -55,10 +67,10 @@ export const Combos = () => {
   useEffect(() => {
     Fetch();
 
-    if (ReloadCoupon) {
-      setReloadCoupon(false);
+    if (ReloadCombo) {
+      setReloadCombo(false);
     }
-  }, [token, ReloadCoupon]);
+  }, [token, ReloadCombo]);
 
   const SkeletonProduct = () => {
     return [0, 1, 2].map(c => (
@@ -92,13 +104,33 @@ export const Combos = () => {
           {Loading && SkeletonProduct()}
           {!Loading &&
             FetchCombos.map(combo => (
-              <TableProductCombo key={combo.idCombo} products={combo.Products} />
+              <>
+                <Card className={classes.cardCombo}>
+                  <CardActionArea>
+                    <CardContent>
+                      <Typography gutterBottom variant='h5' component='h2'>
+                        Lizard
+                      </Typography>
+                      <Typography gutterBottom>
+                        Precio: <strong>$10</strong>
+                        <br />
+                        Activo: <strong>Si</strong>
+                        <br />
+                        Vendidos: <strong>50</strong>
+                        <br />
+                        Creado el: <strong>efefe</strong>
+                      </Typography>
+                    </CardContent>
+                  </CardActionArea>
+                </Card>
+                <TableProductCombo key={combo.idCombo} products={combo.Products} />
+              </>
             ))}
         </Box>
       </Container>
 
       <DialogoForm Open={visible} setOpen={setVisible} title='Nuevo Combo'>
-        <NewCoupons setReloadCoupon={setReloadCoupon} />
+        <NewFormCombo setReloadCombo={setReloadCombo} />
       </DialogoForm>
     </Page>
   );

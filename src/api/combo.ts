@@ -1,7 +1,7 @@
 import { api } from '.';
-import { NewCombos } from '../interfaces/Combo';
+import { NewCombo } from '../interfaces/Combo';
 
-export const NewCombo = async (option: { token: string | undefined; data: NewCombos }) => {
+export const CreateCombo = async (option: { token: string | undefined; data: NewCombo }) => {
   api.defaults.headers['access-token'] = option.token;
   const response = await api({
     method: 'POST',
