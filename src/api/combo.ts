@@ -11,6 +11,23 @@ export const CreateCombo = async (option: { token: string | undefined; data: New
   return response;
 };
 
+export const AddProductCombo = async (option: {
+  token: string | undefined;
+  idProduct: string;
+  idCombo: string;
+}) => {
+  api.defaults.headers['access-token'] = option.token;
+  const response = await api({
+    method: 'POST',
+    url: '/combo/addProduct',
+    data: {
+      idCombo: option.idCombo,
+      idProduct: option.idProduct,
+    },
+  });
+  return response;
+};
+
 export const GetCombos = async (option: { token: string | undefined }) => {
   api.defaults.headers['access-token'] = option.token;
   const response = await api({

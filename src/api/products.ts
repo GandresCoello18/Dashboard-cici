@@ -19,6 +19,15 @@ export const GetProduct = async (option: { token: string | undefined; idProduct:
   return response;
 };
 
+export const GetSearchProduct = async (option: { token: string | undefined; key: string }) => {
+  api.defaults.headers['access-token'] = option.token;
+  const response = await api({
+    method: 'GET',
+    url: `/products/search/${option.key}`,
+  });
+  return response;
+};
+
 export const GetProductReview = async (option: {
   token: string | undefined;
   idProduct: string;

@@ -3,16 +3,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable react/react-in-jsx-scope */
 import { useContext, useEffect, useState } from 'react';
-import {
-  Container,
-  makeStyles,
-  Box,
-  Button,
-  Typography,
-  Card,
-  CardActionArea,
-  CardContent,
-} from '@material-ui/core';
+import { Container, makeStyles, Box, Button } from '@material-ui/core';
 import Page from '../components/page';
 import { toast } from 'react-toast';
 import { MeContext } from '../context/contextMe';
@@ -21,10 +12,8 @@ import { GetCombos } from '../api/combo';
 import { DialogoForm } from '../components/DialogoForm';
 import { TableProductCombo } from '../components/Combos/table-product-combo';
 import { ProductsCombo } from '../interfaces/Combo';
-import DeleteIcon from '@material-ui/icons/Delete';
-import AddIcon from '@material-ui/icons/Add';
-import EditIcon from '@material-ui/icons/Edit';
 import { NewFormCombo } from '../components/Combos/new-combo';
+import { CardInfoCombo } from '../components/Combos/card-info-combo';
 
 const useStyles = makeStyles((theme: any) => ({
   root: {
@@ -120,36 +109,7 @@ export const Combos = () => {
           {!Loading &&
             FetchCombos.map(combo => (
               <Box key={combo.idCombo}>
-                <Card className={classes.cardCombo}>
-                  <CardActionArea>
-                    <CardContent>
-                      <Typography gutterBottom variant='h5' component='h2'>
-                        ** <strong>Lizard</strong> **
-                      </Typography>
-                      <Typography gutterBottom>
-                        Precio: <strong>${combo.price}</strong>
-                        <br />
-                        Activo: <strong>{combo.active ? 'Si' : 'No'}</strong>
-                        <br />
-                        Vendidos: <strong>{combo.sold}</strong>
-                        <br />
-                        Creado el: <strong>{combo.created_at}</strong>
-                      </Typography>
-                      <hr />
-                      <Box mt={2} display='flex' justifyContent='flex-end'>
-                        <Button type='button' className={classes.btnAdd}>
-                          <AddIcon />
-                        </Button>
-                        <Button type='button' className={classes.btnEdit}>
-                          <EditIcon />
-                        </Button>
-                        <Button type='button' className={classes.btnDelete}>
-                          <DeleteIcon />
-                        </Button>
-                      </Box>
-                    </CardContent>
-                  </CardActionArea>
-                </Card>
+                <CardInfoCombo combo={combo} setReloadCombo={setReloadCombo} />
                 <TableProductCombo products={combo.products} />
               </Box>
             ))}
