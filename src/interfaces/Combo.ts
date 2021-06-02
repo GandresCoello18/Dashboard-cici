@@ -7,8 +7,9 @@ export interface NewCombo {
   discount: number;
   active: boolean | number;
   sold: number;
+  created_at?: Date | string;
 }
 
 export interface ProductsCombo extends NewCombo {
-  Products: Product[];
+  products: Product[];
 }
