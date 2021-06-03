@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable react/react-in-jsx-scope */
-import { useState } from 'react';
 import {
   Box,
   Table,
@@ -13,13 +12,13 @@ import {
   Typography,
   TableHead,
   TableRow,
-  TablePagination,
 } from '@material-ui/core';
 import Alert from '@material-ui/lab/Alert';
 import Skeleton from '@material-ui/lab/Skeleton';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import getInitials from '../../util/getInitials';
 import { CouponsAssing } from '../../interfaces/Coupon';
+import { SourceAvatar } from '../../helpers/sourceAvatar';
 
 const useStyles = makeStyles(theme => ({
   root: {},
@@ -35,14 +34,6 @@ interface Props {
 
 export const TableCouponUser = ({ Coupons, Loading }: Props) => {
   const classes = useStyles();
-  const [limit, setLimit] = useState<number>(10);
-  const [page, setPage] = useState<number>(0);
-
-  const handleLimitChange = (event: any) => {
-    setLimit(event.target.value);
-  };
-
-  const handlePageChange = (event: any, newPage: number) => setPage(newPage);
 
   const SkeletonCoupons = () => {
     return [0, 1, 2, 3, 4, 5, 6, 7].map(item => (
@@ -71,7 +62,7 @@ export const TableCouponUser = ({ Coupons, Loading }: Props) => {
                   <TableRow hover key={cupon.id_user_coupons}>
                     <TableCell>
                       <Box alignItems='center' display='flex'>
-                        <Avatar className={classes.avatar} src={cupon.avatar || ''}>
+                        <Avatar className={classes.avatar} src={SourceAvatar(cupon.avatar || '')}>
                           {getInitials(cupon.userName || 'NONE')}
                         </Avatar>
                         <Typography color='textPrimary' variant='body1'>
@@ -110,16 +101,6 @@ export const TableCouponUser = ({ Coupons, Loading }: Props) => {
               Por el momento no hay <strong>Cupones de usuarios</strong> para mostrar.
             </Alert>
           )}
-
-          <TablePagination
-            component='div'
-            count={Coupons.length}
-            onChangePage={handlePageChange}
-            onChangeRowsPerPage={handleLimitChange}
-            page={page}
-            rowsPerPage={limit}
-            rowsPerPageOptions={[5, 10, 25]}
-          />
         </Box>
       </PerfectScrollbar>
     </Card>

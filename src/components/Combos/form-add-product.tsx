@@ -18,9 +18,13 @@ import { GetSearchProduct } from '../../api/products';
 import SearchIcon from '@material-ui/icons/Search';
 import IconButton from '@material-ui/core/IconButton';
 import { Product } from '../../interfaces/Product';
+import Alert from '@material-ui/lab/Alert';
+import getInitials from '../../util/getInitials';
+import { BASE_API_IMAGES_CLOUDINNARY_SCALE } from '../../api';
 
 interface Props {
   setReloadCombo: Dispatch<SetStateAction<boolean>>;
+  idCombo: string;
 }
 
 const useStyles = makeStyles((theme: any) =>
@@ -39,33 +43,60 @@ const useStyles = makeStyles((theme: any) =>
     btnAdd: {
       marginTop: 20,
     },
+    avatar: {
+      marginRight: theme.spacing(2),
+    },
+    itemProduct: {
+      cursor: 'pointer',
+    },
   }),
 );
 
-export const FormAddProduct = ({ setReloadCombo }: Props) => {
+export const FormAddProduct = ({ setReloadCombo, idCombo }: Props) => {
   const classes = useStyles();
+  const [KeyProduct, setKeyProduct] = useState<string>('');
+  const [idProduct, setIdProduct] = useState<string>('');
+  const [Loading, setLoading] = useState<boolean>(false);
+  const [LoadingAdd, setLoadingAdd] = useState<boolean>(false);
   const { token } = useContext(MeContext);
   const [products, setProducts] = useState<Product[]>([]);
 
-  console.log(products);
-
   const SearchProduct = async () => {
+    if (!KeyProduct) {
+      toast.warn('Escriba el nombre del producto a buscar');
+      return;
+    }
+
+    setLoading(true);
+
     try {
-      const { products } = await (await GetSearchProduct({ token: undefined, key: '' })).data;
+      const { products } = await (await GetSearchProduct({ token: undefined, key: KeyProduct }))
+        .data;
       setProducts(products);
+      setLoading(false);
     } catch (error) {
       toast.error(error.message);
+      setLoading(false);
     }
   };
 
   const AddProduct = async () => {
+    if (!idProduct) {
+      toast.warn('Seleccione algun producto');
+      return;
+    }
+
+    setLoadingAdd(true);
+
     try {
-      await AddProductCombo({ token, idProduct: '', idCombo: '' });
+      await AddProductCombo({ token, idProduct, idCombo });
       setReloadCombo(true);
 
       toast.success('Producto agregado al combo');
+      setLoadingAdd(false);
     } catch (error) {
       toast.error(error.message);
+      setLoadingAdd(false);
     }
   };
 
@@ -74,6 +105,7 @@ export const FormAddProduct = ({ setReloadCombo }: Props) => {
       <InputBase
         className={classes.input}
         placeholder='Nombre del producto'
+        onChange={event => setKeyProduct(event.target.value)}
         inputProps={{ 'aria-label': 'search google maps' }}
       />
       <IconButton
@@ -87,21 +119,41 @@ export const FormAddProduct = ({ setReloadCombo }: Props) => {
 
       <Divider />
       <Card className={classes.root}>
-        <CardHeader
-          avatar={<Avatar aria-label='recipe'>R</Avatar>}
-          title='Shrimp and Chorizo Paella'
-        />
-
-        <CardHeader
-          avatar={<Avatar aria-label='recipe'>R</Avatar>}
-          title='Shrimp and Chorizo Paella'
-        />
+        {Loading && 'Buscando Productos...'}
+        {!products.length && !Loading ? (
+          <Alert severity='info'>
+            No se encontraron <strong>Productos</strong> intente con otro nombre.
+          </Alert>
+        ) : (
+          products.map(product => (
+            <CardHeader
+              onClick={() => !LoadingAdd && setIdProduct(product.idProducts)}
+              key={product.idProducts}
+              className={classes.itemProduct}
+              style={
+                idProduct === product.idProducts
+                  ? { borderWidth: 1, borderStyle: 'solid', borderColor: 'red' }
+                  : {}
+              }
+              avatar={
+                <Avatar
+                  className={classes.avatar}
+                  src={`${BASE_API_IMAGES_CLOUDINNARY_SCALE}/${product.source}`}
+                >
+                  {getInitials(product.title || 'NONE')}
+                </Avatar>
+              }
+              title={product.title}
+            />
+          ))
+        )}
       </Card>
 
       <Button
         className={classes.btnAdd}
         color='secondary'
         fullWidth
+        disabled={LoadingAdd}
         variant='contained'
         onClick={AddProduct}
       >

@@ -110,7 +110,7 @@ export const TableProductCombo = ({ products }: Props) => {
               </TableBody>
             </Table>
 
-            {[].length === 0 && (
+            {!products.length && (
               <Alert severity='info'>
                 Por el momento no hay <strong>Productos</strong> para mostrar.
               </Alert>
