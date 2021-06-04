@@ -1,5 +1,6 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/react-in-jsx-scope */
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext, Dispatch, SetStateAction } from 'react';
 import { Link } from 'react-router-dom';
 import {
   Avatar,
@@ -21,9 +22,13 @@ import getInitials from '../../util/getInitials';
 import { BASE_API_IMAGES_CLOUDINNARY_SCALE } from '../../api';
 import { DialogoMessage } from '../DialogoMessage';
 import { Product } from '../../interfaces/Product';
+import { toast } from 'react-toast';
+import { DeleteProductCombo } from '../../api/combo';
+import { MeContext } from '../../context/contextMe';
 
 interface Props {
   products: Product[];
+  setReloadCombo: Dispatch<SetStateAction<boolean>>;
 }
 
 const useStyles = makeStyles(theme => ({
@@ -32,14 +37,24 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export const TableProductCombo = ({ products }: Props) => {
+export const TableProductCombo = ({ products, setReloadCombo }: Props) => {
+  const { token } = useContext(MeContext);
   const classes = useStyles();
   const [IdProduct, setProduct] = useState<string>('');
   const [VisibleDialog, setVisibleDialog] = useState<boolean>(false);
   const [AceptDialog, setAceptDialog] = useState<boolean>(false);
 
   useEffect(() => {
-    console.log(AceptDialog, IdProduct);
+    const RemoveProductCombo = async () => {
+      try {
+        await DeleteProductCombo({ token, idProduct: IdProduct });
+        setReloadCombo(true);
+      } catch (error) {
+        toast.error(error.message);
+      }
+    };
+
+    AceptDialog && IdProduct && RemoveProductCombo();
   }, [AceptDialog, IdProduct]);
 
   return (

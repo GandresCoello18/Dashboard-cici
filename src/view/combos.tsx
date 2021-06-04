@@ -98,7 +98,7 @@ export const Combos = () => {
 
   return (
     <Page className={classes.root} title='Cupones'>
-      <Container maxWidth={undefined}>
+      <Container maxWidth={false}>
         <Box display='flex' justifyContent='flex-end'>
           <Button color='secondary' variant='contained' onClick={() => setVisible(true)}>
             Nuevo Combo
@@ -110,7 +110,7 @@ export const Combos = () => {
             FetchCombos.map(combo => (
               <Box key={combo.idCombo}>
                 <CardInfoCombo combo={combo} setReloadCombo={setReloadCombo} />
-                <TableProductCombo products={combo.products} />
+                <TableProductCombo products={combo.products} setReloadCombo={setReloadCombo} />
               </Box>
             ))}
         </Box>

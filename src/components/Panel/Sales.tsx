@@ -2,7 +2,7 @@
 import { Line } from 'react-chartjs-2';
 import {
   Box,
-  Button,
+  TextField,
   Card,
   CardContent,
   CardHeader,
@@ -10,7 +10,6 @@ import {
   useTheme,
   colors,
 } from '@material-ui/core';
-import ArrowRightIcon from '@material-ui/icons/ArrowRight';
 
 interface Props {
   fechas: string[] | undefined;
@@ -94,19 +93,23 @@ const Sales = ({ fechas, ventas, comision }: Props) => {
 
   return (
     <Card>
-      <CardHeader title='Ventas de este mes' />
+      <Box display='flex' justifyContent='space-between'>
+        <CardHeader title='Ventas de este mes' />
+        <TextField
+          id='date'
+          label='Ventas'
+          type='month'
+          InputLabelProps={{
+            shrink: true,
+          }}
+        />
+      </Box>
       <Divider />
       <CardContent>
         <Box height={400} position='relative'>
           <Line data={data} options={options} />
         </Box>
       </CardContent>
-      <Divider />
-      <Box display='flex' justifyContent='flex-end' p={2}>
-        <Button color='primary' endIcon={<ArrowRightIcon />} size='small' variant='text'>
-          Visión general
-        </Button>
-      </Box>
     </Card>
   );
 };

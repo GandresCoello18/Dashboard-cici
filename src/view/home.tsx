@@ -49,7 +49,7 @@ export const Panel = () => {
 
   return (
     <Page className={classes.root} title='Panel'>
-      <Container maxWidth={undefined}>
+      <Container maxWidth='lg'>
         <Grid container spacing={3}>
           <Grid item lg={3} sm={6} xl={3} xs={12}>
             <Budget
