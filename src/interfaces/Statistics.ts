@@ -10,6 +10,10 @@ export interface OrderStatistics {
   totalLasOrders: number;
 }
 
+export interface TaskStatistics {
+  progress: number;
+}
+
 export interface GraficoStatistics {
   fechas: string[];
   ventas: number[];
@@ -19,6 +23,7 @@ export interface GraficoStatistics {
 export interface Statistics {
   user: UserStatistics;
   order: OrderStatistics;
+  task: TaskStatistics;
   grafico: GraficoStatistics;
   Amount: number;
   ComisionAmount: number;

@@ -20,6 +20,7 @@ import { DialogoMessage } from '../DialogoMessage';
 import { toast } from 'react-toast';
 import { DeleteCombo } from '../../api/combo';
 import { MeContext } from '../../context/contextMe';
+import { FormUpdateCombo } from './form-edit-combo';
 
 interface Props {
   combo: NewCombo;
@@ -48,6 +49,7 @@ export const CardInfoCombo = ({ combo, setReloadCombo }: Props) => {
   const classes = useStyles();
   const { token } = useContext(MeContext);
   const [visible, setVisible] = useState<boolean>(false);
+  const [visibleEdit, setVisibleEdit] = useState<boolean>(false);
   const [VisibleDialog, setVisibleDialog] = useState<boolean>(false);
   const [AceptDialog, setAceptDialog] = useState<boolean>(false);
 
@@ -79,6 +81,8 @@ export const CardInfoCombo = ({ combo, setReloadCombo }: Props) => {
             <Typography gutterBottom>
               Precio: <strong>${combo.price}</strong>
               <br />
+              Descuento: <strong>{combo.discount}%</strong>
+              <br />
               Activo: <strong>{combo.active ? 'Si' : 'No'}</strong>
               <br />
               Vendidos: <strong>{combo.sold}</strong>
@@ -90,7 +94,11 @@ export const CardInfoCombo = ({ combo, setReloadCombo }: Props) => {
               <Button type='button' className={classes.btnAdd} onClick={() => setVisible(true)}>
                 <AddIcon />
               </Button>
-              <Button type='button' className={classes.btnEdit}>
+              <Button
+                type='button'
+                className={classes.btnEdit}
+                onClick={() => setVisibleEdit(true)}
+              >
                 <EditIcon />
               </Button>
               <Button
@@ -107,6 +115,10 @@ export const CardInfoCombo = ({ combo, setReloadCombo }: Props) => {
 
       <DialogoForm Open={visible} setOpen={setVisible} title='Agregar producto'>
         <FormAddProduct idCombo={combo.idCombo} setReloadCombo={setReloadCombo} />
+      </DialogoForm>
+
+      <DialogoForm Open={visibleEdit} setOpen={setVisibleEdit} title='Editar producto'>
+        <FormUpdateCombo Combo={combo} setReloadCombo={setReloadCombo} />
       </DialogoForm>
 
       <DialogoMessage

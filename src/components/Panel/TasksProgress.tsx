@@ -23,7 +23,11 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const TasksProgress = () => {
+interface Props {
+  progress: number;
+}
+
+const TasksProgress = ({ progress }: Props) => {
   const classes = useStyles();
 
   return (
@@ -35,7 +39,7 @@ const TasksProgress = () => {
               PROGRESO DE TAREAS
             </Typography>
             <Typography color='textPrimary' variant='h3'>
-              75.5%
+              {progress}%
             </Typography>
           </Grid>
           <Grid item>
@@ -45,7 +49,7 @@ const TasksProgress = () => {
           </Grid>
         </Grid>
         <Box mt={3}>
-          <LinearProgress value={75.5} variant='determinate' />
+          <LinearProgress value={progress} variant='determinate' />
         </Box>
       </CardContent>
     </Card>

@@ -143,6 +143,7 @@ export const TableShipping = ({ Loading, Shipping, setReloadShipping }: Props) =
                       ) : (
                         <Button
                           variant='contained'
+                          disabled={LoadingUpdate}
                           color='secondary'
                           onClick={() => handleStatusShipping(envio.idShipping, envio.status)}
                         >

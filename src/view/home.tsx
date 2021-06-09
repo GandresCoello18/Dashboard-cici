@@ -68,7 +68,7 @@ export const Panel = () => {
             />
           </Grid>
           <Grid item lg={3} sm={6} xl={3} xs={12}>
-            <TasksProgress />
+            <TasksProgress progress={Statistic?.task.progress || 0} />
           </Grid>
           <Grid item lg={3} sm={6} xl={3} xs={12}>
             <TotalProfit Amount={Statistic?.Amount} ComisionAmount={Statistic?.ComisionAmount} />

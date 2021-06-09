@@ -37,6 +37,18 @@ export const GetCombos = async (option: { token: string | undefined }) => {
   return response;
 };
 
+export const UpdateCombo = async (option: { token: string | undefined; combo: NewCombo }) => {
+  api.defaults.headers['access-token'] = option.token;
+  const response = await api({
+    method: 'PUT',
+    url: `/combo/${option.combo.idCombo}`,
+    data: {
+      ...option.combo,
+    },
+  });
+  return response;
+};
+
 export const DeleteProductCombo = async (option: {
   token: string | undefined;
   idProduct: string;
