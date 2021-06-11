@@ -9,15 +9,19 @@ import {
   Divider,
   useTheme,
   colors,
+  CircularProgress,
 } from '@material-ui/core';
+import { Dispatch, SetStateAction } from 'react';
 
 interface Props {
   fechas: string[] | undefined;
   ventas: number[] | undefined;
   comision: number[] | undefined;
+  setDateFetch: Dispatch<SetStateAction<string>>;
+  Loading: boolean;
 }
 
-const Sales = ({ fechas, ventas, comision }: Props) => {
+const Sales = ({ fechas, ventas, comision, setDateFetch, Loading }: Props) => {
   const theme = useTheme();
 
   const data = {
@@ -99,6 +103,7 @@ const Sales = ({ fechas, ventas, comision }: Props) => {
           id='date'
           label='Ventas'
           type='month'
+          onChange={event => setDateFetch(event.target.value)}
           InputLabelProps={{
             shrink: true,
           }}
@@ -107,7 +112,11 @@ const Sales = ({ fechas, ventas, comision }: Props) => {
       <Divider />
       <CardContent>
         <Box height={400} position='relative'>
-          <Line data={data} options={options} />
+          {Loading ? (
+            <CircularProgress color='secondary' />
+          ) : (
+            <Line data={data} options={options} />
+          )}
         </Box>
       </CardContent>
     </Card>

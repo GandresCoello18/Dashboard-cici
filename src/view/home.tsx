@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-undef */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable react/react-in-jsx-scope */
@@ -26,26 +27,31 @@ const useStyles = makeStyles((theme: any) => ({
 export const Panel = () => {
   const classes = useStyles();
   const { token } = useContext(MeContext);
+  const [dateFetch, setDateFetch] = useState<string>('');
   const [Loading, setLoading] = useState<boolean>(false);
   const [Statistic, setStatistic] = useState<Statistics>();
 
-  useEffect(() => {
+  const Fetch = async () => {
     setLoading(true);
 
-    const Fetch = async () => {
-      try {
-        const { statistics } = await (await GetStatisticTotal({ token })).data;
-        setStatistic(statistics);
+    try {
+      const { statistics } = await (await GetStatisticTotal({ token, dateFetch })).data;
+      setStatistic(statistics);
 
-        setLoading(false);
-      } catch (error) {
-        toast.error(error.message);
-        setLoading(false);
-      }
-    };
+      setLoading(false);
+    } catch (error) {
+      toast.error(error.message);
+      setLoading(false);
+    }
+  };
 
-    Fetch();
+  useEffect(() => {
+    token && Fetch();
   }, [token]);
+
+  useEffect(() => {
+    dateFetch && Fetch();
+  }, [dateFetch]);
 
   return (
     <Page className={classes.root} title='Panel'>
@@ -71,13 +77,19 @@ export const Panel = () => {
             <TasksProgress progress={Statistic?.task.progress || 0} />
           </Grid>
           <Grid item lg={3} sm={6} xl={3} xs={12}>
-            <TotalProfit Amount={Statistic?.Amount} ComisionAmount={Statistic?.ComisionAmount} />
+            <TotalProfit
+              Loading={Loading}
+              Amount={Statistic?.Amount}
+              ComisionAmount={Statistic?.ComisionAmount}
+            />
           </Grid>
           <Grid item xs={12}>
             <Sales
               fechas={Statistic?.grafico.fechas}
               ventas={Statistic?.grafico.ventas}
               comision={Statistic?.grafico.comision}
+              setDateFetch={setDateFetch}
+              Loading={Loading}
             />
           </Grid>
         </Grid>

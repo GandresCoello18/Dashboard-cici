@@ -1,6 +1,7 @@
 /* eslint-disable react/react-in-jsx-scope */
 import { Avatar, Card, CardContent, Grid, Typography, makeStyles, colors } from '@material-ui/core';
 import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
+import Skeleton from '@material-ui/lab/Skeleton';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -14,11 +15,12 @@ const useStyles = makeStyles(() => ({
 }));
 
 interface Props {
+  Loading: boolean;
   Amount: number | undefined;
   ComisionAmount: number | undefined;
 }
 
-const TotalProfit = ({ Amount, ComisionAmount }: Props) => {
+const TotalProfit = ({ Loading, Amount, ComisionAmount }: Props) => {
   const classes = useStyles();
 
   return (
@@ -30,14 +32,14 @@ const TotalProfit = ({ Amount, ComisionAmount }: Props) => {
               TOTAL DE INGRESOS
             </Typography>
             <Typography color='textPrimary' variant='h5'>
-              ${Amount}
+              {Loading ? <Skeleton variant='text' width={100} /> : `$${Amount}`}
             </Typography>
 
             <Typography color='textSecondary' gutterBottom variant='h6'>
               TOTAL DE COMISION
             </Typography>
             <Typography color='textPrimary' variant='h5'>
-              ${ComisionAmount}
+              {Loading ? <Skeleton variant='text' width={100} /> : `$${ComisionAmount}`}
             </Typography>
           </Grid>
           <Grid item>
