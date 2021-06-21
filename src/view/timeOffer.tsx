@@ -7,14 +7,13 @@ import { Container, makeStyles, Box, Button } from '@material-ui/core';
 import Page from '../components/page';
 import { toast } from 'react-toast';
 import { MeContext } from '../context/contextMe';
-import Skeleton from '@material-ui/lab/Skeleton';
-import { GetCombos } from '../api/combo';
-import { DialogoForm } from '../components/DialogoForm';
-import { TableProductCombo } from '../components/Combos/table-product-combo';
-import { ProductsCombo } from '../interfaces/Combo';
+import { Skeleton } from '@material-ui/lab';
+import { GetTimesOffer } from '../api/timeOffer';
 import Alert from '@material-ui/lab/Alert';
-import { NewFormCombo } from '../components/Combos/new-combo';
-import { CardInfoCombo } from '../components/Combos/card-info-combo';
+import { TableProductCombo } from '../components/Combos/table-product-combo';
+import { OfferTimeProducts } from '../interfaces/TimeOffer';
+import { CardTimeOffert } from '../components/TimeOffer/card-time-offer';
+import { DialogoForm } from '../components/DialogoForm';
 
 const useStyles = makeStyles((theme: any) => ({
   root: {
@@ -30,37 +29,22 @@ const useStyles = makeStyles((theme: any) => ({
   space: {
     marginLeft: 10,
   },
-  cardCombo: {
-    maxWidth: 345,
-    marginBottom: 10,
-  },
-  btnDelete: {
-    backgroundColor: 'pink',
-    marginLeft: 10,
-  },
-  btnEdit: {
-    backgroundColor: 'orange',
-    marginLeft: 10,
-  },
-  btnAdd: {
-    backgroundColor: '#6dd96d',
-  },
 }));
 
-export const Combos = () => {
+export const PageTimeOffer = () => {
   const classes = useStyles();
   const { token } = useContext(MeContext);
-  const [Loading, setLoading] = useState<boolean>(false);
   const [visible, setVisible] = useState<boolean>(false);
-  const [ReloadCombo, setReloadCombo] = useState<boolean>(false);
-  const [FetchCombos, setFetchCombos] = useState<ProductsCombo[]>([]);
+  const [Loading, setLoading] = useState<boolean>(false);
+  const [ReloadTime, setReloadTime] = useState<boolean>(false);
+  const [TimeProducts, setTimeProducts] = useState<OfferTimeProducts[]>([]);
 
   const Fetch = async () => {
     setLoading(true);
 
     try {
-      const { combos } = await (await GetCombos({ token })).data;
-      setFetchCombos(combos);
+      const { times } = await (await GetTimesOffer({ token })).data;
+      setTimeProducts(times);
 
       setLoading(false);
     } catch (error) {
@@ -72,12 +56,12 @@ export const Combos = () => {
   useEffect(() => {
     Fetch();
 
-    if (ReloadCombo) {
-      setReloadCombo(false);
+    if (ReloadTime) {
+      setReloadTime(false);
     }
-  }, [token, ReloadCombo]);
+  }, [token, ReloadTime]);
 
-  const SkeletonProduct = () => {
+  const SkeletonTimeProduct = () => {
     return [0, 1, 2].map(c => (
       <>
         <Skeleton key={c} style={{ marginBottom: 10 }} variant='rect' width='50%' height={90} />
@@ -98,32 +82,32 @@ export const Combos = () => {
   };
 
   return (
-    <Page className={classes.root} title='Cupones'>
-      <Container maxWidth={false}>
+    <Page className={classes.root} title='Tiempo de oferta'>
+      <Container maxWidth={undefined}>
         <Box display='flex' justifyContent='flex-end'>
           <Button color='secondary' variant='contained' onClick={() => setVisible(true)}>
-            Nuevo Combo
+            Nuevo tiempo
           </Button>
         </Box>
         <Box mt={3}>
-          {Loading && SkeletonProduct()}
-
-          {!Loading && !FetchCombos.length && (
-            <Alert severity='info'>No hay datos para mostrar.</Alert>
-          )}
-
           {!Loading &&
-            FetchCombos.map(combo => (
-              <Box key={combo.idCombo}>
-                <CardInfoCombo combo={combo} setReloadCombo={setReloadCombo} />
-                <TableProductCombo products={combo.products} setReloadCombo={setReloadCombo} />
+            TimeProducts.map(item => (
+              <Box key={item.idOfferTime}>
+                <CardTimeOffert time={item} setReloadTime={setReloadTime} />
+                <TableProductCombo products={item.productos} setReloadCombo={setReloadTime} />
               </Box>
             ))}
+
+          {Loading && SkeletonTimeProduct()}
+
+          {!Loading && !TimeProducts.length && (
+            <Alert severity='info'>No hay datos para mostrar.</Alert>
+          )}
         </Box>
       </Container>
 
-      <DialogoForm Open={visible} setOpen={setVisible} title='Nuevo Combo'>
-        <NewFormCombo setReloadCombo={setReloadCombo} />
+      <DialogoForm Open={visible} setOpen={setVisible} title='Nuevo tiempo'>
+        new time offer
       </DialogoForm>
     </Page>
   );

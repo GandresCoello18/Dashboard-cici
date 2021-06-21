@@ -25,6 +25,7 @@ import EmailIcon from '@material-ui/icons/Email';
 import PersonIcon from '@material-ui/icons/Person';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import NavItem from './NavItem';
+import TimerIcon from '@material-ui/icons/Timer';
 import { MeContext } from '../../../context/contextMe';
 import Cookies from 'js-cookie';
 import { SourceAvatar } from '../../../helpers/sourceAvatar';
@@ -98,6 +99,11 @@ const NavBar = ({ onMobileClose, openMobile }: Props) => {
       href: '/app/combos',
       icon: ListAltIcon,
       title: 'Combos',
+    },
+    {
+      href: '/app/offerTime',
+      icon: TimerIcon,
+      title: 'Tiempo de oferta',
     },
     {
       href: '/app/coupons',

@@ -25,6 +25,7 @@ import { toast, ToastContainer } from 'react-toast';
 import { ShippingView } from '../view/shipping';
 import { PageContacts } from '../view/contacto';
 import { Combos } from '../view/combos';
+import { PageTimeOffer } from '../view/timeOffer';
 
 const token = Cookies.get('access-token-cici');
 
@@ -48,6 +49,7 @@ const routes = [
       { path: 'products', element: PathSesion(Products) },
       { path: 'products/:idProduct', element: PathSesion(DetailsProduct) },
       { path: 'combos', element: PathSesion(Combos) },
+      { path: 'offerTime', element: PathSesion(PageTimeOffer) },
       { path: 'coupons', element: PathSesion(Coupons) },
       { path: 'shopping', element: PathSesion(Ordens) },
       { path: 'shipping', element: PathSesion(ShippingView) },
