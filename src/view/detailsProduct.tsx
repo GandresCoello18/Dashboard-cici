@@ -265,7 +265,7 @@ export const DetailsProduct = () => {
                   {Loading ? (
                     <Skeleton variant='text' width={85} />
                   ) : (
-                    <Rating name='read-only' value={Product?.stars} readOnly />
+                    <Rating name='read-only' value={Product?.stars || 0} readOnly />
                   )}
                 </Grid>
 
@@ -416,7 +416,15 @@ export const DetailsProduct = () => {
                       ) : (
                         <>
                           <strong>Imagenes Relacionadas:</strong>{' '}
-                          {Product && <ListImagen sources={Product.related_sources} />}
+                          {Product && (
+                            <ListImagen
+                              actions
+                              token={token}
+                              IdProduct={params.idProduct}
+                              sources={Product.related_sources}
+                              setReloadProduct={setReloadProduct}
+                            />
+                          )}
                         </>
                       )}
                     </>

@@ -77,3 +77,16 @@ export const DeleteProducto = async (option: { token: string | undefined; IdProd
   });
   return response;
 };
+
+export const DeleteImageProducto = async (option: {
+  token: string | undefined;
+  IdProduct: string;
+  publicId: string;
+}) => {
+  api.defaults.headers['access-token'] = option.token;
+  const response = await api({
+    method: 'DELETE',
+    url: `/products/image/${option.IdProduct}?public_id=${option.publicId}`,
+  });
+  return response;
+};
