@@ -6,6 +6,7 @@ import {
   Card,
   Box,
   Button,
+  Divider,
   makeStyles,
   CardActionArea,
   CardContent,
@@ -16,9 +17,9 @@ import EditIcon from '@material-ui/icons/Edit';
 import { DialogoForm } from '../DialogoForm';
 import { DialogoMessage } from '../DialogoMessage';
 import { toast } from 'react-toast';
-import { DeleteCombo } from '../../api/combo';
 import { MeContext } from '../../context/contextMe';
 import { OfferTime } from '../../interfaces/TimeOffer';
+import { DeleteTimeOffer } from '../../api/timeOffer';
 
 interface Props {
   time: OfferTime;
@@ -51,10 +52,10 @@ export const CardTimeOffert = ({ time, setReloadTime }: Props) => {
   const [VisibleDialog, setVisibleDialog] = useState<boolean>(false);
   const [AceptDialog, setAceptDialog] = useState<boolean>(false);
 
-  const RemoveCombo = async () => {
+  const RemoveTime = async () => {
     try {
-      await DeleteCombo({ token, idCombo: time.idOfferTime });
-      toast.success('Se elimino el combo');
+      await DeleteTimeOffer({ token, idTimeOffer: time.idOfferTime });
+      toast.success('Se elimino el tiempo');
 
       setReloadTime(true);
     } catch (error) {
@@ -64,7 +65,7 @@ export const CardTimeOffert = ({ time, setReloadTime }: Props) => {
 
   useEffect(() => {
     if (AceptDialog) {
-      RemoveCombo();
+      RemoveTime();
     }
   }, [AceptDialog]);
 
@@ -76,14 +77,15 @@ export const CardTimeOffert = ({ time, setReloadTime }: Props) => {
             <Typography gutterBottom variant='h5' component='h2'>
               <strong>{time.description}</strong>
             </Typography>
+            <br />
             <Typography gutterBottom>
               Creado el: <strong>{time.created_at}</strong>
               <br />
               Termina el: <strong>{time.finish_at}</strong>
               <br />
-              Activo: <strong>{time.status_offer_time}</strong>
+              Estado: <strong>{time.status_offer_time}</strong>
             </Typography>
-            <hr />
+            <Divider />
             <Box mt={2} display='flex' justifyContent='flex-end'>
               <Button type='button' className={classes.btnAdd} onClick={() => setVisible(true)}>
                 <AddIcon />

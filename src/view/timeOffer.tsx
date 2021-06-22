@@ -14,6 +14,7 @@ import { TableProductCombo } from '../components/Combos/table-product-combo';
 import { OfferTimeProducts } from '../interfaces/TimeOffer';
 import { CardTimeOffert } from '../components/TimeOffer/card-time-offer';
 import { DialogoForm } from '../components/DialogoForm';
+import { NewFormTime } from '../components/TimeOffer/new-time';
 
 const useStyles = makeStyles((theme: any) => ({
   root: {
@@ -107,7 +108,7 @@ export const PageTimeOffer = () => {
       </Container>
 
       <DialogoForm Open={visible} setOpen={setVisible} title='Nuevo tiempo'>
-        new time offer
+        <NewFormTime setReloadTime={setReloadTime} />
       </DialogoForm>
     </Page>
   );
