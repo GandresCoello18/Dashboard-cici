@@ -86,7 +86,12 @@ export const PageTimeOffer = () => {
     <Page className={classes.root} title='Tiempo de oferta'>
       <Container maxWidth={undefined}>
         <Box display='flex' justifyContent='flex-end'>
-          <Button color='secondary' variant='contained' onClick={() => setVisible(true)}>
+          <Button
+            color='secondary'
+            disabled={TimeProducts.length !== 0}
+            variant='contained'
+            onClick={() => setVisible(true)}
+          >
             Nuevo tiempo
           </Button>
         </Box>
@@ -95,7 +100,11 @@ export const PageTimeOffer = () => {
             TimeProducts.map(item => (
               <Box key={item.idOfferTime}>
                 <CardTimeOffert time={item} setReloadTime={setReloadTime} />
-                <TableProductCombo products={item.productos} setReloadCombo={setReloadTime} />
+                <TableProductCombo
+                  products={item.productos}
+                  setReloadCombo={setReloadTime}
+                  module='Time'
+                />
               </Box>
             ))}
 

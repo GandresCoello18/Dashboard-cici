@@ -116,7 +116,11 @@ export const Combos = () => {
             FetchCombos.map(combo => (
               <Box key={combo.idCombo}>
                 <CardInfoCombo combo={combo} setReloadCombo={setReloadCombo} />
-                <TableProductCombo products={combo.products} setReloadCombo={setReloadCombo} />
+                <TableProductCombo
+                  products={combo.products}
+                  setReloadCombo={setReloadCombo}
+                  module='Combo'
+                />
               </Box>
             ))}
         </Box>

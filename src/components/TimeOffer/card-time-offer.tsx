@@ -20,6 +20,8 @@ import { toast } from 'react-toast';
 import { MeContext } from '../../context/contextMe';
 import { OfferTime } from '../../interfaces/TimeOffer';
 import { DeleteTimeOffer } from '../../api/timeOffer';
+import { FormAddProductTime } from './add-product-time';
+import { FormUpdateCTime } from './edit-timeOffer';
 
 interface Props {
   time: OfferTime;
@@ -110,11 +112,11 @@ export const CardTimeOffert = ({ time, setReloadTime }: Props) => {
       </Card>
 
       <DialogoForm Open={visible} setOpen={setVisible} title='Agregar producto'>
-        agregar
+        <FormAddProductTime setReloadTime={setReloadTime} idTime={time.idOfferTime} />
       </DialogoForm>
 
-      <DialogoForm Open={visibleEdit} setOpen={setVisibleEdit} title='Editar producto'>
-        update
+      <DialogoForm Open={visibleEdit} setOpen={setVisibleEdit} title='Editar tiempo'>
+        <FormUpdateCTime Time={time} setReloadTime={setReloadTime} />
       </DialogoForm>
 
       <DialogoMessage

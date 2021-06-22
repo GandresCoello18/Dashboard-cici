@@ -25,10 +25,12 @@ import { Product } from '../../interfaces/Product';
 import { toast } from 'react-toast';
 import { DeleteProductCombo } from '../../api/combo';
 import { MeContext } from '../../context/contextMe';
+import { DeleteProductTimeOffer } from '../../api/timeOffer';
 
 interface Props {
   products: Product[];
   setReloadCombo: Dispatch<SetStateAction<boolean>>;
+  module: 'Combo' | 'Time';
 }
 
 const useStyles = makeStyles(theme => ({
@@ -37,7 +39,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export const TableProductCombo = ({ products, setReloadCombo }: Props) => {
+export const TableProductCombo = ({ products, setReloadCombo, module }: Props) => {
   const { token } = useContext(MeContext);
   const classes = useStyles();
   const [IdProduct, setProduct] = useState<string>('');
@@ -54,7 +56,17 @@ export const TableProductCombo = ({ products, setReloadCombo }: Props) => {
       }
     };
 
-    AceptDialog && IdProduct && RemoveProductCombo();
+    const RemoveProductTime = async () => {
+      try {
+        await DeleteProductTimeOffer({ token, idProduct: IdProduct });
+        setReloadCombo(true);
+      } catch (error) {
+        toast.error(error.message);
+      }
+    };
+
+    AceptDialog && IdProduct && module === 'Combo' && RemoveProductCombo();
+    AceptDialog && IdProduct && module === 'Time' && RemoveProductTime();
   }, [AceptDialog, IdProduct]);
 
   return (

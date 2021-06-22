@@ -14,7 +14,6 @@ import {
 } from '@material-ui/core';
 import { toast } from 'react-toast';
 import { MeContext } from '../../context/contextMe';
-import { AddProductCombo } from '../../api/combo';
 import { GetSearchProduct } from '../../api/products';
 import SearchIcon from '@material-ui/icons/Search';
 import IconButton from '@material-ui/core/IconButton';
@@ -22,10 +21,11 @@ import { Product } from '../../interfaces/Product';
 import Alert from '@material-ui/lab/Alert';
 import getInitials from '../../util/getInitials';
 import { BASE_API_IMAGES_CLOUDINNARY_SCALE } from '../../api';
+import { AddProductTimeOffer } from '../../api/timeOffer';
 
 interface Props {
-  setReloadCombo: Dispatch<SetStateAction<boolean>>;
-  idCombo: string;
+  setReloadTime: Dispatch<SetStateAction<boolean>>;
+  idTime: string;
 }
 
 const useStyles = makeStyles((theme: any) =>
@@ -53,7 +53,7 @@ const useStyles = makeStyles((theme: any) =>
   }),
 );
 
-export const FormAddProduct = ({ setReloadCombo, idCombo }: Props) => {
+export const FormAddProductTime = ({ setReloadTime, idTime }: Props) => {
   const classes = useStyles();
   const [KeyProduct, setKeyProduct] = useState<string>('');
   const [idProduct, setIdProduct] = useState<string>('');
@@ -87,13 +87,20 @@ export const FormAddProduct = ({ setReloadCombo, idCombo }: Props) => {
       return;
     }
 
+    const findProduct = products.find(product => product.idProducts === idProduct);
+
+    if (!findProduct?.discount) {
+      toast.warn('El producto seleccionado debe de contener descuento');
+      return;
+    }
+
     setLoadingAdd(true);
 
     try {
-      await AddProductCombo({ token, idProduct, idCombo });
-      setReloadCombo(true);
+      await AddProductTimeOffer({ token, data: { idProduct, idOfferTime: idTime } });
+      setReloadTime(true);
 
-      toast.success('Producto agregado al combo');
+      toast.success('Producto agregado al tiempo');
       setLoadingAdd(false);
     } catch (error) {
       toast.error(error.message);
