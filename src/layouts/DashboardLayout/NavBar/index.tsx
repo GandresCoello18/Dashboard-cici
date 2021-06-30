@@ -25,6 +25,7 @@ import EmailIcon from '@material-ui/icons/Email';
 import PersonIcon from '@material-ui/icons/Person';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import NavItem from './NavItem';
+import PaymentIcon from '@material-ui/icons/Payment';
 import TimerIcon from '@material-ui/icons/Timer';
 import { MeContext } from '../../../context/contextMe';
 import Cookies from 'js-cookie';
@@ -114,6 +115,11 @@ const NavBar = ({ onMobileClose, openMobile }: Props) => {
       href: '/app/shopping',
       icon: ShoppingCartIcon,
       title: 'Compras',
+    },
+    {
+      href: '/app/payment',
+      icon: PaymentIcon,
+      title: 'Pagos',
     },
     {
       href: '/app/shipping',

@@ -26,6 +26,7 @@ import { ShippingView } from '../view/shipping';
 import { PageContacts } from '../view/contacto';
 import { Combos } from '../view/combos';
 import { PageTimeOffer } from '../view/timeOffer';
+import { PaymentPaypal } from '../view/payment';
 
 const token = Cookies.get('access-token-cici');
 
@@ -52,6 +53,7 @@ const routes = [
       { path: 'offerTime', element: PathSesion(PageTimeOffer) },
       { path: 'coupons', element: PathSesion(Coupons) },
       { path: 'shopping', element: PathSesion(Ordens) },
+      { path: 'payment', element: PathSesion(PaymentPaypal) },
       { path: 'shipping', element: PathSesion(ShippingView) },
       { path: 'account', element: PathSesion(Account) },
       { path: '*', element: <Navigate to='/404' /> },
