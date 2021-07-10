@@ -3,7 +3,7 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable react/react-in-jsx-scope */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import {
   Container,
   makeStyles,
@@ -27,9 +27,12 @@ import { TableProductLottery } from '../components/lottey/table-lottery';
 import { ProductLottery } from '../interfaces/lottery';
 import { CardProduct } from '../components/Products/card-product';
 import { DialogoForm } from '../components/DialogoForm';
+import { toast } from 'react-toast';
 import { NewFormLottery } from '../components/lottey/new-lottery';
+import Alert from '@material-ui/lab/Alert';
 import { Product } from '../interfaces/Product';
-// import { MeContext } from '../context/contextMe';
+import { GetProductCart } from '../api/cart';
+import { MeContext } from '../context/contextMe';
 
 const useStyles = makeStyles((theme: any) => ({
   root: {
@@ -46,10 +49,11 @@ const useStyles = makeStyles((theme: any) => ({
 
 export const LoterryView = () => {
   const classes = useStyles();
-  // const { token } = useContext(MeContext);
+  const { token } = useContext(MeContext);
   const [visible, setVisible] = useState<boolean>(false);
   const [searchSorteo, setSearchSorteo] = useState<string>('');
   const [Sorteos, setSorteos] = useState<ProductLottery[]>([]);
+  const [CartProducts, setCartProducts] = useState<Product[]>([]);
   const [Cart, setCart] = useState<Product[]>([]);
   const [ReloadSorteo, setReloadSorteo] = useState<boolean>(false);
   const [selectSorteo, setSelectSorteo] = useState<ProductLottery | undefined>(undefined);
@@ -59,6 +63,19 @@ export const LoterryView = () => {
     setSorteos([]);
     setCart([]);
   }, [ReloadSorteo]);
+
+  useEffect(() => {
+    const fetchCart = async () => {
+      try {
+        const { products } = await (await GetProductCart({ token })).data;
+        setCartProducts(products);
+      } catch (error) {
+        toast.warn(error.message);
+      }
+    };
+
+    fetchCart();
+  }, []);
 
   return (
     <Page className={classes.root} title='Sorteos'>
@@ -102,11 +119,17 @@ export const LoterryView = () => {
             </AccordionSummary>
             <AccordionDetails>
               <Grid container spacing={3} direction='row' alignItems='center'>
-                {[0, 1, 2, 3, 4].map(item => (
-                  <Grid item xs={12} md={4} lg={3} key={item}>
-                    <CardProduct />
+                {CartProducts.map(product => (
+                  <Grid item xs={12} md={4} lg={3} key={product.idProducts}>
+                    <CardProduct product={product} />
                   </Grid>
                 ))}
+
+                {!CartProducts.length && (
+                  <Alert severity='info'>
+                    No hay productos en el <strong>Carrito de compras</strong> para mostrar.
+                  </Alert>
+                )}
               </Grid>
             </AccordionDetails>
           </Accordion>
