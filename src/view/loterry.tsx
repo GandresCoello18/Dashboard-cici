@@ -3,7 +3,7 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable react/react-in-jsx-scope */
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Container,
   makeStyles,
@@ -17,6 +17,8 @@ import {
 } from '@material-ui/core';
 import Page from '../components/page';
 import SearchIcon from '@material-ui/icons/Search';
+import { TableProductLottery } from '../components/lottey/table-lottery';
+import { ProductLottery } from '../interfaces/lottery';
 // import { MeContext } from '../context/contextMe';
 
 const useStyles = makeStyles((theme: any) => ({
@@ -33,8 +35,13 @@ export const LoterryView = () => {
   // const { token } = useContext(MeContext);
   const [visible, setVisible] = useState<boolean>(false);
   const [searchSorteo, setSearchSorteo] = useState<string>('');
+  const [Sorteos, setSorteos] = useState<ProductLottery[]>([]);
+  const [selectSorteo, setSelectSorteo] = useState<ProductLottery | undefined>(undefined);
 
-  console.group(visible, searchSorteo);
+  useEffect(() => {
+    console.group(visible, searchSorteo, selectSorteo);
+    setSorteos([]);
+  }, []);
 
   return (
     <Page className={classes.root} title='Sorteos'>
@@ -67,7 +74,16 @@ export const LoterryView = () => {
             </CardContent>
           </Card>
         </Box>
-        <Box mt={3}>defef</Box>
+        <Box mt={3}>
+          {Sorteos.map(item => (
+            <TableProductLottery
+              Lottery={item}
+              Loading={true}
+              setSelectProduct={setSelectSorteo}
+              key={item.idLottery}
+            />
+          ))}
+        </Box>
       </Container>
     </Page>
   );

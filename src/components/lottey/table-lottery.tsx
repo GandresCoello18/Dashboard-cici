@@ -6,24 +6,38 @@ import {
   Table,
   TableBody,
   TableCell,
-  Chip,
   Card,
   TableHead,
   TableRow,
+  Avatar,
+  makeStyles,
+  Button,
+  Typography,
 } from '@material-ui/core';
+import { Link } from 'react-router-dom';
 import Alert from '@material-ui/lab/Alert';
 import Skeleton from '@material-ui/lab/Skeleton';
 import PerfectScrollbar from 'react-perfect-scrollbar';
-import { OrdenProduct } from '../../interfaces/orden';
+import { BASE_API_IMAGES_CLOUDINNARY_SCALE } from '../../api';
+import getInitials from '../../util/getInitials';
+import { ProductLottery } from '../../interfaces/lottery';
 
 interface Props {
-  Orders: OrdenProduct[];
+  Lottery: ProductLottery;
   Loading: boolean;
-  setSelectOrder: Dispatch<SetStateAction<OrdenProduct | undefined>>;
+  setSelectProduct: Dispatch<SetStateAction<ProductLottery | undefined>>;
 }
 
-export const TableLottery = ({ Orders, Loading, setSelectOrder }: Props) => {
-  const SkeletonOrder = () => {
+const useStyles = makeStyles(theme => ({
+  avatar: {
+    marginRight: theme.spacing(2),
+  },
+}));
+
+export const TableProductLottery = ({ Lottery, Loading, setSelectProduct }: Props) => {
+  const classes = useStyles();
+
+  const SkeletonProducts = () => {
     return [0, 1, 2, 3, 4, 5, 6, 7].map(item => (
       <Skeleton key={item} style={{ marginBottom: 10 }} variant='rect' width='100%' height={40} />
     ));
@@ -36,44 +50,54 @@ export const TableLottery = ({ Orders, Loading, setSelectOrder }: Props) => {
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell>Metodo</TableCell>
-                <TableCell>ID de pago</TableCell>
-                <TableCell>Estado</TableCell>
-                <TableCell>Enviado</TableCell>
-                <TableCell>Creado el</TableCell>
-                <TableCell>Total</TableCell>
+                <TableCell>Producto</TableCell>
+                <TableCell>Pecio</TableCell>
+                <TableCell>Calificacion</TableCell>
+                <TableCell>Descuento</TableCell>
+                <TableCell>Opciones</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {!Loading &&
-                Orders.map(orden => (
-                  <TableRow onClick={() => setSelectOrder(orden)} hover key={orden.idOrder}>
-                    <TableCell>{orden.paymentMethod}</TableCell>
-                    <TableCell>{orden.paymentId}</TableCell>
+                Lottery.products.map(product => (
+                  <TableRow
+                    hover
+                    onClick={() => setSelectProduct(Lottery)}
+                    key={product.idProducts}
+                  >
                     <TableCell>
-                      <Chip
-                        label={orden.status}
-                        color={orden.status === 'Paid' ? 'secondary' : 'primary'}
-                      />
+                      <Box alignItems='center' display='flex' maxWidth={400}>
+                        <Avatar
+                          className={classes.avatar}
+                          src={`${BASE_API_IMAGES_CLOUDINNARY_SCALE}/${product.source}`}
+                        >
+                          {getInitials(product.title)}
+                        </Avatar>
+                        <Typography color='textPrimary' variant='body1'>
+                          {product.title}
+                        </Typography>
+                      </Box>
                     </TableCell>
+                    <TableCell>${product.price}</TableCell>
+                    <TableCell>{product.stars}</TableCell>
+                    <TableCell>{product.discount}%</TableCell>
                     <TableCell>
-                      <Chip
-                        label={orden.sent ? 'Si' : 'No'}
-                        color={orden.sent ? 'secondary' : 'primary'}
-                      />
+                      <Link to={`/app/products/${product.idProducts}`}>
+                        <Button size='small' variant='contained' color='primary'>
+                          Detalles
+                        </Button>
+                      </Link>
                     </TableCell>
-                    <TableCell>{orden.created_at}</TableCell>
-                    <TableCell>${orden.totalAmount}</TableCell>
                   </TableRow>
                 ))}
             </TableBody>
           </Table>
 
-          {Loading && SkeletonOrder()}
+          {Loading && SkeletonProducts()}
 
-          {!Loading && Orders.length === 0 && (
+          {!Lottery.products.length && (
             <Alert severity='info'>
-              Por el momento no hay <strong>Ordenes</strong> para mostrar.
+              Por el momento no hay <strong>Productos</strong> para mostrar.
             </Alert>
           )}
         </Box>
