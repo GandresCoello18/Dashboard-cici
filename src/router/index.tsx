@@ -23,6 +23,7 @@ import { GetMeUser } from '../api/users';
 import { MeContext } from '../context/contextMe';
 import { toast, ToastContainer } from 'react-toast';
 import { ShippingView } from '../view/shipping';
+import { LoterryView } from '../view/loterry';
 import { PageContacts } from '../view/contacto';
 import { Combos } from '../view/combos';
 import { PageTimeOffer } from '../view/timeOffer';
@@ -55,6 +56,7 @@ const routes = [
       { path: 'shopping', element: PathSesion(Ordens) },
       { path: 'payment', element: PathSesion(PaymentPaypal) },
       { path: 'shipping', element: PathSesion(ShippingView) },
+      { path: 'loterry', element: PathSesion(LoterryView) },
       { path: 'account', element: PathSesion(Account) },
       { path: '*', element: <Navigate to='/404' /> },
     ],

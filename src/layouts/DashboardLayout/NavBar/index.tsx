@@ -28,6 +28,7 @@ import NavItem from './NavItem';
 import PaymentIcon from '@material-ui/icons/Payment';
 import TimerIcon from '@material-ui/icons/Timer';
 import { MeContext } from '../../../context/contextMe';
+import RedeemIcon from '@material-ui/icons/Redeem';
 import Cookies from 'js-cookie';
 import { SourceAvatar } from '../../../helpers/sourceAvatar';
 
@@ -125,6 +126,11 @@ const NavBar = ({ onMobileClose, openMobile }: Props) => {
       href: '/app/shipping',
       icon: LocalShippingIcon,
       title: 'Envios',
+    },
+    {
+      href: '/app/loterry',
+      icon: RedeemIcon,
+      title: 'Sorteos',
     },
     {
       href: '/app/account',
