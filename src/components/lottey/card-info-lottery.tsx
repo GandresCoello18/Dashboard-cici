@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-use-before-define */
 import React, { Dispatch, SetStateAction, useContext, useEffect, useState } from 'react';
@@ -8,17 +9,24 @@ import {
   Button,
   Avatar,
   makeStyles,
+  CircularProgress,
   CardActionArea,
   CardContent,
 } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
+import EmojiEventsIcon from '@material-ui/icons/EmojiEvents';
+import AutorenewIcon from '@material-ui/icons/Autorenew';
 import { DialogoMessage } from '../DialogoMessage';
 import { toast } from 'react-toast';
+import Confetti from 'react-confetti';
 import { DeleteCombo } from '../../api/combo';
 import { MeContext } from '../../context/contextMe';
 import { ProductLottery } from '../../interfaces/lottery';
-import { BASE_API_IMAGES_CLOUDINNARY_SCALE } from '../../api';
+import { DialogoForm } from '../DialogoForm';
+import { GetUserWinnerLottery } from '../../api/lottery';
+import { Customers } from '../../interfaces/Customers';
+import { SourceAvatar } from '../../helpers/sourceAvatar';
 
 interface Props {
   lottery: ProductLottery;
@@ -34,6 +42,10 @@ const useStyles = makeStyles(() => ({
     backgroundColor: 'pink',
     marginLeft: 10,
   },
+  btnReset: {
+    backgroundColor: '#ffeae8',
+    marginLeft: 10,
+  },
   btnEdit: {
     backgroundColor: 'orange',
     marginLeft: 10,
@@ -41,16 +53,23 @@ const useStyles = makeStyles(() => ({
   btnAdd: {
     backgroundColor: '#6dd96d',
   },
+  btnWinner: {
+    backgroundColor: '#86D169',
+  },
   degradado: {
-    backgroundImage: 'linear-gradient(#edd7dc, #d907386e)',
+    backgroundImage: 'linear-gradient(#d907386e, #edd7dc)',
   },
 }));
 
 export const CardInfoLottery = ({ lottery, setReloadSorteo }: Props) => {
   const classes = useStyles();
   const { token } = useContext(MeContext);
+  const [visible, setVisible] = useState<boolean>(false);
   const [VisibleDialog, setVisibleDialog] = useState<boolean>(false);
+  const [Loading, setLoading] = useState<boolean>(false);
   const [AceptDialog, setAceptDialog] = useState<boolean>(false);
+  const [WinnerUser, setWinnerUser] = useState<Customers | undefined>(undefined);
+  const [width] = useState<number>(window.innerWidth);
 
   const RemoveLottery = async () => {
     try {
@@ -59,6 +78,25 @@ export const CardInfoLottery = ({ lottery, setReloadSorteo }: Props) => {
 
       setReloadSorteo(true);
     } catch (error) {
+      toast.error(error.message);
+    }
+  };
+
+  const handleWinner = async () => {
+    setLoading(true);
+    setVisible(true);
+
+    try {
+      const { winner } = await (await GetUserWinnerLottery({ token, idLoterry: lottery.idLottery }))
+        .data;
+      setWinnerUser(winner);
+      setLoading(false);
+
+      setTimeout(() => {
+        setReloadSorteo(true);
+      }, 10000);
+    } catch (error) {
+      setLoading(false);
       toast.error(error.message);
     }
   };
@@ -99,10 +137,7 @@ export const CardInfoLottery = ({ lottery, setReloadSorteo }: Props) => {
                   flexDirection='column'
                   p={2}
                 >
-                  <Avatar
-                    alt={lottery.winner.userName}
-                    src={`${BASE_API_IMAGES_CLOUDINNARY_SCALE}/${lottery.winner.avatar}`}
-                  />
+                  <Avatar alt={lottery.winner.userName} src={SourceAvatar(lottery.winner.avatar)} />
                   <Typography color='textPrimary' variant='h5'>
                     {lottery.winner.userName}
                   </Typography>
@@ -112,10 +147,18 @@ export const CardInfoLottery = ({ lottery, setReloadSorteo }: Props) => {
                 </Box>
               </>
             )}
-            {!lottery.winnerUser && (
+            {!lottery.winnerUser ? (
               <>
                 <hr />
                 <Box mt={2} display='flex' justifyContent='flex-end'>
+                  <Button
+                    type='button'
+                    disabled={Loading}
+                    className={classes.btnWinner}
+                    onClick={handleWinner}
+                  >
+                    <EmojiEventsIcon />
+                  </Button>
                   <Button
                     type='button'
                     className={classes.btnEdit}
@@ -132,10 +175,64 @@ export const CardInfoLottery = ({ lottery, setReloadSorteo }: Props) => {
                   </Button>
                 </Box>
               </>
+            ) : (
+              <>
+                <hr />
+                <Box mt={2} display='flex' justifyContent='center'>
+                  <Button
+                    type='button'
+                    fullWidth
+                    disabled={Loading}
+                    className={classes.btnReset}
+                    onClick={handleWinner}
+                  >
+                    <AutorenewIcon /> Restaurar sorteo
+                  </Button>
+                </Box>
+              </>
             )}
           </CardContent>
         </CardActionArea>
       </Card>
+
+      <DialogoForm
+        Open={visible}
+        setOpen={setVisible}
+        title={Loading ? 'Calculando ganador...' : 'Calculo terminado'}
+      >
+        {Loading && (
+          <Box display='flex' justifyContent='center' alignItems='center'>
+            <CircularProgress color='secondary' />
+          </Box>
+        )}
+
+        {!Loading && WinnerUser ? (
+          <>
+            <Confetti width={width / 3.2} height={300} />
+            <Box alignItems='center' display='flex' justifyContent='center' p={2}>
+              <h2>Ganador</h2>
+            </Box>
+            <hr />
+            <Box
+              className={classes.degradado}
+              alignItems='center'
+              display='flex'
+              flexDirection='column'
+              p={2}
+            >
+              <Avatar alt={WinnerUser.userName} src={SourceAvatar(WinnerUser.avatar)} />
+              <Typography color='textPrimary' variant='h5'>
+                {WinnerUser.userName}
+              </Typography>
+              <Typography color='textSecondary' variant='body2'>
+                {WinnerUser.email}
+              </Typography>
+            </Box>
+          </>
+        ) : (
+          'No hay ganador seleccionado'
+        )}
+      </DialogoForm>
 
       <DialogoMessage
         title='Aviso importante'
