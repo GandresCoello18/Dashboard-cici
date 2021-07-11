@@ -16,16 +16,16 @@ import {
 } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 import Alert from '@material-ui/lab/Alert';
-import Skeleton from '@material-ui/lab/Skeleton';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import { BASE_API_IMAGES_CLOUDINNARY_SCALE } from '../../api';
 import getInitials from '../../util/getInitials';
 import { ProductLottery } from '../../interfaces/lottery';
+import { CardInfoLottery } from './card-info-lottery';
 
 interface Props {
   Lottery: ProductLottery;
-  Loading: boolean;
   setSelectProduct: Dispatch<SetStateAction<ProductLottery | undefined>>;
+  setReloadSorteo: Dispatch<SetStateAction<boolean>>;
 }
 
 const useStyles = makeStyles(theme => ({
@@ -34,32 +34,27 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export const TableProductLottery = ({ Lottery, Loading, setSelectProduct }: Props) => {
+export const TableProductLottery = ({ Lottery, setSelectProduct, setReloadSorteo }: Props) => {
   const classes = useStyles();
 
-  const SkeletonProducts = () => {
-    return [0, 1, 2, 3, 4, 5, 6, 7].map(item => (
-      <Skeleton key={item} style={{ marginBottom: 10 }} variant='rect' width='100%' height={40} />
-    ));
-  };
-
   return (
-    <Card>
-      <PerfectScrollbar>
-        <Box width='100%'>
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell>Producto</TableCell>
-                <TableCell>Pecio</TableCell>
-                <TableCell>Calificacion</TableCell>
-                <TableCell>Descuento</TableCell>
-                <TableCell>Opciones</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {!Loading &&
-                Lottery.products.map(product => (
+    <>
+      <CardInfoLottery lottery={Lottery} setReloadSorteo={setReloadSorteo} />
+      <Card>
+        <PerfectScrollbar>
+          <Box width='100%'>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell>Producto</TableCell>
+                  <TableCell>Pecio</TableCell>
+                  <TableCell>Cantidad</TableCell>
+                  <TableCell>Color</TableCell>
+                  <TableCell>Opciones</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {Lottery.products.map(product => (
                   <TableRow
                     hover
                     onClick={() => setSelectProduct(Lottery)}
@@ -79,8 +74,8 @@ export const TableProductLottery = ({ Lottery, Loading, setSelectProduct }: Prop
                       </Box>
                     </TableCell>
                     <TableCell>${product.price}</TableCell>
-                    <TableCell>{product.stars}</TableCell>
-                    <TableCell>{product.discount}%</TableCell>
+                    <TableCell>{product.quantity}</TableCell>
+                    <TableCell>{product.colour || 'No aplica'}</TableCell>
                     <TableCell>
                       <Link to={`/app/products/${product.idProducts}`}>
                         <Button size='small' variant='contained' color='primary'>
@@ -90,18 +85,17 @@ export const TableProductLottery = ({ Lottery, Loading, setSelectProduct }: Prop
                     </TableCell>
                   </TableRow>
                 ))}
-            </TableBody>
-          </Table>
+              </TableBody>
+            </Table>
 
-          {Loading && SkeletonProducts()}
-
-          {!Lottery.products.length && (
-            <Alert severity='info'>
-              Por el momento no hay <strong>Productos</strong> para mostrar.
-            </Alert>
-          )}
-        </Box>
-      </PerfectScrollbar>
-    </Card>
+            {!Lottery.products.length && (
+              <Alert severity='info'>
+                Por el momento no hay <strong>Productos</strong> para mostrar.
+              </Alert>
+            )}
+          </Box>
+        </PerfectScrollbar>
+      </Card>
+    </>
   );
 };

@@ -11,3 +11,12 @@ export const NewLottery = async (option: { token?: string; finishAt: string }) =
   });
   return response;
 };
+
+export const GetLotterys = async (option: { token?: string }) => {
+  api.defaults.headers['access-token'] = option.token;
+  const response = await api({
+    method: 'GET',
+    url: '/lottery',
+  });
+  return response;
+};

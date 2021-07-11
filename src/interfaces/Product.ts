@@ -43,3 +43,13 @@ export interface ProductReview {
   userName: string;
   avatar: string;
 }
+
+export interface ProductCart {
+  idProducts: string;
+  title: string;
+  description: string;
+  source: string;
+  price: number;
+  quantity: number;
+  colour: string;
+}

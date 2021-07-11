@@ -1,4 +1,4 @@
-import { Product } from './Product';
+import { ProductCart } from './Product';
 
 export interface Lottery {
   idLottery: string;
@@ -9,6 +9,13 @@ export interface Lottery {
   status: 'Pending' | 'Complete';
 }
 
+export interface Winner {
+  userName: string;
+  avatar: string;
+  email: string;
+}
+
 export interface ProductLottery extends Lottery {
-  products: Product[];
+  products: ProductCart[];
+  winner: Winner;
 }

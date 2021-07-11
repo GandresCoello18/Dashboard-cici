@@ -33,6 +33,8 @@ import Alert from '@material-ui/lab/Alert';
 import { Product } from '../interfaces/Product';
 import { GetProductCart } from '../api/cart';
 import { MeContext } from '../context/contextMe';
+import { GetLotterys } from '../api/lottery';
+import { Skeleton } from '@material-ui/lab';
 
 const useStyles = makeStyles((theme: any) => ({
   root: {
@@ -50,6 +52,7 @@ const useStyles = makeStyles((theme: any) => ({
 export const LoterryView = () => {
   const classes = useStyles();
   const { token } = useContext(MeContext);
+  const [Loading, setLoading] = useState<boolean>(false);
   const [visible, setVisible] = useState<boolean>(false);
   const [searchSorteo, setSearchSorteo] = useState<string>('');
   const [Sorteos, setSorteos] = useState<ProductLottery[]>([]);
@@ -60,7 +63,6 @@ export const LoterryView = () => {
 
   useEffect(() => {
     console.group(visible, searchSorteo, selectSorteo, ReloadSorteo);
-    setSorteos([]);
   }, [ReloadSorteo]);
 
   const fetchCart = async () => {
@@ -72,8 +74,23 @@ export const LoterryView = () => {
     }
   };
 
+  const fetchLotterys = async () => {
+    setLoading(true);
+
+    try {
+      const { lotterys } = await (await GetLotterys({ token })).data;
+      setSorteos(lotterys);
+
+      setLoading(false);
+    } catch (error) {
+      setLoading(false);
+      toast.warn(error.message);
+    }
+  };
+
   useEffect(() => {
     fetchCart();
+    fetchLotterys();
   }, []);
 
   useEffect(() => {
@@ -81,7 +98,19 @@ export const LoterryView = () => {
       fetchCart();
       setReloadCart(false);
     }
-  }, [ReloadCart]);
+
+    if (ReloadSorteo) {
+      fetchLotterys();
+      fetchCart();
+      setReloadSorteo(false);
+    }
+  }, [ReloadCart, ReloadSorteo]);
+
+  const SkeletonProducts = () => {
+    return [0, 1, 2, 3, 4, 5].map(item => (
+      <Skeleton key={item} style={{ marginBottom: 10 }} variant='rect' width='100%' height={40} />
+    ));
+  };
 
   return (
     <Page className={classes.root} title='Sorteos'>
@@ -140,15 +169,18 @@ export const LoterryView = () => {
             </AccordionDetails>
           </Accordion>
         </Box>
-        <Box mt={3}>
-          {Sorteos.map(item => (
-            <TableProductLottery
-              Lottery={item}
-              Loading={true}
-              setSelectProduct={setSelectSorteo}
-              key={item.idLottery}
-            />
-          ))}
+        <Box mt={3} mb={4}>
+          {!Loading &&
+            Sorteos.map(item => (
+              <TableProductLottery
+                Lottery={item}
+                setReloadSorteo={setReloadSorteo}
+                setSelectProduct={setSelectSorteo}
+                key={item.idLottery}
+              />
+            ))}
+
+          {Loading && SkeletonProducts()}
         </Box>
 
         <DialogoForm Open={visible} setOpen={setVisible} title='Nuevo sorteo'>
