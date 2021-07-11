@@ -29,3 +29,12 @@ export const GetUserWinnerLottery = async (option: { token?: string; idLoterry: 
   });
   return response;
 };
+
+export const ResetLottery = async (option: { token?: string; idLoterry: string }) => {
+  api.defaults.headers['access-token'] = option.token;
+  const response = await api({
+    method: 'PUT',
+    url: `/lottery/reset/${option.idLoterry}`,
+  });
+  return response;
+};

@@ -24,7 +24,7 @@ import { DeleteCombo } from '../../api/combo';
 import { MeContext } from '../../context/contextMe';
 import { ProductLottery } from '../../interfaces/lottery';
 import { DialogoForm } from '../DialogoForm';
-import { GetUserWinnerLottery } from '../../api/lottery';
+import { GetUserWinnerLottery, ResetLottery } from '../../api/lottery';
 import { Customers } from '../../interfaces/Customers';
 import { SourceAvatar } from '../../helpers/sourceAvatar';
 
@@ -67,6 +67,7 @@ export const CardInfoLottery = ({ lottery, setReloadSorteo }: Props) => {
   const [visible, setVisible] = useState<boolean>(false);
   const [VisibleDialog, setVisibleDialog] = useState<boolean>(false);
   const [Loading, setLoading] = useState<boolean>(false);
+  const [LoadingReset, setLoadingReset] = useState<boolean>(false);
   const [AceptDialog, setAceptDialog] = useState<boolean>(false);
   const [WinnerUser, setWinnerUser] = useState<Customers | undefined>(undefined);
   const [width] = useState<number>(window.innerWidth);
@@ -97,6 +98,19 @@ export const CardInfoLottery = ({ lottery, setReloadSorteo }: Props) => {
       }, 10000);
     } catch (error) {
       setLoading(false);
+      toast.error(error.message);
+    }
+  };
+
+  const handleReset = async () => {
+    setLoadingReset(true);
+
+    try {
+      await ResetLottery({ token, idLoterry: lottery.idLottery });
+      setLoadingReset(false);
+      setReloadSorteo(true);
+    } catch (error) {
+      setLoadingReset(false);
       toast.error(error.message);
     }
   };
@@ -182,11 +196,11 @@ export const CardInfoLottery = ({ lottery, setReloadSorteo }: Props) => {
                   <Button
                     type='button'
                     fullWidth
-                    disabled={Loading}
+                    disabled={LoadingReset}
                     className={classes.btnReset}
-                    onClick={handleWinner}
+                    onClick={handleReset}
                   >
-                    <AutorenewIcon /> Restaurar sorteo
+                    <AutorenewIcon /> {LoadingReset ? 'Restaurando...' : 'Restaurar sorteo'}
                   </Button>
                 </Box>
               </>
