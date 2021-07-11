@@ -54,28 +54,34 @@ export const LoterryView = () => {
   const [searchSorteo, setSearchSorteo] = useState<string>('');
   const [Sorteos, setSorteos] = useState<ProductLottery[]>([]);
   const [CartProducts, setCartProducts] = useState<Product[]>([]);
-  const [Cart, setCart] = useState<Product[]>([]);
   const [ReloadSorteo, setReloadSorteo] = useState<boolean>(false);
+  const [ReloadCart, setReloadCart] = useState<boolean>(false);
   const [selectSorteo, setSelectSorteo] = useState<ProductLottery | undefined>(undefined);
 
   useEffect(() => {
-    console.group(visible, searchSorteo, selectSorteo, ReloadSorteo, Cart);
+    console.group(visible, searchSorteo, selectSorteo, ReloadSorteo);
     setSorteos([]);
-    setCart([]);
   }, [ReloadSorteo]);
 
-  useEffect(() => {
-    const fetchCart = async () => {
-      try {
-        const { products } = await (await GetProductCart({ token })).data;
-        setCartProducts(products);
-      } catch (error) {
-        toast.warn(error.message);
-      }
-    };
+  const fetchCart = async () => {
+    try {
+      const { products } = await (await GetProductCart({ token })).data;
+      setCartProducts(products);
+    } catch (error) {
+      toast.warn(error.message);
+    }
+  };
 
+  useEffect(() => {
     fetchCart();
   }, []);
+
+  useEffect(() => {
+    if (ReloadCart) {
+      fetchCart();
+      setReloadCart(false);
+    }
+  }, [ReloadCart]);
 
   return (
     <Page className={classes.root} title='Sorteos'>
@@ -121,7 +127,7 @@ export const LoterryView = () => {
               <Grid container spacing={3} direction='row' alignItems='center'>
                 {CartProducts.map(product => (
                   <Grid item xs={12} md={4} lg={3} key={product.idProducts}>
-                    <CardProduct product={product} />
+                    <CardProduct product={product} setReloadCart={setReloadCart} />
                   </Grid>
                 ))}
 
@@ -146,7 +152,7 @@ export const LoterryView = () => {
         </Box>
 
         <DialogoForm Open={visible} setOpen={setVisible} title='Nuevo sorteo'>
-          <NewFormLottery setReloadSorteo={setReloadSorteo} isCart={Cart.length} />
+          <NewFormLottery setReloadSorteo={setReloadSorteo} isCart={CartProducts.length} />
         </DialogoForm>
       </Container>
     </Page>

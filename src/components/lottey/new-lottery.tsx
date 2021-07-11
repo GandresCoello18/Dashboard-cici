@@ -53,7 +53,7 @@ export const NewFormLottery = ({ setReloadSorteo, isCart }: Props) => {
                     error={Boolean(touched.finishAt && errors.finishAt)}
                     helperText={touched.finishAt && errors.finishAt}
                     fullWidth
-                    type='date'
+                    type='datetime-local'
                     name='finishAt'
                     onChange={handleChange}
                     onBlur={handleBlur}
