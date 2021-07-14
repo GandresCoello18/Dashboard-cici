@@ -49,6 +49,8 @@ export const NewFormLottery = ({ setReloadSorteo, isCart }: Props) => {
             <CardContent>
               <Grid container spacing={3}>
                 <Grid item md={6} xs={12}>
+                  <p>¿Cuando empieza el sorteo?</p>
+                  <br />
                   <TextField
                     error={Boolean(touched.finishAt && errors.finishAt)}
                     helperText={touched.finishAt && errors.finishAt}

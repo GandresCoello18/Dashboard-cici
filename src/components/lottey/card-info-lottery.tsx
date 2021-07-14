@@ -20,13 +20,13 @@ import AutorenewIcon from '@material-ui/icons/Autorenew';
 import { DialogoMessage } from '../DialogoMessage';
 import { toast } from 'react-toast';
 import Confetti from 'react-confetti';
-import { DeleteCombo } from '../../api/combo';
 import { MeContext } from '../../context/contextMe';
 import { ProductLottery } from '../../interfaces/lottery';
 import { DialogoForm } from '../DialogoForm';
-import { GetUserWinnerLottery, ResetLottery } from '../../api/lottery';
+import { DeleteLottery, GetUserWinnerLottery, ResetLottery } from '../../api/lottery';
 import { Customers } from '../../interfaces/Customers';
 import { SourceAvatar } from '../../helpers/sourceAvatar';
+import { BackTime } from '../BackTime';
 
 interface Props {
   lottery: ProductLottery;
@@ -64,6 +64,7 @@ const useStyles = makeStyles(() => ({
 export const CardInfoLottery = ({ lottery, setReloadSorteo }: Props) => {
   const classes = useStyles();
   const { token } = useContext(MeContext);
+  const [IsRunning, SetIsRunning] = useState<boolean>(true);
   const [visible, setVisible] = useState<boolean>(false);
   const [VisibleDialog, setVisibleDialog] = useState<boolean>(false);
   const [Loading, setLoading] = useState<boolean>(false);
@@ -74,7 +75,7 @@ export const CardInfoLottery = ({ lottery, setReloadSorteo }: Props) => {
 
   const RemoveLottery = async () => {
     try {
-      await DeleteCombo({ token, idCombo: lottery.idLottery });
+      await DeleteLottery({ token, idLoterry: lottery.idLottery });
       toast.success('Se elimino el sorteo');
 
       setReloadSorteo(true);
@@ -119,7 +120,11 @@ export const CardInfoLottery = ({ lottery, setReloadSorteo }: Props) => {
     if (AceptDialog) {
       RemoveLottery();
     }
-  }, [AceptDialog]);
+
+    if (!IsRunning && !lottery.winnerUser) {
+      handleWinner();
+    }
+  }, [AceptDialog, IsRunning]);
 
   return (
     <>
@@ -137,6 +142,15 @@ export const CardInfoLottery = ({ lottery, setReloadSorteo }: Props) => {
               Estado: <strong>{lottery.status}</strong>
               <br />
             </Typography>
+            {lottery.finish_at && IsRunning && (
+              <>
+                <hr />
+                <BackTime
+                  expiryTimestamp={new Date(lottery.finish_at).getTime()}
+                  SetIsRunning={SetIsRunning}
+                />
+              </>
+            )}
             {lottery.winner && (
               <>
                 <hr />

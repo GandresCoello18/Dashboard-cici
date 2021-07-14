@@ -12,6 +12,7 @@ import {
   Card,
   Grid,
   CardContent,
+  Chip,
   InputAdornment,
   SvgIcon,
   TextField,
@@ -150,7 +151,9 @@ export const LoterryView = () => {
               aria-controls='panel1a-content'
               id='panel1a-header'
             >
-              <Typography className={classes.heading}>Productos en mi carrito</Typography>
+              <Typography className={classes.heading}>
+                Productos en mi carrito: <Chip color='secondary' label={CartProducts.length} />
+              </Typography>
             </AccordionSummary>
             <AccordionDetails>
               <Grid container spacing={3} direction='row' alignItems='center'>

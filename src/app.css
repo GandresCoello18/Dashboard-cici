@@ -1,3 +1,21 @@
 .toastContainer {
     z-index: 9999 !important;
 }
+
+.time {
+    display: inline-block;
+}
+
+.time .dice {
+    color: #343a40;
+    font-size: 13px;
+    padding: 5px;
+    border-radius: 4px;
+    background-color: #f1d7dd;
+}
+
+.time .split {
+    color: #343a40;
+    font-weight: 700;
+    padding: 3px;
+}
