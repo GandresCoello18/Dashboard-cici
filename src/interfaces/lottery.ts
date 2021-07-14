@@ -7,6 +7,7 @@ export interface Lottery {
   finish_at?: string | Date;
   winnerUser: string | null;
   status: 'Pending' | 'Complete';
+  numberOfLottery: number;
 }
 
 export interface Winner {

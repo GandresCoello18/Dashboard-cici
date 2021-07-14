@@ -127,7 +127,7 @@ export const CardInfoLottery = ({ lottery, setReloadSorteo }: Props) => {
         <CardActionArea>
           <CardContent>
             <Typography gutterBottom variant='h4' component='h2'>
-              <strong>Sorteo #12</strong>
+              <strong>Sorteo #{lottery.numberOfLottery}</strong>
             </Typography>
             <Typography gutterBottom>
               Creado el: <strong>{lottery.created_at}</strong>
