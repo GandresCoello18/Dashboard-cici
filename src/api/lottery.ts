@@ -39,6 +39,22 @@ export const ResetLottery = async (option: { token?: string; idLoterry: string }
   return response;
 };
 
+export const UpdateFinishLottery = async (option: {
+  token?: string;
+  idLoterry: string;
+  finishAt: string;
+}) => {
+  api.defaults.headers['access-token'] = option.token;
+  const response = await api({
+    method: 'PUT',
+    url: `/lottery/finish/${option.idLoterry}`,
+    data: {
+      finishAt: option.finishAt,
+    },
+  });
+  return response;
+};
+
 export const DeleteLottery = async (option: { token?: string; idLoterry: string }) => {
   api.defaults.headers['access-token'] = option.token;
   const response = await api({

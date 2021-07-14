@@ -29,7 +29,7 @@ import { ProductLottery } from '../interfaces/lottery';
 import { CardProduct } from '../components/Products/card-product';
 import { DialogoForm } from '../components/DialogoForm';
 import { toast } from 'react-toast';
-import { NewFormLottery } from '../components/lottey/new-lottery';
+import { InputFormLottery } from '../components/lottey/input-lottery';
 import Alert from '@material-ui/lab/Alert';
 import { Product } from '../interfaces/Product';
 import { GetProductCart } from '../api/cart';
@@ -187,7 +187,7 @@ export const LoterryView = () => {
         </Box>
 
         <DialogoForm Open={visible} setOpen={setVisible} title='Nuevo sorteo'>
-          <NewFormLottery setReloadSorteo={setReloadSorteo} isCart={CartProducts.length} />
+          <InputFormLottery setReloadSorteo={setReloadSorteo} isCart={CartProducts.length} />
         </DialogoForm>
       </Container>
     </Page>

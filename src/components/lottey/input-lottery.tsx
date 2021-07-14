@@ -6,14 +6,15 @@ import { Box, Button, Card, CardContent, Divider, Grid, TextField } from '@mater
 import { toast } from 'react-toast';
 import { MeContext } from '../../context/contextMe';
 import Alert from '@material-ui/lab/Alert';
-import { NewLottery } from '../../api/lottery';
+import { NewLottery, UpdateFinishLottery } from '../../api/lottery';
 
 interface Props {
   setReloadSorteo: Dispatch<SetStateAction<boolean>>;
   isCart: number;
+  idLoterry?: string;
 }
 
-export const NewFormLottery = ({ setReloadSorteo, isCart }: Props) => {
+export const InputFormLottery = ({ setReloadSorteo, isCart, idLoterry }: Props) => {
   const { token } = useContext(MeContext);
 
   return (
@@ -33,8 +34,13 @@ export const NewFormLottery = ({ setReloadSorteo, isCart }: Props) => {
         }
 
         try {
-          await NewLottery({ token, finishAt });
-          toast.success('Se creo el nuevo sorteo');
+          if (!idLoterry) {
+            await NewLottery({ token, finishAt });
+            toast.success('Se creo el nuevo sorteo');
+          } else {
+            await UpdateFinishLottery({ token, finishAt, idLoterry });
+            toast.success('Se actualizo el sorteo');
+          }
 
           setReloadSorteo(true);
           actions.setSubmitting(false);
@@ -49,7 +55,9 @@ export const NewFormLottery = ({ setReloadSorteo, isCart }: Props) => {
             <CardContent>
               <Grid container spacing={3}>
                 <Grid item md={6} xs={12}>
-                  <p>¿Cuando empieza el sorteo?</p>
+                  <p>
+                    {!idLoterry ? '¿Cuando empieza el sorteo?' : 'Actualizar finish del sorteo'}
+                  </p>
                   <br />
                   <TextField
                     error={Boolean(touched.finishAt && errors.finishAt)}
@@ -68,7 +76,7 @@ export const NewFormLottery = ({ setReloadSorteo, isCart }: Props) => {
             <Box display='flex' justifyContent='flex-end' p={2}>
               <Button
                 color='primary'
-                disabled={isSubmitting || isCart === 0 ? true : false}
+                disabled={isSubmitting || (isCart === 0 ? true : false && !idLoterry)}
                 fullWidth
                 size='large'
                 type='submit'
@@ -78,7 +86,7 @@ export const NewFormLottery = ({ setReloadSorteo, isCart }: Props) => {
               </Button>
             </Box>
 
-            {isCart === 0 && (
+            {isCart === 0 && !idLoterry && (
               <Alert severity='info'>
                 No hay productos en el <strong>Carrito de compras</strong> para mostrar.
               </Alert>

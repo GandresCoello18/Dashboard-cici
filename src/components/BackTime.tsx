@@ -12,7 +12,6 @@ export const BackTime = ({ expiryTimestamp, SetIsRunning }: Props) => {
   const { seconds, minutes, hours, days, start, pause } = useTimer({
     expiryTimestamp,
     onExpire: () => {
-      console.log('expiro ya');
       SetIsRunning(false);
       pause();
     },

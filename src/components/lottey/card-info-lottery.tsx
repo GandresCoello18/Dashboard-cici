@@ -27,6 +27,7 @@ import { DeleteLottery, GetUserWinnerLottery, ResetLottery } from '../../api/lot
 import { Customers } from '../../interfaces/Customers';
 import { SourceAvatar } from '../../helpers/sourceAvatar';
 import { BackTime } from '../BackTime';
+import { InputFormLottery } from './input-lottery';
 
 interface Props {
   lottery: ProductLottery;
@@ -47,7 +48,7 @@ const useStyles = makeStyles(() => ({
     marginLeft: 10,
   },
   btnEdit: {
-    backgroundColor: 'orange',
+    float: 'right',
     marginLeft: 10,
   },
   btnAdd: {
@@ -66,6 +67,7 @@ export const CardInfoLottery = ({ lottery, setReloadSorteo }: Props) => {
   const { token } = useContext(MeContext);
   const [IsRunning, SetIsRunning] = useState<boolean>(true);
   const [visible, setVisible] = useState<boolean>(false);
+  const [visibleUpdate, setVisibleUpdate] = useState<boolean>(false);
   const [VisibleDialog, setVisibleDialog] = useState<boolean>(false);
   const [Loading, setLoading] = useState<boolean>(false);
   const [LoadingReset, setLoadingReset] = useState<boolean>(false);
@@ -138,6 +140,9 @@ export const CardInfoLottery = ({ lottery, setReloadSorteo }: Props) => {
               Creado el: <strong>{lottery.created_at}</strong>
               <br />
               Finaliza el: <strong>{lottery.finish_at || 'Sin fecha'}</strong>
+              <span className={classes.btnEdit} onClick={() => setVisibleUpdate(true)}>
+                <EditIcon />
+              </span>
               <br />
               Estado: <strong>{lottery.status}</strong>
               <br />
@@ -186,13 +191,6 @@ export const CardInfoLottery = ({ lottery, setReloadSorteo }: Props) => {
                     onClick={handleWinner}
                   >
                     <EmojiEventsIcon />
-                  </Button>
-                  <Button
-                    type='button'
-                    className={classes.btnEdit}
-                    onClick={() => console.log(true)}
-                  >
-                    <EditIcon />
                   </Button>
                   <Button
                     type='button'
@@ -260,6 +258,14 @@ export const CardInfoLottery = ({ lottery, setReloadSorteo }: Props) => {
         ) : (
           'No hay ganador seleccionado'
         )}
+      </DialogoForm>
+
+      <DialogoForm Open={visibleUpdate} setOpen={setVisibleUpdate} title=''>
+        <InputFormLottery
+          idLoterry={lottery.idLottery}
+          isCart={1}
+          setReloadSorteo={setReloadSorteo}
+        />
       </DialogoForm>
 
       <DialogoMessage
