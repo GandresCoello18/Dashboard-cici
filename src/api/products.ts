@@ -1,11 +1,19 @@
 /* eslint-disable no-undef */
 import { api } from '.';
 
-export const GetProducts = async (option: { token: string | undefined; findProduct?: string }) => {
+export const GetProducts = async (option: {
+  token?: string;
+  findProduct?: string;
+  page: number;
+}) => {
   api.defaults.headers['access-token'] = option.token;
   const response = await api({
     method: 'GET',
-    url: `${option.findProduct ? `/products?findProduct=${option.findProduct}` : '/products'}`,
+    url: `${
+      option.findProduct
+        ? `/products??page=${option.page}&findProduct=${option.findProduct}`
+        : `/products?page=${option.page}`
+    }`,
   });
   return response;
 };

@@ -28,6 +28,7 @@ import { ListCategory } from '../components/Products/list-category';
 import { GetCategoryProduct } from '../api/category';
 import { CategoryCountProduct } from '../interfaces/Category';
 import { NewCategory } from '../components/Products/new-category';
+import { Pagination } from '@material-ui/lab';
 
 const useStyles = makeStyles((theme: any) => ({
   root: {
@@ -47,6 +48,7 @@ export const Products = () => {
   const [visibleProduct, setVisibleProduct] = useState<boolean>(false);
   const [visibleCategory, setVisibleCategory] = useState<boolean>(false);
   const [Loading, setLoading] = useState<boolean>(false);
+  const [Count, setCount] = useState<number>(0);
   const [ReloadPrducts, setReloadPrducts] = useState<boolean>(false);
   const [ReloadCategory, setReloadCategory] = useState<boolean>(false);
   const [SearchProduct, setSearchProduct] = useState<string>('');
@@ -63,26 +65,26 @@ export const Products = () => {
     }
   };
 
+  const Fetch = async (page: number) => {
+    try {
+      const { products, pages } = await (
+        await GetProducts({ token, findProduct: SearchProduct || undefined, page })
+      ).data;
+      setFetchProducts(products);
+      setCount(pages);
+
+      setLoading(false);
+    } catch (error) {
+      toast.error(error.message);
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
     setLoading(true);
 
-    const Fetch = async () => {
-      try {
-        const { products } = await (
-          await GetProducts({ token, findProduct: SearchProduct || undefined })
-        ).data;
-        setFetchProducts(products);
-
-        FetchCategory();
-
-        setLoading(false);
-      } catch (error) {
-        toast.error(error.message);
-        setLoading(false);
-      }
-    };
-
-    Fetch();
+    Fetch(1);
+    FetchCategory();
 
     if (ReloadPrducts) {
       setReloadPrducts(false);
@@ -95,6 +97,8 @@ export const Products = () => {
       FetchCategory();
     }
   }, [ReloadCategory]);
+
+  const SelectItemPagination = (page: number) => Fetch(page);
 
   return (
     <>
@@ -141,6 +145,13 @@ export const Products = () => {
               products={FetchProducts}
               Loading={Loading}
               setReloadProduct={setReloadPrducts}
+            />
+          </Box>
+          <Box mt={3} display='flex' justifyContent='center'>
+            <Pagination
+              count={Count}
+              color='secondary'
+              onChange={(event, page) => SelectItemPagination(page)}
             />
           </Box>
         </Container>
