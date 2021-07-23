@@ -63,7 +63,7 @@ export const CardProfile = ({ User, Loading }: Props) => {
           </Grid>
 
           <Grid item xs={12} sm={8}>
-            <Grid container spacing={4} direction='row' justify='center' alignItems='center'>
+            <Grid container spacing={3} direction='row'>
               <Grid item xs={12} md={6}>
                 Email:{' '}
                 {Loading ? <Skeleton variant='text' width={160} /> : <strong>{User?.email}</strong>}
@@ -74,6 +74,22 @@ export const CardProfile = ({ User, Loading }: Props) => {
                   <Skeleton variant='text' width={60} />
                 ) : (
                   <strong>{User?.isBanner ? 'Si' : 'No'}</strong>
+                )}
+              </Grid>
+              <Grid item xs={12} md={6}>
+                CiciRank:{' '}
+                {Loading ? (
+                  <Skeleton variant='text' width={60} />
+                ) : (
+                  <strong>{User?.ciciRank}</strong>
+                )}
+              </Grid>
+              <Grid item xs={12} md={6}>
+                Email validado:{' '}
+                {Loading ? (
+                  <Skeleton variant='text' width={160} />
+                ) : (
+                  <strong>{User?.validatedEmail ? 'Si' : 'No'}</strong>
                 )}
               </Grid>
               <Grid item xs={12} md={6}>

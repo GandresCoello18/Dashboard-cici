@@ -6,13 +6,16 @@ import { createContext, Dispatch, SetStateAction, useState } from 'react';
 
 interface Me {
   idUser: string;
-  isAdmin: boolean;
+  isAdmin: number;
   userName: string;
   email: string;
   created_at: Date | string;
   avatar: string;
   provider: string;
   phone: number | null;
+  isBanner: number;
+  ciciRank: number;
+  validatedEmail: number;
 }
 
 interface Props {
@@ -29,13 +32,16 @@ export const MeContext = createContext<Values>({
   token: '',
   me: {
     idUser: '',
-    isAdmin: false,
+    isAdmin: 0,
     userName: '',
     email: '',
     created_at: '',
     avatar: '',
     provider: '',
     phone: 0,
+    isBanner: 0,
+    ciciRank: 0,
+    validatedEmail: 0,
   },
   setMe: () => false,
 });
@@ -44,13 +50,16 @@ export const MeContextProvider = ({ children }: Props) => {
   const [token] = useState<string>(Cookies.get('access-token-cici') || '');
   const [me, setMe] = useState<Me>({
     idUser: '',
-    isAdmin: false,
+    isAdmin: 0,
     userName: '',
     email: '',
     created_at: '',
     avatar: '',
     provider: '',
     phone: 0,
+    isBanner: 0,
+    ciciRank: 0,
+    validatedEmail: 0,
   });
 
   const Values: Values = {

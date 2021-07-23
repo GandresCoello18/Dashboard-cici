@@ -40,6 +40,7 @@ import { CouponAmount } from '../interfaces/Coupon';
 import { DialogoMessage } from '../components/DialogoMessage';
 import { DialogoForm } from '../components/DialogoForm';
 import { ResetPasswordEmail } from '../components/customers/Details/changePassword';
+import { EditCustomer } from '../components/customers/Details/editCustomers';
 
 const useStyles = makeStyles((theme: any) => ({
   root: {
@@ -52,6 +53,10 @@ const useStyles = makeStyles((theme: any) => ({
     color: 'red',
     marginLeft: 10,
   },
+  btnEdit: {
+    backgroundColor: 'orange',
+    marginLeft: 10,
+  },
 }));
 
 export const DetailsCustomenr = () => {
@@ -60,10 +65,12 @@ export const DetailsCustomenr = () => {
   const { token } = useContext(MeContext);
   const [VisibleDialog, setVisibleDialog] = useState<boolean>(false);
   const [VisibleDialogForm, setVisibleDialogForm] = useState<boolean>(false);
+  const [VisibleDialogFormEdit, setVisibleDialogFormEdit] = useState<boolean>(false);
   const [AceptDialog, setAceptDialog] = useState<boolean>(false);
   const [Loading, setLoading] = useState<boolean>(false);
   const [ReloadOrders, setReloadOrders] = useState<boolean>(false);
   const [ReloadFav, setReloadFav] = useState<boolean>(false);
+  const [ReloadUser, setReloadUser] = useState<boolean>(false);
   const [User, setUser] = useState<Customers>();
   const [Address, setAddress] = useState<Addresses[]>([]);
   const [Favorites, setFavorites] = useState<Product[]>([]);
@@ -71,14 +78,30 @@ export const DetailsCustomenr = () => {
   const [FetchCouponAmount, setFetchCouponAmount] = useState<CouponAmount[]>([]);
   const [SelectOrder, setSelectOrder] = useState<OrdenProduct>();
 
+  const FetchUser = async () => {
+    try {
+      const { user } = await (await GetUser({ token, idUser: params.idUser })).data;
+      setUser(user);
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
+
+  useEffect(() => {
+    if (ReloadUser) {
+      FetchUser();
+      setReloadUser(false);
+      setVisibleDialogFormEdit(false);
+    }
+  }, [ReloadUser]);
+
   useEffect(() => {
     setLoading(true);
 
-    const FetchUser = async () => {
-      try {
-        const { user } = await (await GetUser({ token, idUser: params.idUser })).data;
-        setUser(user);
+    FetchUser();
 
+    const FetchDetailUser = async () => {
+      try {
         const { address } = await (await GetAddressByUser({ token, idUser: params.idUser })).data;
         setAddress(address);
 
@@ -97,7 +120,7 @@ export const DetailsCustomenr = () => {
       }
     };
 
-    params.idUser && FetchUser();
+    params.idUser && FetchDetailUser();
   }, [params, token]);
 
   useEffect(() => {
@@ -153,7 +176,7 @@ export const DetailsCustomenr = () => {
   return (
     <Page className={classes.root} title={`Detalles de ${User?.userName}`}>
       <Container maxWidth='xl'>
-        <Box display='flex' justifyContent='flex-end'>
+        <Box display='flex' justifyContent='flex-end' mb={1}>
           {User?.provider === 'cici' ? (
             <Button
               color='secondary'
@@ -165,6 +188,13 @@ export const DetailsCustomenr = () => {
           ) : (
             ''
           )}
+          <Button
+            className={classes.btnEdit}
+            variant='contained'
+            onClick={() => setVisibleDialogFormEdit(true)}
+          >
+            Editar
+          </Button>
           <Button
             className={classes.btnDelete}
             variant='contained'
@@ -259,6 +289,10 @@ export const DetailsCustomenr = () => {
 
       <DialogoForm Open={VisibleDialogForm} setOpen={setVisibleDialogForm} title=''>
         <ResetPasswordEmail email={User?.email || ''} />
+      </DialogoForm>
+
+      <DialogoForm Open={VisibleDialogFormEdit} setOpen={setVisibleDialogFormEdit} title=''>
+        {User && <EditCustomer User={User} setReloadUser={setReloadUser} />}
       </DialogoForm>
     </Page>
   );

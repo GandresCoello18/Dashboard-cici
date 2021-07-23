@@ -3,9 +3,11 @@ export interface Customers {
   userName: string;
   email: string;
   created_at: string;
-  isAdmin: boolean;
+  isAdmin: number;
   avatar: string;
   provider: 'cici' | 'google';
-  phone: number | null;
-  isBanner: boolean;
+  phone?: number | null;
+  isBanner: number;
+  ciciRank: number;
+  validatedEmail: number;
 }

@@ -14,6 +14,15 @@ export interface UpdateMeUser {
   phone: number;
 }
 
+export interface UpdateCustomerUser {
+  email: string;
+  userName: string;
+  phone?: number | null;
+  isBanner: number;
+  isAdmin: number;
+  validatedEmail: number;
+}
+
 interface NewUsers {
   email: string;
   userName: string;
@@ -108,6 +117,19 @@ export const UpdatePasswordUser = async (options: {
       newKey: options.newKey,
       currentKey: options.currentKey,
     },
+  });
+  return response;
+};
+
+export const UpdateCustomer = async (options: {
+  token: string | undefined;
+  data: UpdateCustomerUser;
+}) => {
+  api.defaults.headers['access-token'] = options.token;
+  const response = await api({
+    method: 'PUT',
+    url: '/users/customer',
+    data: options.data,
   });
   return response;
 };
