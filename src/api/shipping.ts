@@ -1,7 +1,8 @@
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
 import { api } from '.';
 import { NewShipping } from '../interfaces/Shipping';
 
-export const CreateShipping = async (option: { token: string | undefined; data: NewShipping }) => {
+export const CreateShipping = async (option: { token?: string; data: NewShipping }) => {
   api.defaults.headers['access-token'] = option.token;
   const response = await api({
     method: 'POST',

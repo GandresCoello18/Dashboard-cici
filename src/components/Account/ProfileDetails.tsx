@@ -24,9 +24,9 @@ export const ProfileDetails = () => {
     <>
       <Formik
         initialValues={{
-          email: '',
-          userName: '',
-          phone: 0,
+          email: me.email,
+          userName: me.userName,
+          phone: me.phone,
         }}
         validationSchema={Yup.object().shape({
           email: Yup.string().email('Esta direccion es invalida').max(100),
@@ -62,7 +62,7 @@ export const ProfileDetails = () => {
           actions.setSubmitting(false);
         }}
       >
-        {({ errors, handleBlur, handleChange, handleSubmit, isSubmitting, touched }) => (
+        {({ errors, handleBlur, handleChange, handleSubmit, isSubmitting, touched, values }) => (
           <form onSubmit={handleSubmit}>
             <Card>
               <CardHeader subheader='Esta informacion es editable' title='Perfil' />
@@ -74,15 +74,22 @@ export const ProfileDetails = () => {
                       error={Boolean(touched.userName && errors.userName)}
                       helperText={touched.userName && errors.userName}
                       fullWidth
+                      label='User name'
                       name='userName'
                       onChange={handleChange}
                       onBlur={handleBlur}
                       variant='outlined'
-                      placeholder={me.userName}
+                      defaultValue={values.userName}
                     />
                   </Grid>
                   <Grid item md={6} xs={12}>
-                    <TextField fullWidth disabled value={me.created_at} variant='outlined' />
+                    <TextField
+                      fullWidth
+                      label='Te uniste el'
+                      disabled
+                      value={me.created_at}
+                      variant='outlined'
+                    />
                   </Grid>
                   <Grid item md={6} xs={12}>
                     <TextField
@@ -90,10 +97,11 @@ export const ProfileDetails = () => {
                       helperText={touched.email && errors.email}
                       fullWidth
                       name='email'
+                      label='Dirección de correo'
                       onBlur={handleBlur}
                       variant='outlined'
                       onChange={handleChange}
-                      placeholder={me.email}
+                      defaultValue={values.email}
                     />
                   </Grid>
                   <Grid item md={6} xs={12}>
@@ -104,9 +112,11 @@ export const ProfileDetails = () => {
                       name='phone'
                       onBlur={handleBlur}
                       type='number'
+                      label='Telefono'
                       onChange={handleChange}
                       variant='outlined'
-                      placeholder={me.phone ? `${me.phone}` : 'Escriba su numero de telefono'}
+                      placeholder='Escriba su numero de telefono'
+                      defaultValue={values.phone}
                     />
                   </Grid>
                 </Grid>

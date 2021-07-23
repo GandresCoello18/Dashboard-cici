@@ -14,7 +14,6 @@ import {
   Card,
   TableHead,
   TableRow,
-  TablePagination,
 } from '@material-ui/core';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import Alert from '@material-ui/lab/Alert';
@@ -44,14 +43,6 @@ export const TableShipping = ({ Loading, Shipping, setReloadShipping }: Props) =
 
   const { token } = useContext(MeContext);
   const [LoadingUpdate, setLoading] = useState<boolean>(false);
-  const [limit, setLimit] = useState<number>(10);
-  const [page, setPage] = useState<number>(0);
-
-  const handleLimitChange = (event: any) => {
-    setLimit(event.target.value);
-  };
-
-  const handlePageChange = (event: any, newPage: number) => setPage(newPage);
 
   const SkeletonShipping = () => {
     return [0, 1, 2, 3, 4, 5, 6, 7].map(item => (
@@ -81,6 +72,39 @@ export const TableShipping = ({ Loading, Shipping, setReloadShipping }: Props) =
     } catch (error) {
       toast.error(error.message);
       setLoading(false);
+    }
+  };
+
+  const renderGuideExpress = (method: string, guide: string) => {
+    switch (method) {
+      case 'ServiEntrega':
+        return (
+          <a
+            href={`https://www.servientrega.com.ec/rastreo/guia/${guide}`}
+            target='_blank'
+            rel='noopener noreferrer'
+          >
+            {guide || 'NONE'}
+          </a>
+        );
+      case 'Tramaco':
+        return (
+          <a
+            href='https://www.tramaco.com.ec/rastrear-envio/'
+            target='_blank'
+            rel='noopener noreferrer'
+          >
+            {guide || 'NONE'}
+          </a>
+        );
+      case 'Urbano':
+        return (
+          <a href='https://www.urbano.com.ec/' target='_blank' rel='noopener noreferrer'>
+            {guide || 'NONE'}
+          </a>
+        );
+      default:
+        return 'NONE';
     }
   };
 
@@ -114,19 +138,7 @@ export const TableShipping = ({ Loading, Shipping, setReloadShipping }: Props) =
                       </Box>
                     </TableCell>
                     <TableCell>{envio.method ? <Chip label={envio.method} /> : 'None'}</TableCell>
-                    <TableCell>
-                      {envio.guide ? (
-                        <a
-                          href={`https://www.servientrega.com.ec/rastreo/guia/${envio.guide}`}
-                          target='_blank'
-                          rel='noopener noreferrer'
-                        >
-                          {envio.guide}
-                        </a>
-                      ) : (
-                        'None'
-                      )}
-                    </TableCell>
+                    <TableCell>{renderGuideExpress(envio.method, envio.guide)}</TableCell>
                     <TableCell>
                       <Chip
                         label={envio.status}
@@ -163,16 +175,6 @@ export const TableShipping = ({ Loading, Shipping, setReloadShipping }: Props) =
               Por el momento no hay <strong>Envios</strong> para mostrar.
             </Alert>
           )}
-
-          <TablePagination
-            component='div'
-            count={Shipping.length}
-            onChangePage={handlePageChange}
-            onChangeRowsPerPage={handleLimitChange}
-            page={page}
-            rowsPerPage={limit}
-            rowsPerPageOptions={[5, 10, 25]}
-          />
         </Box>
       </PerfectScrollbar>
     </Card>

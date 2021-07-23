@@ -39,8 +39,8 @@ export const FormNewShipping = ({ idOrder, setReloadOrders }: Props) => {
         method: '',
       }}
       validationSchema={Yup.object().shape({
-        guide: Yup.string().max(100),
-        method: Yup.string().max(100),
+        guide: Yup.string().required('Esta opción es requerida').max(100),
+        method: Yup.string().required('Esta opción es requerida').max(100),
       })}
       onSubmit={async (values, actions) => {
         setLoading(true);
@@ -91,6 +91,8 @@ export const FormNewShipping = ({ idOrder, setReloadOrders }: Props) => {
                     >
                       <MenuItem value='ServiEntrega'>ServiEntrega</MenuItem>
                       <MenuItem value='Cici'>Cici</MenuItem>
+                      <MenuItem value='Tramaco'>Tramaco express</MenuItem>
+                      <MenuItem value='Urbano'>Urbano express</MenuItem>
                     </Select>
                   </FormControl>
                 </Grid>
