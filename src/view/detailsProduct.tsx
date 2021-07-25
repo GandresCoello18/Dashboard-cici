@@ -20,6 +20,8 @@ import {
   CardContent,
   Divider,
   Button,
+  Checkbox,
+  FormControlLabel,
 } from '@material-ui/core';
 import Rating from '@material-ui/lab/Rating';
 import Page from '../components/page';
@@ -42,6 +44,7 @@ import { DialogoMessage } from '../components/DialogoMessage';
 import { DialogoForm } from '../components/DialogoForm';
 import { AddCategory } from '../components/Products/Details/addCategory';
 import { DeleteProductCategory } from '../api/category';
+import { Alert } from '@material-ui/lab';
 
 const useStyles = makeStyles((theme: any) => ({
   root: {
@@ -69,6 +72,7 @@ const useStyles = makeStyles((theme: any) => ({
 
 export const DetailsProduct = () => {
   const [images, setImages] = useState<ImageListType | any>([]);
+  const [isDescriptionImg, setIsDescriptionImg] = useState<number>(0);
   const [StatiscProduct, setStatisticProduct] = useState<StatisticProduct>();
   const classes = useStyles();
   const { token } = useContext(MeContext);
@@ -138,6 +142,7 @@ export const DetailsProduct = () => {
 
     onlyFiles.map((file: any) => sources.append('more_sources', file));
     sources.append('idProduct', params.idProduct);
+    sources.append('isDescription', isDescriptionImg.toString());
 
     try {
       await MoreSourcesProducto({ token, data: sources });
@@ -145,6 +150,7 @@ export const DetailsProduct = () => {
       setIsMoreUpload(false);
 
       FetchProduct();
+      setIsDescriptionImg(0);
 
       toast.success('Fuentes agregadas para este producto');
     } catch (error) {
@@ -407,6 +413,17 @@ export const DetailsProduct = () => {
                         <>
                           <UploadImage images={images} maxNumber={4} onChange={onChange} />
                           <br />
+                          <FormControlLabel
+                            control={
+                              <Checkbox
+                                checked={isDescriptionImg ? true : false}
+                                onChange={event =>
+                                  setIsDescriptionImg(event.target.checked ? 1 : 0)
+                                }
+                              />
+                            }
+                            label='¿Fuente para descripcion?'
+                          />
                           {images.length > 0 && (
                             <Button variant='contained' color='primary' onClick={uploadSources}>
                               Subir fuentes
@@ -415,16 +432,41 @@ export const DetailsProduct = () => {
                         </>
                       ) : (
                         <>
-                          <strong>Imagenes Relacionadas:</strong>{' '}
-                          {Product && (
-                            <ListImagen
-                              actions
-                              token={token}
-                              IdProduct={params.idProduct}
-                              sources={Product.related_sources}
-                              setReloadProduct={setReloadProduct}
-                            />
-                          )}
+                          <Box p={2}>
+                            <strong>Imagenes Relacionadas:</strong>
+                            {Product?.related_sources.filter(item => item.isDescription === 0)
+                              .length ? (
+                              <ListImagen
+                                actions
+                                token={token}
+                                IdProduct={params.idProduct}
+                                sources={Product.related_sources.filter(
+                                  item => item.isDescription === 0,
+                                )}
+                                setReloadProduct={setReloadProduct}
+                              />
+                            ) : (
+                              <Alert color='info'>No hay imagenes relacionadas</Alert>
+                            )}
+                          </Box>
+
+                          <Box p={2} mt={2}>
+                            <strong>Imagenes de descripción:</strong>
+                            {Product?.related_sources.filter(item => item.isDescription === 1)
+                              .length ? (
+                              <ListImagen
+                                actions
+                                token={token}
+                                IdProduct={params.idProduct}
+                                sources={Product.related_sources.filter(
+                                  item => item.isDescription === 1,
+                                )}
+                                setReloadProduct={setReloadProduct}
+                              />
+                            ) : (
+                              <Alert color='info'>No hay imagenes en descripción</Alert>
+                            )}
+                          </Box>
                         </>
                       )}
                     </>

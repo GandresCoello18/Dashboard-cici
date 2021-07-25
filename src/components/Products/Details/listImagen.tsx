@@ -62,12 +62,9 @@ export const ListImagen = ({ actions, token, sources, IdProduct, setReloadProduc
               {item.kind === 'IMAGEN' ? (
                 <img
                   width='100%'
+                  height='cover'
                   style={{ padding: 10 }}
-                  src={
-                    item.idSourceProduct === 'generado'
-                      ? `${BASE_API_IMAGES_CLOUDINNARY_SCALE}/${item.source}`
-                      : `${BASE_API_IMAGES_CLOUDINNARY_SCALE}/${item.source}`
-                  }
+                  src={`${BASE_API_IMAGES_CLOUDINNARY_SCALE}/${item.source}`}
                   title=''
                 />
               ) : (

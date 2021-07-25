@@ -36,7 +36,15 @@ const Recomendado = ({ Recommendation }: Props) => {
       <Divider />
       <CardContent>
         <Box height={400} position='relative'>
-          <Pie data={data} />
+          <Pie
+            data={data}
+            options={{
+              title: {
+                display: true,
+                text: !Recommendation?.length && 'No hay datos',
+              },
+            }}
+          />
         </Box>
       </CardContent>
     </Card>
