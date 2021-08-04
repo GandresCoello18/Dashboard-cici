@@ -28,6 +28,8 @@ import { PageContacts } from '../view/contacto';
 import { Combos } from '../view/combos';
 import { PageTimeOffer } from '../view/timeOffer';
 import { PaymentPaypal } from '../view/payment';
+import { AxiosError } from 'axios';
+import { HandleError } from '../helpers/handleError';
 
 const token = Cookies.get('access-token-cici');
 
@@ -86,7 +88,7 @@ const App = () => {
 
       token && FetchMe();
     } catch (error) {
-      toast.error(error.message);
+      toast.error(HandleError(error as AxiosError));
     }
   }, [token, setMe]);
 

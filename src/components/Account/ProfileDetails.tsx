@@ -16,6 +16,8 @@ import { useContext } from 'react';
 import { MeContext } from '../../context/contextMe';
 import { UpdateMeUser, UpdateUser } from '../../api/users';
 import { toast } from 'react-toast';
+import { HandleError } from '../../helpers/handleError';
+import { AxiosError } from 'axios';
 
 export const ProfileDetails = () => {
   const { me, token } = useContext(MeContext);
@@ -56,7 +58,7 @@ export const ProfileDetails = () => {
             await UpdateUser({ token, data });
             toast.success('Se actualizaron los datos');
           } catch (error) {
-            toast.error(error.message);
+            toast.error(HandleError(error as AxiosError));
           }
 
           actions.setSubmitting(false);

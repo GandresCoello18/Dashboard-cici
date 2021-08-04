@@ -22,6 +22,8 @@ import { MeContext } from '../context/contextMe';
 import { OrdenProduct } from '../interfaces/orden';
 import { TableOrders } from '../components/Orders/table-orders';
 import { DetailsOrder } from '../components/Orders/DetailsOrder';
+import { AxiosError } from 'axios';
+import { HandleError } from '../helpers/handleError';
 
 const useStyles = makeStyles((theme: any) => ({
   root: {
@@ -55,7 +57,7 @@ export const Ordens = () => {
 
       setLoading(false);
     } catch (error) {
-      toast.error(error.message);
+      toast.error(HandleError(error as AxiosError));
       setLoading(false);
     }
   };

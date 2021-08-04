@@ -14,6 +14,8 @@ import { toast } from 'react-toast';
 import { BASE_API_IMAGES_CLOUDINNARY } from '../../api';
 import { DeleteProductCart } from '../../api/cart';
 import { MeContext } from '../../context/contextMe';
+import { AxiosError } from 'axios';
+import { HandleError } from '../../helpers/handleError';
 
 const useStyles = makeStyles({
   root: {
@@ -44,7 +46,7 @@ export const CardProduct = ({ product, setReloadCart }: Props) => {
       setReloadCart(true);
     } catch (error) {
       setLoading(false);
-      toast.warn(error.message);
+      toast.error(HandleError(error as AxiosError));
     }
   };
 

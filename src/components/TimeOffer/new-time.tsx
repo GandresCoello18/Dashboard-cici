@@ -15,6 +15,8 @@ import {
 import { toast } from 'react-toast';
 import { MeContext } from '../../context/contextMe';
 import { CreateTimeOffer } from '../../api/timeOffer';
+import { AxiosError } from 'axios';
+import { HandleError } from '../../helpers/handleError';
 
 interface Props {
   setReloadTime: Dispatch<SetStateAction<boolean>>;
@@ -54,7 +56,7 @@ export const NewFormTime = ({ setReloadTime }: Props) => {
           setReloadTime(true);
           actions.setSubmitting(false);
         } catch (error) {
-          toast.error(error.message);
+          toast.error(HandleError(error as AxiosError));
         }
       }}
     >

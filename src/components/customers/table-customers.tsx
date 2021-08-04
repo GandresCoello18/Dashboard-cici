@@ -25,6 +25,8 @@ import Skeleton from '@material-ui/lab/Skeleton';
 import { DialogoMessage } from '../DialogoMessage';
 import { toast } from 'react-toast';
 import { DeleteUser } from '../../api/users';
+import { AxiosError } from 'axios';
+import { HandleError } from '../../helpers/handleError';
 
 const useStyles = makeStyles(theme => ({
   root: {},
@@ -63,7 +65,7 @@ export const TableCustomer = ({ customers, Loading, setReloadCustoment }: Props)
         setVisibleDialog(false);
         setIdUser('');
       } catch (error) {
-        toast.error(error.message);
+        toast.error(HandleError(error as AxiosError));
       }
     };
 

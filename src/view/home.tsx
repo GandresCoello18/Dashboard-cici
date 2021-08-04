@@ -14,6 +14,8 @@ import { toast } from 'react-toast';
 import { GetStatisticTotal } from '../api/statistic';
 import { MeContext } from '../context/contextMe';
 import { Statistics } from '../interfaces/Statistics';
+import { AxiosError } from 'axios';
+import { HandleError } from '../helpers/handleError';
 
 const useStyles = makeStyles((theme: any) => ({
   root: {
@@ -40,7 +42,7 @@ export const Panel = () => {
 
       setLoading(false);
     } catch (error) {
-      toast.error(error.message);
+      toast.error(HandleError(error as AxiosError));
       setLoading(false);
     }
   };

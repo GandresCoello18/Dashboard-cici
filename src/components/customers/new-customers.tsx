@@ -15,6 +15,8 @@ import {
 import { NewUser } from '../../api/users';
 import { toast } from 'react-toast';
 import { Dispatch, SetStateAction } from 'react';
+import { AxiosError } from 'axios';
+import { HandleError } from '../../helpers/handleError';
 
 interface Props {
   setReloadCustoment: Dispatch<SetStateAction<boolean>>;
@@ -44,7 +46,7 @@ export const NewCustoment = ({ setReloadCustoment }: Props) => {
               toast.success('Se creo el nuevo usuario');
               setReloadCustoment(true);
             } catch (error) {
-              toast.error(error.message);
+              toast.error(HandleError(error as AxiosError));
             }
 
             actions.setSubmitting(false);

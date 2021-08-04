@@ -22,6 +22,8 @@ import { Dispatch, SetStateAction, useContext, useState } from 'react';
 import { MeContext } from '../../context/contextMe';
 import { UpdateCombo } from '../../api/combo';
 import { NewCombo } from '../../interfaces/Combo';
+import { AxiosError } from 'axios';
+import { HandleError } from '../../helpers/handleError';
 
 interface Props {
   Combo: NewCombo;
@@ -76,7 +78,7 @@ export const FormUpdateCombo = ({ Combo, setReloadCombo }: Props) => {
 
           setReloadCombo(true);
         } catch (error) {
-          toast.error(error.message);
+          toast.error(HandleError(error as AxiosError));
           setLoading(false);
         }
 

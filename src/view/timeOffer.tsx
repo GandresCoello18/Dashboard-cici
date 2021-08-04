@@ -15,6 +15,8 @@ import { OfferTimeProducts } from '../interfaces/TimeOffer';
 import { CardTimeOffert } from '../components/TimeOffer/card-time-offer';
 import { DialogoForm } from '../components/DialogoForm';
 import { NewFormTime } from '../components/TimeOffer/new-time';
+import { AxiosError } from 'axios';
+import { HandleError } from '../helpers/handleError';
 
 const useStyles = makeStyles((theme: any) => ({
   root: {
@@ -49,7 +51,7 @@ export const PageTimeOffer = () => {
 
       setLoading(false);
     } catch (error) {
-      toast.error(error.message);
+      toast.error(HandleError(error as AxiosError));
       setLoading(false);
     }
   };

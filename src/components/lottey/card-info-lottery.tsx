@@ -28,6 +28,8 @@ import { Customers } from '../../interfaces/Customers';
 import { SourceAvatar } from '../../helpers/sourceAvatar';
 import { BackTime } from '../BackTime';
 import { InputFormLottery } from './input-lottery';
+import { AxiosError } from 'axios';
+import { HandleError } from '../../helpers/handleError';
 
 interface Props {
   lottery: ProductLottery;
@@ -82,7 +84,7 @@ export const CardInfoLottery = ({ lottery, setReloadSorteo }: Props) => {
 
       setReloadSorteo(true);
     } catch (error) {
-      toast.error(error.message);
+      toast.error(HandleError(error as AxiosError));
     }
   };
 
@@ -101,7 +103,7 @@ export const CardInfoLottery = ({ lottery, setReloadSorteo }: Props) => {
       }, 10000);
     } catch (error) {
       setLoading(false);
-      toast.error(error.message);
+      toast.error(HandleError(error as AxiosError));
     }
   };
 
@@ -114,7 +116,7 @@ export const CardInfoLottery = ({ lottery, setReloadSorteo }: Props) => {
       setReloadSorteo(true);
     } catch (error) {
       setLoadingReset(false);
-      toast.error(error.message);
+      toast.error(HandleError(error as AxiosError));
     }
   };
 

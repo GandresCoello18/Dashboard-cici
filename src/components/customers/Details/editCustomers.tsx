@@ -18,6 +18,8 @@ import { MeContext } from '../../../context/contextMe';
 import { UpdateCustomer } from '../../../api/users';
 import { toast } from 'react-toast';
 import { Customers } from '../../../interfaces/Customers';
+import { AxiosError } from 'axios';
+import { HandleError } from '../../../helpers/handleError';
 
 interface Props {
   User: Customers;
@@ -51,7 +53,7 @@ export const EditCustomer = ({ User, setReloadUser }: Props) => {
           toast.success('Se actualizaron los datos');
           setReloadUser(true);
         } catch (error) {
-          toast.error(error.message);
+          toast.error(HandleError(error as AxiosError));
         }
 
         actions.setSubmitting(false);

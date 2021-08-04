@@ -25,6 +25,8 @@ import { toast } from 'react-toast';
 import { MeContext } from '../../context/contextMe';
 import DoneIcon from '@material-ui/icons/Done';
 import { SourceAvatar } from '../../helpers/sourceAvatar';
+import { AxiosError } from 'axios';
+import { HandleError } from '../../helpers/handleError';
 
 interface Props {
   Loading: boolean;
@@ -70,7 +72,7 @@ export const TableShipping = ({ Loading, Shipping, setReloadShipping }: Props) =
       setReloadShipping(true);
       setLoading(false);
     } catch (error) {
-      toast.error(error.message);
+      toast.error(HandleError(error as AxiosError));
       setLoading(false);
     }
   };

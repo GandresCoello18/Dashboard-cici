@@ -26,6 +26,8 @@ import { DialogoMessage } from '../DialogoMessage';
 import { toast } from 'react-toast';
 import { MeContext } from '../../context/contextMe';
 import { DeleteProducto } from '../../api/products';
+import { AxiosError } from 'axios';
+import { HandleError } from '../../helpers/handleError';
 
 const useStyles = makeStyles(theme => ({
   avatar: {
@@ -63,7 +65,7 @@ export const TableProduct = ({ products, Loading, setReloadProduct }: Props) => 
         setVisibleDialog(false);
         setProduct('');
       } catch (error) {
-        toast.error(error.message);
+        toast.error(HandleError(error as AxiosError));
       }
     };
 

@@ -15,6 +15,8 @@ import { ProductsCombo } from '../interfaces/Combo';
 import Alert from '@material-ui/lab/Alert';
 import { NewFormCombo } from '../components/Combos/new-combo';
 import { CardInfoCombo } from '../components/Combos/card-info-combo';
+import { AxiosError } from 'axios';
+import { HandleError } from '../helpers/handleError';
 
 const useStyles = makeStyles((theme: any) => ({
   root: {
@@ -64,7 +66,7 @@ export const Combos = () => {
 
       setLoading(false);
     } catch (error) {
-      toast.error(error.message);
+      toast.error(HandleError(error as AxiosError));
       setLoading(false);
     }
   };

@@ -9,6 +9,8 @@ import { Formik } from 'formik';
 import { toast } from 'react-toast';
 import { CreateCategory } from '../../api/category';
 import { MeContext } from '../../context/contextMe';
+import { AxiosError } from 'axios';
+import { HandleError } from '../../helpers/handleError';
 
 export const NewCategory = () => {
   const [visible, setVisible] = useState<boolean>(false);
@@ -38,7 +40,7 @@ export const NewCategory = () => {
               setVisible(false);
               toast.success('Se registro la categoria');
             } catch (error) {
-              toast.error(error.message);
+              toast.error(HandleError(error as AxiosError));
             }
 
             actions.setSubmitting(false);

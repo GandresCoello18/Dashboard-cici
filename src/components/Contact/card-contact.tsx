@@ -18,6 +18,8 @@ import { toast } from 'react-toast';
 import { MeContext } from '../../context/contextMe';
 import { DeleteContact } from '../../api/contact';
 import { FormSendMessage } from './form-send-message';
+import { AxiosError } from 'axios';
+import { HandleError } from '../../helpers/handleError';
 
 interface Props {
   Contact: Contact;
@@ -54,7 +56,7 @@ export const CardContact = ({ Contact, setReloadContact }: Props) => {
         setReloadContact(true);
         toast.success('Mensaje eliminado');
       } catch (error) {
-        toast.error(error.message);
+        toast.error(HandleError(error as AxiosError));
         setLoading(false);
       }
     };

@@ -7,6 +7,8 @@ import { GetProductReview } from '../../../api/products';
 import Alert from '@material-ui/lab/Alert';
 import Rating from '@material-ui/lab/Rating';
 import { ProductReview } from '../../../interfaces/Product';
+import { AxiosError } from 'axios';
+import { HandleError } from '../../../helpers/handleError';
 
 interface Props {
   idProduct: string;
@@ -27,7 +29,7 @@ export const Resenas = ({ idProduct }: Props) => {
 
       idProduct && FetchResena();
     } catch (error) {
-      toast.error(error.message);
+      toast.error(HandleError(error as AxiosError));
     }
 
     setLoading(false);

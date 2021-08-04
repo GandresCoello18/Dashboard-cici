@@ -19,6 +19,8 @@ import { toast } from 'react-toast';
 import Cookies from 'js-cookie';
 import { useContext, useState } from 'react';
 import { MeContext } from '../../context/contextMe';
+import { HandleError } from '../../helpers/handleError';
+import { AxiosError } from 'axios';
 
 export const Login = () => {
   const { setMe } = useContext(MeContext);
@@ -52,7 +54,7 @@ export const Login = () => {
 
           window.location.href = '/app/dashboard';
         } catch (error) {
-          toast.error(error.message);
+          toast.error(HandleError(error as AxiosError));
           setLoading(false);
         }
 

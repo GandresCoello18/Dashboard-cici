@@ -29,6 +29,8 @@ import { GetCategoryProduct } from '../api/category';
 import { CategoryCountProduct } from '../interfaces/Category';
 import { NewCategory } from '../components/Products/new-category';
 import { Pagination } from '@material-ui/lab';
+import { AxiosError } from 'axios';
+import { HandleError } from '../helpers/handleError';
 
 const useStyles = makeStyles((theme: any) => ({
   root: {
@@ -60,7 +62,7 @@ export const Products = () => {
       const { categoryProducts } = await (await GetCategoryProduct({ token })).data;
       setFetchCategoryProduct(categoryProducts);
     } catch (error) {
-      toast.error(error.message);
+      toast.error(HandleError(error as AxiosError));
       setLoading(false);
     }
   };
@@ -75,7 +77,7 @@ export const Products = () => {
 
       setLoading(false);
     } catch (error) {
-      toast.error(error.message);
+      toast.error(HandleError(error as AxiosError));
       setLoading(false);
     }
   };

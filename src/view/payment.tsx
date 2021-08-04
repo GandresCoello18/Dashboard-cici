@@ -23,6 +23,8 @@ import Alert from '@material-ui/lab/Alert';
 import SearchIcon from '@material-ui/icons/Search';
 import { toast } from 'react-toast';
 import { GetOrdenPayment, GetPayment, RefundPayment } from '../api/payment';
+import { AxiosError } from 'axios';
+import { HandleError } from '../helpers/handleError';
 
 const useStyles = makeStyles((theme: any) => ({
   root: {
@@ -61,7 +63,7 @@ export const PaymentPaypal = () => {
       setPayment(payment);
       setLoading(false);
     } catch (error) {
-      toast.error(error.message);
+      toast.error(HandleError(error as AxiosError));
       setLoading(false);
     }
   };
@@ -77,7 +79,7 @@ export const PaymentPaypal = () => {
       setOrden(orden);
       setLoadingDetails(false);
     } catch (error) {
-      toast.error(error.message);
+      toast.error(HandleError(error as AxiosError));
       setLoadingDetails(false);
     }
   };
@@ -90,7 +92,7 @@ export const PaymentPaypal = () => {
       setLoadingRefund(false);
     } catch (error) {
       setLoadingRefund(false);
-      toast.error(error.message);
+      toast.error(HandleError(error as AxiosError));
     }
   };
 

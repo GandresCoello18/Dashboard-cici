@@ -21,6 +21,8 @@ import { toast } from 'react-toast';
 import { DeleteCombo } from '../../api/combo';
 import { MeContext } from '../../context/contextMe';
 import { FormUpdateCombo } from './form-edit-combo';
+import { HandleError } from '../../helpers/handleError';
+import { AxiosError } from 'axios';
 
 interface Props {
   combo: NewCombo;
@@ -60,7 +62,7 @@ export const CardInfoCombo = ({ combo, setReloadCombo }: Props) => {
 
       setReloadCombo(true);
     } catch (error) {
-      toast.error(error.message);
+      toast.error(HandleError(error as AxiosError));
     }
   };
 

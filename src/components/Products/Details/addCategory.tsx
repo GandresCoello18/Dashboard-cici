@@ -3,12 +3,14 @@
 /* eslint-disable no-undef */
 import { Select, MenuItem, Button } from '@material-ui/core';
 import { Skeleton } from '@material-ui/lab';
+import { AxiosError } from 'axios';
 import { SetStateAction, useContext, useEffect } from 'react';
 import { Dispatch } from 'react';
 import { useState } from 'react';
 import { toast } from 'react-toast';
 import { AddCategoryProduct, GetCategory } from '../../../api/category';
 import { MeContext } from '../../../context/contextMe';
+import { HandleError } from '../../../helpers/handleError';
 import { Category } from '../../../interfaces/Category';
 
 interface Props {
@@ -28,7 +30,7 @@ export const AddCategory = ({ idProduct, setReloadProduct }: Props) => {
         const { categorys } = (await GetCategory({ token })).data;
         setCategorys(categorys);
       } catch (error) {
-        toast.error(error.message);
+        toast.error(HandleError(error as AxiosError));
         setLoading(false);
       }
     };
@@ -63,7 +65,7 @@ export const AddCategory = ({ idProduct, setReloadProduct }: Props) => {
 
       setReloadProduct(true);
     } catch (error) {
-      toast.error(error.message);
+      toast.error(HandleError(error as AxiosError));
       setLoading(false);
     }
   };

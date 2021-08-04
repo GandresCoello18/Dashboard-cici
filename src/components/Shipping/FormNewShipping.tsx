@@ -21,6 +21,8 @@ import { MeContext } from '../../context/contextMe';
 import { CreateShipping } from '../../api/shipping';
 import { toast } from 'react-toast';
 import { BASE_API_IMAGES_CLOUDINNARY_SCALE } from '../../api';
+import { AxiosError } from 'axios';
+import { HandleError } from '../../helpers/handleError';
 
 interface Props {
   idOrder: string | undefined;
@@ -56,7 +58,7 @@ export const FormNewShipping = ({ idOrder, setReloadOrders }: Props) => {
 
           setLoading(false);
         } catch (error) {
-          toast.error(error.message);
+          toast.error(HandleError(error as AxiosError));
           setLoading(false);
         }
 

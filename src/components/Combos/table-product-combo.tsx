@@ -26,6 +26,8 @@ import { toast } from 'react-toast';
 import { DeleteProductCombo } from '../../api/combo';
 import { MeContext } from '../../context/contextMe';
 import { DeleteProductTimeOffer } from '../../api/timeOffer';
+import { AxiosError } from 'axios';
+import { HandleError } from '../../helpers/handleError';
 
 interface Props {
   products: Product[];
@@ -52,7 +54,7 @@ export const TableProductCombo = ({ products, setReloadCombo, module }: Props) =
         await DeleteProductCombo({ token, idProduct: IdProduct });
         setReloadCombo(true);
       } catch (error) {
-        toast.error(error.message);
+        toast.error(HandleError(error as AxiosError));
       }
     };
 
@@ -61,7 +63,7 @@ export const TableProductCombo = ({ products, setReloadCombo, module }: Props) =
         await DeleteProductTimeOffer({ token, idProduct: IdProduct });
         setReloadCombo(true);
       } catch (error) {
-        toast.error(error.message);
+        toast.error(HandleError(error as AxiosError));
       }
     };
 

@@ -25,6 +25,8 @@ import { ImageListType } from 'react-images-uploading';
 import Alert from '@material-ui/lab/Alert';
 import { NewProducto } from '../../api/products';
 import { Colors } from '../../interfaces/Product';
+import { AxiosError } from 'axios';
+import { HandleError } from '../../helpers/handleError';
 
 const BootstrapInput = withStyles(theme => ({
   root: {
@@ -153,7 +155,7 @@ export const NewProduct = ({ setOpen, setReloadPrducts }: Props) => {
             setOpen(false);
             setReloadPrducts(true);
           } catch (error) {
-            toast.error(error.message);
+            toast.error(HandleError(error as AxiosError));
           }
 
           actions.setSubmitting(false);

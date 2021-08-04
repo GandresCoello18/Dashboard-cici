@@ -19,6 +19,8 @@ import { Dispatch, SetStateAction, useContext, useState } from 'react';
 import { UploadImage } from '../UploadImage';
 import { ImageListType } from 'react-images-uploading';
 import { MeContext } from '../../context/contextMe';
+import { AxiosError } from 'axios';
+import { HandleError } from '../../helpers/handleError';
 
 interface Props {
   setReloadCoupon: Dispatch<SetStateAction<boolean>>;
@@ -62,7 +64,7 @@ export const NewCoupons = ({ setReloadCoupon }: Props) => {
             setReloadCoupon(true);
             actions.setSubmitting(false);
           } catch (error) {
-            toast.error(error.message);
+            toast.error(HandleError(error as AxiosError));
           }
         }}
       >

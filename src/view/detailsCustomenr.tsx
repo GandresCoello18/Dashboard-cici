@@ -41,6 +41,8 @@ import { DialogoMessage } from '../components/DialogoMessage';
 import { DialogoForm } from '../components/DialogoForm';
 import { ResetPasswordEmail } from '../components/customers/Details/changePassword';
 import { EditCustomer } from '../components/customers/Details/editCustomers';
+import { HandleError } from '../helpers/handleError';
+import { AxiosError } from 'axios';
 
 const useStyles = makeStyles((theme: any) => ({
   root: {
@@ -83,7 +85,7 @@ export const DetailsCustomenr = () => {
       const { user } = await (await GetUser({ token, idUser: params.idUser })).data;
       setUser(user);
     } catch (error) {
-      toast.error(error.message);
+      toast.error(HandleError(error as AxiosError));
     }
   };
 
@@ -115,7 +117,7 @@ export const DetailsCustomenr = () => {
 
         setLoading(false);
       } catch (error) {
-        toast.error(error.message);
+        toast.error(HandleError(error as AxiosError));
         setLoading(false);
       }
     };
@@ -142,7 +144,7 @@ export const DetailsCustomenr = () => {
       const { products } = await (await GetFavoriteByUser({ token, idUser: params.idUser })).data;
       setFavorites(products);
     } catch (error) {
-      toast.error(error.message);
+      toast.error(HandleError(error as AxiosError));
     }
   };
 
@@ -151,7 +153,7 @@ export const DetailsCustomenr = () => {
       const { ordenes } = await (await GetOrdensByUser({ token, idUser: params.idUser })).data;
       setFetchOrden(ordenes);
     } catch (error) {
-      toast.error(error.message);
+      toast.error(HandleError(error as AxiosError));
     }
   };
 
@@ -166,7 +168,7 @@ export const DetailsCustomenr = () => {
 
         window.location.href = '/app/customers';
       } catch (error) {
-        toast.error(error.message);
+        toast.error(HandleError(error as AxiosError));
       }
     };
 

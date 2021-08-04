@@ -24,6 +24,8 @@ import { GetUsers } from '../api/users';
 import { MeContext } from '../context/contextMe';
 import { DialogoForm } from '../components/DialogoForm';
 import { NewCustoment } from '../components/customers/new-customers';
+import { AxiosError } from 'axios';
+import { HandleError } from '../helpers/handleError';
 
 const useStyles = makeStyles((theme: any) => ({
   root: {
@@ -57,7 +59,7 @@ export const Customenrs = () => {
 
       setLoading(false);
     } catch (error) {
-      toast.error(error.message);
+      toast.error(HandleError(error as AxiosError));
       setLoading(false);
     }
   };

@@ -45,6 +45,8 @@ import { DialogoForm } from '../components/DialogoForm';
 import { AddCategory } from '../components/Products/Details/addCategory';
 import { DeleteProductCategory } from '../api/category';
 import { Alert } from '@material-ui/lab';
+import { AxiosError } from 'axios';
+import { HandleError } from '../helpers/handleError';
 
 const useStyles = makeStyles((theme: any) => ({
   root: {
@@ -113,7 +115,7 @@ export const DetailsProduct = () => {
       ).data;
       setStatisticProduct(StatisticsReview);
     } catch (error) {
-      toast.error(error.message);
+      toast.error(HandleError(error as AxiosError));
       setLoading(false);
     }
   };
@@ -127,7 +129,7 @@ export const DetailsProduct = () => {
 
       setLoading(false);
     } catch (error) {
-      toast.error(error.message);
+      toast.error(HandleError(error as AxiosError));
       setLoading(false);
     }
   };
@@ -154,7 +156,7 @@ export const DetailsProduct = () => {
 
       toast.success('Fuentes agregadas para este producto');
     } catch (error) {
-      toast.error(error.message);
+      toast.error(HandleError(error as AxiosError));
       setLoading(false);
     }
   };
@@ -170,7 +172,7 @@ export const DetailsProduct = () => {
 
       FetchProduct();
     } catch (error) {
-      toast.error(error.message);
+      toast.error(HandleError(error as AxiosError));
       setLoading(false);
     }
   };

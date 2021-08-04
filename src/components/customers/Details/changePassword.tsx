@@ -7,6 +7,8 @@ import { useContext } from 'react';
 import { MeContext } from '../../../context/contextMe';
 import { UpdatePasswordEmail } from '../../../api/users';
 import { toast } from 'react-toast';
+import { AxiosError } from 'axios';
+import { HandleError } from '../../../helpers/handleError';
 
 interface Props {
   email: string;
@@ -30,7 +32,7 @@ export const ResetPasswordEmail = ({ email }: Props) => {
           await UpdatePasswordEmail({ token, newKey: values.newKey, email });
           toast.success('Se actualizaron los datos');
         } catch (error) {
-          toast.error(error.message);
+          toast.error(HandleError(error as AxiosError));
         }
 
         actions.setSubmitting(false);

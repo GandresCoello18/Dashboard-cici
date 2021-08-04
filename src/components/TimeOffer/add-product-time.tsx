@@ -22,6 +22,8 @@ import Alert from '@material-ui/lab/Alert';
 import getInitials from '../../util/getInitials';
 import { BASE_API_IMAGES_CLOUDINNARY_SCALE } from '../../api';
 import { AddProductTimeOffer } from '../../api/timeOffer';
+import { AxiosError } from 'axios';
+import { HandleError } from '../../helpers/handleError';
 
 interface Props {
   setReloadTime: Dispatch<SetStateAction<boolean>>;
@@ -76,7 +78,7 @@ export const FormAddProductTime = ({ setReloadTime, idTime }: Props) => {
       setProducts(products);
       setLoading(false);
     } catch (error) {
-      toast.error(error.message);
+      toast.error(HandleError(error as AxiosError));
       setLoading(false);
     }
   };
@@ -103,7 +105,7 @@ export const FormAddProductTime = ({ setReloadTime, idTime }: Props) => {
       toast.success('Producto agregado al tiempo');
       setLoadingAdd(false);
     } catch (error) {
-      toast.error(error.message);
+      toast.error(HandleError(error as AxiosError));
       setLoadingAdd(false);
     }
   };

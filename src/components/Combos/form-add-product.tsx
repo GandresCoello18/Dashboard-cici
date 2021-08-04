@@ -22,6 +22,8 @@ import { Product } from '../../interfaces/Product';
 import Alert from '@material-ui/lab/Alert';
 import getInitials from '../../util/getInitials';
 import { BASE_API_IMAGES_CLOUDINNARY_SCALE } from '../../api';
+import { HandleError } from '../../helpers/handleError';
+import { AxiosError } from 'axios';
 
 interface Props {
   setReloadCombo: Dispatch<SetStateAction<boolean>>;
@@ -76,7 +78,7 @@ export const FormAddProduct = ({ setReloadCombo, idCombo }: Props) => {
       setProducts(products);
       setLoading(false);
     } catch (error) {
-      toast.error(error.message);
+      toast.error(HandleError(error as AxiosError));
       setLoading(false);
     }
   };
@@ -96,7 +98,7 @@ export const FormAddProduct = ({ setReloadCombo, idCombo }: Props) => {
       toast.success('Producto agregado al combo');
       setLoadingAdd(false);
     } catch (error) {
-      toast.error(error.message);
+      toast.error(HandleError(error as AxiosError));
       setLoadingAdd(false);
     }
   };

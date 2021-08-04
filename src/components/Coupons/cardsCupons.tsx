@@ -14,12 +14,14 @@ import {
 } from '@material-ui/core';
 import Alert from '@material-ui/lab/Alert';
 import Skeleton from '@material-ui/lab/Skeleton';
+import { AxiosError } from 'axios';
 import { Dispatch, SetStateAction } from 'react';
 import { useContext, useState } from 'react';
 import { toast } from 'react-toast';
 import { BASE_API_IMAGES_CLOUDINNARY } from '../../api';
 import { DeleteCoupon } from '../../api/coupons';
 import { MeContext } from '../../context/contextMe';
+import { HandleError } from '../../helpers/handleError';
 import { Coupon } from '../../interfaces/Coupon';
 
 const useStyles = makeStyles(() => ({
@@ -64,7 +66,7 @@ export const CardCoupons = ({ Loading, setLoading, setReloadCoupon, Coupons }: P
 
       setReloadCoupon(true);
     } catch (error) {
-      toast.error(error.message);
+      toast.error(HandleError(error as AxiosError));
       setLoading(false);
     }
   };

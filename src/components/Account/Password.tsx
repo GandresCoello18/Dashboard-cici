@@ -8,6 +8,8 @@ import { MeContext } from '../../context/contextMe';
 import { UpdatePasswordUser } from '../../api/users';
 import { toast } from 'react-toast';
 import Cookies from 'js-cookie';
+import { HandleError } from '../../helpers/handleError';
+import { AxiosError } from 'axios';
 
 export const ResetPassword = () => {
   const { token } = useContext(MeContext);
@@ -30,7 +32,7 @@ export const ResetPassword = () => {
           Cookies.remove('access-token-cici');
           window.location.href = '/login';
         } catch (error) {
-          toast.error(error.message);
+          toast.error(HandleError(error as AxiosError));
         }
 
         actions.setSubmitting(false);

@@ -21,6 +21,8 @@ import { GetShipping } from '../api/shipping';
 import { MeContext } from '../context/contextMe';
 import { TableShipping } from '../components/Shipping/tableShippong';
 import { Shipping } from '../interfaces/Shipping';
+import { AxiosError } from 'axios';
+import { HandleError } from '../helpers/handleError';
 
 const useStyles = makeStyles((theme: any) => ({
   root: {
@@ -51,7 +53,7 @@ export const ShippingView = () => {
 
       setLoading(false);
     } catch (error) {
-      toast.error(error.message);
+      toast.error(HandleError(error as AxiosError));
       setLoading(false);
     }
   };

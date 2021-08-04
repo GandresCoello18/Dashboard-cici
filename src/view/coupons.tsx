@@ -30,6 +30,8 @@ import Pagination from '@material-ui/lab/Pagination';
 import { TableCouponUser } from '../components/Coupons/tableCouponUser';
 import { DialogoForm } from '../components/DialogoForm';
 import { NewCoupons } from '../components/Coupons/new-coupons';
+import { AxiosError } from 'axios';
+import { HandleError } from '../helpers/handleError';
 
 const useStyles = makeStyles((theme: any) => ({
   root: {
@@ -74,7 +76,7 @@ export const Coupons = () => {
 
       setLoading(false);
     } catch (error) {
-      toast.error(error.message);
+      toast.error(HandleError(error as AxiosError));
       setLoading(false);
     }
   };

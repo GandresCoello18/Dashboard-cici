@@ -2,10 +2,12 @@
 /* eslint-disable react/react-in-jsx-scope */
 /* eslint-disable no-undef */
 import { makeStyles, FormControl, InputLabel, Select, Button, MenuItem } from '@material-ui/core';
+import { AxiosError } from 'axios';
 import { Dispatch, SetStateAction, useContext, useEffect, useState } from 'react';
 import { toast } from 'react-toast';
 import { UpdateStatusOrden } from '../../api/orders';
 import { MeContext } from '../../context/contextMe';
+import { HandleError } from '../../helpers/handleError';
 
 const useStyles = makeStyles(theme => ({
   formControl: {
@@ -37,7 +39,7 @@ export const SelectUpdate = ({ ActualState, idOrden, setReloadOrders }: Props) =
         setReloadOrders(true);
         setStatus('');
       } catch (error) {
-        toast.error(error.message);
+        toast.error(HandleError(error as AxiosError));
         setLoading(false);
       }
     };

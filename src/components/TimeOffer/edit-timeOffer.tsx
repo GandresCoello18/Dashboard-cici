@@ -18,6 +18,8 @@ import { Dispatch, SetStateAction, useContext, useState } from 'react';
 import { MeContext } from '../../context/contextMe';
 import { OfferTime } from '../../interfaces/TimeOffer';
 import { EditTimeOffer } from '../../api/timeOffer';
+import { AxiosError } from 'axios';
+import { HandleError } from '../../helpers/handleError';
 
 interface Props {
   Time: OfferTime;
@@ -60,7 +62,7 @@ export const FormUpdateCTime = ({ Time, setReloadTime }: Props) => {
 
           setReloadTime(true);
         } catch (error) {
-          toast.error(error.message);
+          toast.error(HandleError(error as AxiosError));
           setLoading(false);
         }
 

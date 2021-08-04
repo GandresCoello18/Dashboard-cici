@@ -7,6 +7,8 @@ import { toast } from 'react-toast';
 import { MeContext } from '../../context/contextMe';
 import Alert from '@material-ui/lab/Alert';
 import { NewLottery, UpdateFinishLottery } from '../../api/lottery';
+import { AxiosError } from 'axios';
+import { HandleError } from '../../helpers/handleError';
 
 interface Props {
   setReloadSorteo: Dispatch<SetStateAction<boolean>>;
@@ -45,7 +47,7 @@ export const InputFormLottery = ({ setReloadSorteo, isCart, idLoterry }: Props) 
           setReloadSorteo(true);
           actions.setSubmitting(false);
         } catch (error) {
-          toast.error(error.message);
+          toast.error(HandleError(error as AxiosError));
         }
       }}
     >

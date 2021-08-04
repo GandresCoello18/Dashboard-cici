@@ -1,11 +1,13 @@
 /* eslint-disable react/react-in-jsx-scope */
 // import { Card } from '@material-ui/core';
 import { CircularProgress } from '@material-ui/core';
+import { AxiosError } from 'axios';
 import { Dispatch, SetStateAction, useState } from 'react';
 import Carousel from 'react-multi-carousel';
 import { toast } from 'react-toast';
 import { BASE_API_IMAGES_CLOUDINNARY, BASE_API_IMAGES_CLOUDINNARY_SCALE } from '../../../api';
 import { DeleteImageProducto } from '../../../api/products';
+import { HandleError } from '../../../helpers/handleError';
 import { SourcesProduct } from '../../../interfaces/Product';
 
 interface Props {
@@ -48,7 +50,7 @@ export const ListImagen = ({ actions, token, sources, IdProduct, setReloadProduc
       setLoading(false);
       setReloadProduct(true);
     } catch (error) {
-      toast.error(error.message);
+      toast.error(HandleError(error as AxiosError));
       setLoading(false);
     }
   };

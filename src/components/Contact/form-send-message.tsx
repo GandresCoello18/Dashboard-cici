@@ -19,6 +19,8 @@ import {
 import { SendMessageContact } from '../../api/contact';
 import { MeContext } from '../../context/contextMe';
 import { Contact } from '../../interfaces/Contacto';
+import { HandleError } from '../../helpers/handleError';
+import { AxiosError } from 'axios';
 
 interface Props {
   Contacto: Contact;
@@ -52,7 +54,7 @@ export const FormSendMessage = ({ Contacto, setReloadContact }: Props) => {
           toast.success('Su respuesta fue enviada');
           setReloadContact(true);
         } catch (error) {
-          toast.error(error.message);
+          toast.error(HandleError(error as AxiosError));
           setLoading(false);
         }
 

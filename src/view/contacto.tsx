@@ -22,6 +22,8 @@ import { Contact } from '../interfaces/Contacto';
 import { GetContact } from '../api/contact';
 import { CardContact } from '../components/Contact/card-contact';
 import { Skeleton } from '@material-ui/lab';
+import { AxiosError } from 'axios';
+import { HandleError } from '../helpers/handleError';
 
 const useStyles = makeStyles((theme: any) => ({
   root: {
@@ -58,7 +60,7 @@ export const PageContacts = () => {
 
       setLoading(false);
     } catch (error) {
-      toast.error(error.message);
+      toast.error(HandleError(error as AxiosError));
       setLoading(false);
     }
   };

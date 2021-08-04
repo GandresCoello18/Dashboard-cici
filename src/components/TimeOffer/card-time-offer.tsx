@@ -22,6 +22,8 @@ import { OfferTime } from '../../interfaces/TimeOffer';
 import { DeleteTimeOffer } from '../../api/timeOffer';
 import { FormAddProductTime } from './add-product-time';
 import { FormUpdateCTime } from './edit-timeOffer';
+import { AxiosError } from 'axios';
+import { HandleError } from '../../helpers/handleError';
 
 interface Props {
   time: OfferTime;
@@ -61,7 +63,7 @@ export const CardTimeOffert = ({ time, setReloadTime }: Props) => {
 
       setReloadTime(true);
     } catch (error) {
-      toast.error(error.message);
+      toast.error(HandleError(error as AxiosError));
     }
   };
 

@@ -36,6 +36,8 @@ import { GetProductCart } from '../api/cart';
 import { MeContext } from '../context/contextMe';
 import { GetLotterys } from '../api/lottery';
 import { Skeleton } from '@material-ui/lab';
+import { AxiosError } from 'axios';
+import { HandleError } from '../helpers/handleError';
 
 const useStyles = makeStyles((theme: any) => ({
   root: {
@@ -71,7 +73,7 @@ export const LoterryView = () => {
       const { products } = await (await GetProductCart({ token })).data;
       setCartProducts(products);
     } catch (error) {
-      toast.warn(error.message);
+      toast.error(HandleError(error as AxiosError));
     }
   };
 
@@ -85,7 +87,7 @@ export const LoterryView = () => {
       setLoading(false);
     } catch (error) {
       setLoading(false);
-      toast.warn(error.message);
+      toast.error(HandleError(error as AxiosError));
     }
   };
 

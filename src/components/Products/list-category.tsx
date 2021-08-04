@@ -18,6 +18,8 @@ import { useEffect, useState, useContext, Dispatch, SetStateAction } from 'react
 import { toast } from 'react-toast';
 import { MeContext } from '../../context/contextMe';
 import { DeleteCategory } from '../../api/category';
+import { AxiosError } from 'axios';
+import { HandleError } from '../../helpers/handleError';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -56,7 +58,7 @@ export const ListCategory = ({ CategoryCountProduct, setReloadCategory }: Props)
         setVisibleDialog(false);
         toast.success('Categoria eliminada');
       } catch (error) {
-        toast.error(error.message);
+        toast.error(HandleError(error as AxiosError));
         setLoading(false);
       }
     };
